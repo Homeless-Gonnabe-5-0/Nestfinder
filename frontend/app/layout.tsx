@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+import { GeistSans } from "geist/font/sans";
 
 export const metadata: Metadata = {
   title: "Nestfinder - Find the best apartments in Ottawa",
@@ -19,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="antialiased">
+    <html lang="en" className={GeistSans.className}>
+      <body className="antialiased bg-[var(--bg-primary)] text-[var(--text-primary)]">
         {children}
       </body>
     </html>
