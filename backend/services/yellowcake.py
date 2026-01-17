@@ -1,7 +1,7 @@
 import os
 import requests
 
-YELLOWCAKE_API_URL = "https://api.yellowcake.dev/v1/query"
+YELLOWCAKE_API_URL = "https://api.yellowcake.dev/v1/extract-stream"
 YELLOWCAKE_API_KEY = os.getenv("YELLOWCAKE_API_KEY")
 
 
