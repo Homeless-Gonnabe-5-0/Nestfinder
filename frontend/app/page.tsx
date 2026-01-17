@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import ThemeTogglePill from "./components/ThemeTogglePill";
+import LogoMarquee from "./components/LogoMarquee";
 import { MapPin, Clock, Shield, DollarSign, TrendingUp, CheckCircle } from "lucide-react";
 
 export default function Home() {
@@ -159,6 +160,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Logo Marquee Section */}
+      <LogoMarquee />
 
       {/* Features Section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-32">
