@@ -22,3 +22,7 @@ Thumbs.db
 .env
 __pycache__/
 *.pyc
+
+# Cache directory (scraped listings)
+cache/
+*.json

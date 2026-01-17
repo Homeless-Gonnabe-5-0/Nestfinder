@@ -1,20 +1,17 @@
-# agents/listing.py - Listing Agent (Person 2 will improve this later)
-# This is a working stub so we can test the full system
-
 import sys
 import os
 
-# Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from models import Apartment
-from data.mock_apartments import get_mock_apartments
+from services.scraper import get_listings
+from constants import CITY
 
 
 class ListingAgent:
     """
-    Finds apartments matching user criteria.
-    Uses Yellowcake API to scrape listings (falls back to mock data).
+    Finds apartments matching user criteria using Yellowcake API + Zumper.
+    Falls back to mock data if API unavailable.
     """
     
     def __init__(self):
@@ -26,19 +23,38 @@ class ListingAgent:
         budget_min: int,
         budget_max: int,
         bedrooms: int = 1,
-        limit: int = 20
+        limit: int = 20,
+        max_results_per_source: int = 20
     ) -> list:
         """
-        Find apartments matching criteria.
+        Find apartments matching criteria via Yellowcake API.
         
         Returns: List of Apartment objects
         """
         print(f"[{self.name}] Searching ${budget_min}-${budget_max}, {bedrooms}BR")
         
-        # TODO: Person 2 will add Yellowcake integration here
-        # For now, use mock data
-        apartments = get_mock_apartments(budget_min, budget_max, bedrooms)
-        apartments = apartments[:limit]
+        raw_listings = get_listings(CITY, budget_min, budget_max, bedrooms, max_results=max_results_per_source)
+        apartments = []
+        
+        for listing in raw_listings[:limit]:
+            apt = Apartment(
+                id=listing['id'],
+                title=listing.get('title', 'Apartment'),
+                address=listing['address'],
+                neighborhood=listing['neighborhood'],
+                price=listing['price'],
+                bedrooms=listing['bedrooms'],
+                bathrooms=1.0,
+                sqft=listing['sqft'],
+                amenities=listing['amenities'],
+                lat=listing['lat'],
+                lng=listing['lng'],
+                source_url=listing.get('link', ''),
+                pet_friendly='pets' in listing['amenities'],
+                parking_included='parking' in listing['amenities'],
+                laundry_type='in-unit' if 'laundry' in listing['amenities'] else 'none'
+            )
+            apartments.append(apt)
         
         print(f"[{self.name}] Found {len(apartments)} apartments")
         return apartments
