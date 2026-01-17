@@ -1,8 +1,10 @@
-# agents/budget.py - Budget Agent (Person 3 will improve this later)
+# agents/budget.py - Budget Agent
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from models import Apartment, BudgetAnalysis
 from scoring import calculate_budget_score
