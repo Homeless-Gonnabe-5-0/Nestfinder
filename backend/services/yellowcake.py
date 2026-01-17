@@ -2,7 +2,7 @@ import os
 import requests
 
 YELLOWCAKE_API_URL = "https://api.yellowcake.dev/v1/extract-stream"
-YELLOWCAKE_API_KEY = os.getenv("YELLOWCAKE_API_KEY")
+YELLOWCAKE_API_KEY = os.getenv("yc_live_Z7j_6O4LDRhSGy7Akps7VxpwNnQWRrvRc7BIpQLMIps=")
 
 
 def fetch_raw_listings(city: str) -> list:
