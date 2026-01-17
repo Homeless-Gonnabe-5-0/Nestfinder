@@ -19,7 +19,7 @@ class ListingAgent:
     
     def __init__(self):
         self.name = "ListingAgent"
-        print(f"🏠 {self.name} initialized")
+        print(f"[{self.name}] initialized")
     
     async def find_listings(
         self,
@@ -33,14 +33,14 @@ class ListingAgent:
         
         Returns: List of Apartment objects
         """
-        print(f"🔍 {self.name}: Searching ${budget_min}-${budget_max}, {bedrooms}BR")
+        print(f"[{self.name}] Searching ${budget_min}-${budget_max}, {bedrooms}BR")
         
         # TODO: Person 2 will add Yellowcake integration here
         # For now, use mock data
         apartments = get_mock_apartments(budget_min, budget_max, bedrooms)
         apartments = apartments[:limit]
         
-        print(f"✅ {self.name}: Found {len(apartments)} apartments")
+        print(f"[{self.name}] Found {len(apartments)} apartments")
         return apartments
 
 
@@ -52,6 +52,6 @@ if __name__ == "__main__":
         agent = ListingAgent()
         apartments = await agent.find_listings(1500, 2000, 1)
         for apt in apartments:
-            print(f"  • {apt.title}: ${apt.price}")
+            print(f"  - {apt.title}: ${apt.price}")
     
     asyncio.run(test())
