@@ -121,6 +121,26 @@ class BudgetAnalysis:
         return asdict(self)
 
 
+@dataclass
+class WalkabilityAnalysis:
+    """OUTPUT from Walkability Agent"""
+    apartment_id: str
+    walkability_score: int = 0
+    parks_nearby: int = 0
+    schools_nearby: int = 0
+    groceries_nearby: int = 0
+    closest_park_name: Optional[str] = None
+    closest_park_distance: Optional[int] = None
+    closest_school_name: Optional[str] = None
+    closest_school_distance: Optional[int] = None
+    closest_grocery_name: Optional[str] = None
+    closest_grocery_distance: Optional[int] = None
+    summary: str = ""
+
+    def to_dict(self):
+        return asdict(self)
+
+
 # Final output models
 
 @dataclass
@@ -131,13 +151,14 @@ class Recommendation:
     commute: CommuteAnalysis
     neighborhood: NeighborhoodAnalysis
     budget: BudgetAnalysis
-    overall_score: int
-    headline: str
+    walkability: Optional[WalkabilityAnalysis] = None
+    overall_score: int = 0
+    headline: str = ""
     match_reasons: list = field(default_factory=list)
     concerns: list = field(default_factory=list)
 
     def to_dict(self):
-        return {
+        result = {
             "rank": self.rank,
             "apartment": self.apartment.to_dict(),
             "commute": self.commute.to_dict(),
@@ -148,6 +169,9 @@ class Recommendation:
             "match_reasons": self.match_reasons,
             "concerns": self.concerns
         }
+        if self.walkability:
+            result["walkability"] = self.walkability.to_dict()
+        return result
 
 
 @dataclass
