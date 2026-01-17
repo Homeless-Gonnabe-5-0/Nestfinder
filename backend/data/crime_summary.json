@@ -1,0 +1,812 @@
+{
+  "East Industrial": {
+    "Auto_Theft": 234,
+    "Bike_Theft": 1620,
+    "Criminal_Offences": 5675,
+    "Hate_Crime": 16,
+    "Shootings": 5
+  },
+  "Carson Grove - Carson Meadows": {
+    "Auto_Theft": 74,
+    "Bike_Theft": 44,
+    "Criminal_Offences": 1470,
+    "Hate_Crime": 14,
+    "Homicide": 1,
+    "Shootings": 3
+  },
+  "Orl\u00e9ans Queenswood Heights": {
+    "Auto_Theft": 80,
+    "Bike_Theft": 24,
+    "Criminal_Offences": 1167,
+    "Hate_Crime": 2,
+    "Homicide": 2,
+    "Shootings": 1
+  },
+  "Orl\u00e9ans Avalon - Notting Gate - Fallingbrook - Gardenway South": {
+    "Auto_Theft": 521,
+    "Bike_Theft": 247,
+    "Criminal_Offences": 8176,
+    "Hate_Crime": 66,
+    "Homicide": 3,
+    "Shootings": 6
+  },
+  "Vanier South": {
+    "Auto_Theft": 98,
+    "Bike_Theft": 151,
+    "Criminal_Offences": 4418,
+    "Hate_Crime": 18,
+    "Shootings": 3
+  },
+  "Hintonburg - Mechanicsville": {
+    "Auto_Theft": 97,
+    "Bike_Theft": 405,
+    "Criminal_Offences": 4877,
+    "Hate_Crime": 40,
+    "Homicide": 2,
+    "Shootings": 4
+  },
+  "Hunt Club Upper -Blossom Park - Timbermill": {
+    "Auto_Theft": 114,
+    "Bike_Theft": 20,
+    "Criminal_Offences": 1264,
+    "Hate_Crime": 7,
+    "Shootings": 6
+  },
+  "Vanier North": {
+    "Auto_Theft": 119,
+    "Bike_Theft": 289,
+    "Criminal_Offences": 4949,
+    "Hate_Crime": 35,
+    "Homicide": 5,
+    "Shootings": 17
+  },
+  "West Centertown": {
+    "Auto_Theft": 162,
+    "Bike_Theft": 574,
+    "Criminal_Offences": 6656,
+    "Hate_Crime": 54,
+    "Homicide": 5,
+    "Shootings": 11
+  },
+  "Greenbelt - Stony Swamp": {
+    "Auto_Theft": 9,
+    "Bike_Theft": 4,
+    "Criminal_Offences": 297,
+    "Shootings": 1
+  },
+  "Centretown": {
+    "Auto_Theft": 363,
+    "Bike_Theft": 2161,
+    "Criminal_Offences": 42881,
+    "Hate_Crime": 273,
+    "Homicide": 4,
+    "Shootings": 20
+  },
+  "Fitzroy": {
+    "Auto_Theft": 16,
+    "Bike_Theft": 2,
+    "Criminal_Offences": 221,
+    "Hate_Crime": 1
+  },
+  "Glebe - Dows Lake": {
+    "Auto_Theft": 137,
+    "Bike_Theft": 670,
+    "Criminal_Offences": 6276,
+    "Hate_Crime": 74,
+    "Shootings": 4
+  },
+  "Riverside South - Leitrim": {
+    "Auto_Theft": 314,
+    "Bike_Theft": 38,
+    "Criminal_Offences": 3749,
+    "Hate_Crime": 28,
+    "Shootings": 6
+  },
+  "Merivale Gardens - Grenfell Glen - Pineglen - Country Place": {
+    "Auto_Theft": 47,
+    "Bike_Theft": 9,
+    "Criminal_Offences": 691,
+    "Hate_Crime": 5,
+    "Homicide": 1,
+    "Shootings": 3
+  },
+  "Rothwell Heights - Beacon Hill North": {
+    "Auto_Theft": 94,
+    "Bike_Theft": 24,
+    "Criminal_Offences": 1461,
+    "Hate_Crime": 11,
+    "Shootings": 6
+  },
+  "Borden Farm - Stewart Farm - Parkwood Hills - Fisher Glen": {
+    "Auto_Theft": 79,
+    "Bike_Theft": 60,
+    "Criminal_Offences": 1929,
+    "Hate_Crime": 14,
+    "Shootings": 1
+  },
+  "Lowertown": {
+    "Auto_Theft": 164,
+    "Bike_Theft": 523,
+    "Criminal_Offences": 13755,
+    "Hate_Crime": 59,
+    "Homicide": 8,
+    "Shootings": 18
+  },
+  "Crestview - Meadowlands": {
+    "Auto_Theft": 92,
+    "Bike_Theft": 172,
+    "Criminal_Offences": 5878,
+    "Hate_Crime": 19,
+    "Homicide": 2,
+    "Shootings": 8
+  },
+  "Orl\u00e9ans Village - Chateauneuf": {
+    "Auto_Theft": 69,
+    "Bike_Theft": 49,
+    "Criminal_Offences": 1639,
+    "Hate_Crime": 11,
+    "Shootings": 7
+  },
+  "Greenboro East": {
+    "Auto_Theft": 113,
+    "Bike_Theft": 26,
+    "Criminal_Offences": 1372,
+    "Hate_Crime": 16,
+    "Homicide": 3,
+    "Shootings": 11
+  },
+  "Orl\u00e9ans North West": {
+    "Auto_Theft": 53,
+    "Bike_Theft": 42,
+    "Criminal_Offences": 1483,
+    "Hate_Crime": 12,
+    "Shootings": 2
+  },
+  "Hunt Club East - Western Community": {
+    "Auto_Theft": 97,
+    "Bike_Theft": 34,
+    "Criminal_Offences": 1654,
+    "Hate_Crime": 19,
+    "Homicide": 2,
+    "Shootings": 4
+  },
+  "Richmond": {
+    "Auto_Theft": 58,
+    "Bike_Theft": 21,
+    "Criminal_Offences": 1022,
+    "Hate_Crime": 15,
+    "Homicide": 1,
+    "Shootings": 2
+  },
+  "Orl\u00e9ans Chapel Hill South": {
+    "Auto_Theft": 172,
+    "Bike_Theft": 21,
+    "Criminal_Offences": 1989,
+    "Hate_Crime": 13,
+    "Shootings": 1
+  },
+  "Tanglewood": {
+    "Auto_Theft": 34,
+    "Bike_Theft": 14,
+    "Criminal_Offences": 917,
+    "Hate_Crime": 3,
+    "Shootings": 1
+  },
+  "Carlington": {
+    "Auto_Theft": 132,
+    "Bike_Theft": 101,
+    "Criminal_Offences": 4055,
+    "Hate_Crime": 32,
+    "Homicide": 1,
+    "Shootings": 10
+  },
+  "Ledbury - Heron Gate - Ridgemont - Elmwood": {
+    "Auto_Theft": 175,
+    "Bike_Theft": 67,
+    "Criminal_Offences": 5875,
+    "Hate_Crime": 38,
+    "Homicide": 6,
+    "Shootings": 25
+  },
+  "Bayshore": {
+    "Auto_Theft": 93,
+    "Bike_Theft": 78,
+    "Criminal_Offences": 2848,
+    "Hate_Crime": 18,
+    "Shootings": 7
+  },
+  "Vars": {
+    "Auto_Theft": 38,
+    "Bike_Theft": 3,
+    "Criminal_Offences": 340,
+    "Hate_Crime": 2
+  },
+  "Hunt Club - Ottawa Airport": {
+    "Auto_Theft": 117,
+    "Bike_Theft": 10,
+    "Criminal_Offences": 976,
+    "Hate_Crime": 6,
+    "Homicide": 2,
+    "Shootings": 2
+  },
+  "Russell - Edwards": {
+    "Auto_Theft": 92,
+    "Bike_Theft": 5,
+    "Criminal_Offences": 760,
+    "Hate_Crime": 3,
+    "Homicide": 1,
+    "Shootings": 4
+  },
+  "Blackburn Hamlet": {
+    "Auto_Theft": 50,
+    "Bike_Theft": 10,
+    "Criminal_Offences": 1072,
+    "Hate_Crime": 12,
+    "Shootings": 1
+  },
+  "Cummings": {
+    "Auto_Theft": 195,
+    "Bike_Theft": 127,
+    "Criminal_Offences": 8031,
+    "Hate_Crime": 26,
+    "Homicide": 4,
+    "Shootings": 11
+  },
+  "Hunt Club South Industrial": {
+    "Auto_Theft": 69,
+    "Bike_Theft": 9,
+    "Criminal_Offences": 1184,
+    "Hate_Crime": 9,
+    "Shootings": 5
+  },
+  "Cityview - Skyline - Fisher Heights": {
+    "Auto_Theft": 78,
+    "Bike_Theft": 60,
+    "Criminal_Offences": 2705,
+    "Hate_Crime": 12,
+    "Homicide": 3,
+    "Shootings": 4
+  },
+  "Woodroffe - Lincoln Heights": {
+    "Auto_Theft": 31,
+    "Bike_Theft": 72,
+    "Criminal_Offences": 912,
+    "Hate_Crime": 5,
+    "Shootings": 2
+  },
+  "Woodvale - Craig Henry - Manordale - Estates of Arlington Woods": {
+    "Auto_Theft": 50,
+    "Bike_Theft": 65,
+    "Criminal_Offences": 1336,
+    "Hate_Crime": 22,
+    "Homicide": 2,
+    "Shootings": 1
+  },
+  "Pineview": {
+    "Auto_Theft": 63,
+    "Bike_Theft": 16,
+    "Criminal_Offences": 1037,
+    "Hate_Crime": 3,
+    "Homicide": 1,
+    "Shootings": 3
+  },
+  "Hawthorne Meadows - Sheffield Glen": {
+    "Auto_Theft": 76,
+    "Bike_Theft": 81,
+    "Criminal_Offences": 1778,
+    "Hate_Crime": 14,
+    "Homicide": 2,
+    "Shootings": 10
+  },
+  "Katimavik - Hazeldean": {
+    "Auto_Theft": 112,
+    "Bike_Theft": 78,
+    "Criminal_Offences": 3157,
+    "Hate_Crime": 36,
+    "Homicide": 1,
+    "Shootings": 1
+  },
+  "South Keys - Heron Gate - Greenboro West": {
+    "Auto_Theft": 80,
+    "Bike_Theft": 55,
+    "Criminal_Offences": 3150,
+    "Hate_Crime": 13,
+    "Homicide": 2,
+    "Shootings": 5
+  },
+  "Stittsville": {
+    "Auto_Theft": 221,
+    "Bike_Theft": 123,
+    "Criminal_Offences": 4703,
+    "Hate_Crime": 64
+  },
+  "Metcalfe": {
+    "Auto_Theft": 42,
+    "Bike_Theft": 8,
+    "Criminal_Offences": 558,
+    "Hate_Crime": 9,
+    "Homicide": 1,
+    "Shootings": 1
+  },
+  "Civic Hospital-Central Park": {
+    "Auto_Theft": 99,
+    "Bike_Theft": 181,
+    "Criminal_Offences": 3226,
+    "Hate_Crime": 28,
+    "Homicide": 1,
+    "Shootings": 8
+  },
+  "Hunt Club Park": {
+    "Auto_Theft": 114,
+    "Bike_Theft": 29,
+    "Criminal_Offences": 1128,
+    "Hate_Crime": 8,
+    "Homicide": 1,
+    "Shootings": 15
+  },
+  "Carp": {
+    "Auto_Theft": 34,
+    "Bike_Theft": 2,
+    "Criminal_Offences": 637,
+    "Hate_Crime": 6,
+    "Shootings": 1
+  },
+  "Centrepointe": {
+    "Auto_Theft": 54,
+    "Bike_Theft": 48,
+    "Criminal_Offences": 972,
+    "Hate_Crime": 19,
+    "Homicide": 3,
+    "Shootings": 1
+  },
+  "Overbrook - McArthur": {
+    "Auto_Theft": 257,
+    "Bike_Theft": 275,
+    "Criminal_Offences": 10306,
+    "Hate_Crime": 30,
+    "Homicide": 3,
+    "Shootings": 25
+  },
+  "New Barrhaven - New Development - Stonebridge": {
+    "Auto_Theft": 536,
+    "Bike_Theft": 272,
+    "Criminal_Offences": 9777,
+    "Hate_Crime": 117,
+    "Homicide": 6,
+    "Shootings": 2
+  },
+  "Greely": {
+    "Auto_Theft": 81,
+    "Bike_Theft": 5,
+    "Criminal_Offences": 1211,
+    "Hate_Crime": 7,
+    "Shootings": 1
+  },
+  "Chapman Mills - Rideau Crest - Davidson Heights": {
+    "Auto_Theft": 131,
+    "Bike_Theft": 53,
+    "Criminal_Offences": 1650,
+    "Hate_Crime": 15,
+    "Shootings": 1
+  },
+  "Lindenlea - New Edinburgh": {
+    "Auto_Theft": 60,
+    "Bike_Theft": 156,
+    "Criminal_Offences": 2317,
+    "Hate_Crime": 6
+  },
+  "Carleton Heights - Rideauview": {
+    "Auto_Theft": 50,
+    "Bike_Theft": 42,
+    "Criminal_Offences": 1489,
+    "Hate_Crime": 14,
+    "Shootings": 4
+  },
+  "Glen Cairn - Kanata South Business Park": {
+    "Auto_Theft": 116,
+    "Bike_Theft": 63,
+    "Criminal_Offences": 3538,
+    "Hate_Crime": 38,
+    "Shootings": 3
+  },
+  "Kanata Lakes - Marchwood Lakeside - Morgan's Grant - Kanata North Business Park": {
+    "Auto_Theft": 180,
+    "Bike_Theft": 88,
+    "Criminal_Offences": 3889,
+    "Hate_Crime": 49,
+    "Shootings": 4
+  },
+  "Elmvale - Eastway - Riverview - Riverview Park West": {
+    "Auto_Theft": 174,
+    "Bike_Theft": 219,
+    "Criminal_Offences": 5291,
+    "Hate_Crime": 22,
+    "Homicide": 6,
+    "Shootings": 11
+  },
+  "Barrhaven": {
+    "Auto_Theft": 96,
+    "Bike_Theft": 58,
+    "Criminal_Offences": 1583,
+    "Hate_Crime": 17,
+    "Homicide": 1,
+    "Shootings": 1
+  },
+  "CFB Rockcliffe-NRC": {
+    "Auto_Theft": 69,
+    "Bike_Theft": 69,
+    "Criminal_Offences": 1806,
+    "Hate_Crime": 12,
+    "Shootings": 2
+  },
+  "Manotick West": {
+    "Auto_Theft": 70,
+    "Bike_Theft": 10,
+    "Criminal_Offences": 1020,
+    "Hate_Crime": 10
+  },
+  "Braemar Park - Bel Air Heights - Copeland Park": {
+    "Auto_Theft": 42,
+    "Bike_Theft": 45,
+    "Criminal_Offences": 1087,
+    "Hate_Crime": 9,
+    "Shootings": 4
+  },
+  "Byward Market": {
+    "Auto_Theft": 155,
+    "Bike_Theft": 741,
+    "Criminal_Offences": 15060,
+    "Hate_Crime": 91,
+    "Homicide": 4,
+    "Shootings": 24
+  },
+  "Corkery": {
+    "Auto_Theft": 14,
+    "Bike_Theft": 1,
+    "Criminal_Offences": 261,
+    "Hate_Crime": 7,
+    "Homicide": 1,
+    "Shootings": 2
+  },
+  "Sandy Hill - Ottawa East": {
+    "Auto_Theft": 124,
+    "Bike_Theft": 1044,
+    "Criminal_Offences": 6491,
+    "Hate_Crime": 50,
+    "Shootings": 2
+  },
+  "Westboro": {
+    "Auto_Theft": 107,
+    "Bike_Theft": 307,
+    "Criminal_Offences": 6436,
+    "Hate_Crime": 18,
+    "Homicide": 1,
+    "Shootings": 2
+  },
+  "Laurentian": {
+    "Auto_Theft": 88,
+    "Bike_Theft": 192,
+    "Criminal_Offences": 2431,
+    "Hate_Crime": 9,
+    "Shootings": 1
+  },
+  "Cumberland": {
+    "Auto_Theft": 35,
+    "Bike_Theft": 3,
+    "Criminal_Offences": 527,
+    "Hate_Crime": 3,
+    "Shootings": 1
+  },
+  "Riverside Park": {
+    "Auto_Theft": 39,
+    "Bike_Theft": 38,
+    "Criminal_Offences": 870,
+    "Hate_Crime": 17,
+    "Shootings": 8
+  },
+  "Carlingwood West - Glabar Park - McKellar Heights": {
+    "Auto_Theft": 51,
+    "Bike_Theft": 43,
+    "Criminal_Offences": 2752,
+    "Hate_Crime": 21,
+    "Shootings": 2
+  },
+  "Briar Green - Leslie Park": {
+    "Auto_Theft": 35,
+    "Bike_Theft": 25,
+    "Criminal_Offences": 599,
+    "Hate_Crime": 7,
+    "Shootings": 1
+  },
+  "Iris": {
+    "Auto_Theft": 52,
+    "Bike_Theft": 51,
+    "Criminal_Offences": 1493,
+    "Hate_Crime": 8,
+    "Homicide": 2,
+    "Shootings": 9
+  },
+  "Whitehaven - Queensway Terrace North": {
+    "Auto_Theft": 118,
+    "Bike_Theft": 88,
+    "Criminal_Offences": 2883,
+    "Hate_Crime": 25,
+    "Homicide": 3,
+    "Shootings": 15
+  },
+  "Ottawa East": {
+    "Auto_Theft": 55,
+    "Bike_Theft": 235,
+    "Criminal_Offences": 1444,
+    "Hate_Crime": 9,
+    "Shootings": 2
+  },
+  "Bells Corners West": {
+    "Auto_Theft": 40,
+    "Bike_Theft": 23,
+    "Criminal_Offences": 942,
+    "Hate_Crime": 9,
+    "Homicide": 1,
+    "Shootings": 5
+  },
+  "Island Park": {
+    "Auto_Theft": 42,
+    "Bike_Theft": 215,
+    "Criminal_Offences": 1227,
+    "Hate_Crime": 16,
+    "Shootings": 1
+  },
+  "Bells Corners East": {
+    "Auto_Theft": 57,
+    "Bike_Theft": 26,
+    "Criminal_Offences": 1656,
+    "Hate_Crime": 14,
+    "Shootings": 1
+  },
+  "Munster": {
+    "Auto_Theft": 14,
+    "Bike_Theft": 2,
+    "Criminal_Offences": 318,
+    "Hate_Crime": 3,
+    "Shootings": 2
+  },
+  "Navan - Carlsbad Springs": {
+    "Auto_Theft": 46,
+    "Bike_Theft": 6,
+    "Criminal_Offences": 495,
+    "Hate_Crime": 9
+  },
+  "Ottawa South": {
+    "Auto_Theft": 73,
+    "Bike_Theft": 171,
+    "Criminal_Offences": 1305,
+    "Hate_Crime": 10,
+    "Shootings": 1
+  },
+  "Orl\u00e9ans Central": {
+    "Auto_Theft": 40,
+    "Bike_Theft": 20,
+    "Criminal_Offences": 1138,
+    "Hate_Crime": 10,
+    "Shootings": 1
+  },
+  "Orl\u00e9ans Industrial": {
+    "Auto_Theft": 22,
+    "Bike_Theft": 5,
+    "Criminal_Offences": 189,
+    "Hate_Crime": 4
+  },
+  "Hunt Club Woods - Quintarra - Revelstoke": {
+    "Auto_Theft": 34,
+    "Bike_Theft": 20,
+    "Criminal_Offences": 602,
+    "Hate_Crime": 8,
+    "Homicide": 1,
+    "Shootings": 1
+  },
+  "Galetta": {
+    "Auto_Theft": 12,
+    "Criminal_Offences": 115,
+    "Hate_Crime": 1,
+    "Shootings": 1
+  },
+  "Playfair Park - Lynda Park - Guildwood Estates": {
+    "Auto_Theft": 43,
+    "Bike_Theft": 24,
+    "Criminal_Offences": 684,
+    "Hate_Crime": 19,
+    "Shootings": 1
+  },
+  "Beacon Hill South - Cardinal Heights": {
+    "Auto_Theft": 66,
+    "Bike_Theft": 54,
+    "Criminal_Offences": 1826,
+    "Hate_Crime": 19,
+    "Shootings": 3
+  },
+  "Osgoode": {
+    "Auto_Theft": 30,
+    "Bike_Theft": 16,
+    "Criminal_Offences": 573,
+    "Hate_Crime": 5,
+    "Shootings": 2
+  },
+  "Trend-Arlington": {
+    "Auto_Theft": 28,
+    "Bike_Theft": 16,
+    "Criminal_Offences": 491,
+    "Hate_Crime": 3
+  },
+  "Greenbelt - Mer Bleue": {
+    "Auto_Theft": 25,
+    "Bike_Theft": 4,
+    "Criminal_Offences": 1323,
+    "Hate_Crime": 5,
+    "Homicide": 3,
+    "Shootings": 1
+  },
+  "Beaverbrook": {
+    "Auto_Theft": 22,
+    "Bike_Theft": 30,
+    "Criminal_Offences": 542,
+    "Hate_Crime": 14
+  },
+  "Billings Bridge - Alta Vista": {
+    "Auto_Theft": 109,
+    "Bike_Theft": 193,
+    "Criminal_Offences": 3855,
+    "Hate_Crime": 19,
+    "Homicide": 1,
+    "Shootings": 4
+  },
+  "Orl\u00e9ans Chapel Hill": {
+    "Auto_Theft": 61,
+    "Bike_Theft": 11,
+    "Criminal_Offences": 791,
+    "Hate_Crime": 8,
+    "Shootings": 1
+  },
+  "Bridlewood - Emerald Meadows": {
+    "Auto_Theft": 129,
+    "Bike_Theft": 89,
+    "Criminal_Offences": 1965,
+    "Hate_Crime": 25,
+    "Shootings": 4
+  },
+  "Rockcliffe - Manor Park": {
+    "Auto_Theft": 31,
+    "Bike_Theft": 107,
+    "Criminal_Offences": 911,
+    "Hate_Crime": 10,
+    "Homicide": 1,
+    "Shootings": 2
+  },
+  "Britannia Village": {
+    "Auto_Theft": 84,
+    "Bike_Theft": 88,
+    "Criminal_Offences": 2700,
+    "Hate_Crime": 15,
+    "Homicide": 2,
+    "Shootings": 13
+  },
+  "Qualicum - Redwood Park": {
+    "Auto_Theft": 36,
+    "Bike_Theft": 11,
+    "Criminal_Offences": 821,
+    "Hate_Crime": 8,
+    "Shootings": 2
+  },
+  "Kinburn": {
+    "Auto_Theft": 9,
+    "Bike_Theft": 1,
+    "Criminal_Offences": 104
+  },
+  "Orl\u00e9ans Chatelaine Village": {
+    "Auto_Theft": 24,
+    "Bike_Theft": 24,
+    "Criminal_Offences": 484,
+    "Hate_Crime": 2,
+    "Homicide": 2
+  },
+  "North Gower": {
+    "Auto_Theft": 35,
+    "Bike_Theft": 3,
+    "Criminal_Offences": 554,
+    "Hate_Crime": 4,
+    "Shootings": 1
+  },
+  "Pierces Corners": {
+    "Auto_Theft": 13,
+    "Bike_Theft": 2,
+    "Criminal_Offences": 158
+  },
+  "Constance Bay": {
+    "Auto_Theft": 12,
+    "Bike_Theft": 2,
+    "Criminal_Offences": 231,
+    "Hate_Crime": 3
+  },
+  "Emerald Woods - Sawmill Creek": {
+    "Auto_Theft": 51,
+    "Bike_Theft": 14,
+    "Criminal_Offences": 891,
+    "Hate_Crime": 12,
+    "Homicide": 2,
+    "Shootings": 11
+  },
+  "Greenbelt SouthEast": {
+    "Auto_Theft": 20,
+    "Criminal_Offences": 315,
+    "Shootings": 1
+  },
+  "Carleton University": {
+    "Auto_Theft": 10,
+    "Bike_Theft": 130,
+    "Criminal_Offences": 1145,
+    "Hate_Crime": 23
+  },
+  "Dunrobin": {
+    "Auto_Theft": 15,
+    "Bike_Theft": 1,
+    "Criminal_Offences": 419,
+    "Hate_Crime": 6
+  },
+  "Manotick East": {
+    "Auto_Theft": 10,
+    "Bike_Theft": 7,
+    "Criminal_Offences": 390,
+    "Hate_Crime": 7,
+    "Shootings": 1
+  },
+  "Greenbelt - Rideau River East": {
+    "Auto_Theft": 6,
+    "Criminal_Offences": 34
+  },
+  "Crystal Bay - Lakeview Park": {
+    "Auto_Theft": 12,
+    "Bike_Theft": 11,
+    "Criminal_Offences": 407,
+    "Hate_Crime": 4
+  },
+  "<Data Quality - Blank/NULL>": {
+    "Auto_Theft": 1
+  },
+  "Lebreton Development": {
+    "Auto_Theft": 5,
+    "Bike_Theft": 65,
+    "Criminal_Offences": 364,
+    "Hate_Crime": 9
+  },
+  "Greenbelt - Shirleys Bay": {
+    "Auto_Theft": 2,
+    "Bike_Theft": 6,
+    "Criminal_Offences": 68,
+    "Shootings": 1
+  },
+  "Sarsfield": {
+    "Auto_Theft": 10,
+    "Criminal_Offences": 165
+  },
+  "Greenbelt - Rideau River West": {
+    "Bike_Theft": 3,
+    "Criminal_Offences": 55
+  },
+  "": {
+    "Criminal_Offences": 96
+  },
+  "Carp Ridge": {
+    "Criminal_Offences": 34,
+    "Hate_Crime": 1
+  },
+  "Beechwood Cemetery": {
+    "Criminal_Offences": 16,
+    "Hate_Crime": 1
+  },
+  "Notre-Dame Cemetery": {
+    "Criminal_Offences": 8,
+    "Hate_Crime": 2
+  },
+  "Unknown": {
+    "Hate_Crime": 2
+  }
+}
