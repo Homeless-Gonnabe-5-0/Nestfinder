@@ -74,7 +74,15 @@ export default function Home() {
                 alt="Nestfinder Logo" 
                 width={44}
                 height={44}
-                className="w-11 h-11 object-contain"
+                className="w-11 h-11 object-contain dark:hidden"
+                priority
+              />
+              <Image 
+                src="/images/nestfinder_logo_trimmed_black.png" 
+                alt="Nestfinder Logo" 
+                width={44}
+                height={44}
+                className="w-11 h-11 object-contain hidden dark:block"
                 priority
               />
               <span className="text-xl font-bold tracking-[-0.02em] text-[var(--text-primary)]">Nestfinder</span>

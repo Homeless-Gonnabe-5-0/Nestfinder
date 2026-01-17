@@ -13,7 +13,8 @@ const config: Config = {
         'forest-green': '#1F4D2B',
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'monospace'],
+        sans: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'monospace'],
       },
     },
   },

@@ -4,24 +4,79 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ThemeTogglePill from "../components/ThemeTogglePill";
+import { searchApartments, type SearchResponse } from "@/lib/api";
+import { parseUserMessage } from "@/lib/parseUserInput";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
+  data?: SearchResponse;
 };
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleSend() {
+  async function handleSend() {
     const text = input.trim();
-    if (!text) return;
+    if (!text || isLoading) return;
 
+    // Add user message
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setInput("");
+    setIsLoading(true);
 
-    // TODO: later connect backend and add assistant response
+    try {
+      // Parse user input
+      const parsed = parseUserMessage(text);
+      
+      if (!parsed) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "I couldn't find a work address in your message. Please include where you work (e.g., '99 Bank St' or 'downtown Ottawa') so I can calculate commute times.",
+          },
+        ]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Call backend API
+      const response = await searchApartments(parsed);
+      
+      // Format response message
+      let responseText = `Found ${response.total_found} apartments! Here are the top matches:\n\n`;
+      
+      response.recommendations.slice(0, 5).forEach((rec) => {
+        responseText += `${rec.rank}. ${rec.apartment.title}\n`;
+        responseText += `   📍 ${rec.apartment.address}, ${rec.apartment.neighborhood}\n`;
+        responseText += `   💰 $${rec.apartment.price}/month\n`;
+        responseText += `   🚇 ${rec.commute.best_time} min commute\n`;
+        responseText += `   ⭐ Score: ${rec.overall_score}/100\n`;
+        responseText += `   ${rec.headline}\n\n`;
+      });
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: responseText,
+          data: response,
+        },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Sorry, something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}. Make sure the backend is running at http://localhost:8000`,
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -35,7 +90,14 @@ export default function ChatPage() {
               alt="Nestfinder Logo" 
               width={44}
               height={44}
-              className="w-11 h-11 object-contain"
+              className="w-11 h-11 object-contain dark:hidden"
+            />
+            <Image 
+              src="/images/nestfinder_logo_trimmed_black.png" 
+              alt="Nestfinder Logo" 
+              width={44}
+              height={44}
+              className="w-11 h-11 object-contain hidden dark:block"
             />
             <span className="text-xl font-bold tracking-[-0.02em]">Nestfinder</span>
           </Link>
@@ -95,26 +157,30 @@ export default function ChatPage() {
 
                 <button
                   onClick={handleSend}
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || isLoading}
                   className="group flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md transition-all duration-200 hover:shadow-lg active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-md"
                   aria-label="Send"
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="transition-transform duration-200 group-hover:-translate-y-0.5"
-                  >
-                    <path
-                      d="M8 3L8 13M8 3L4 7M8 3L12 7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  {isLoading ? (
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="transition-transform duration-200 group-hover:-translate-y-0.5"
+                    >
+                      <path
+                        d="M8 3L8 13M8 3L4 7M8 3L12 7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
                 </button>
               </div>
 

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { GeistSans } from "geist/font/sans";
+import { JetBrains_Mono } from "next/font/google";
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Nestfinder - Find the best apartments in Ottawa",
@@ -13,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="antialiased bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <html lang="en" className={jetbrainsMono.variable}>
+      <body className="antialiased bg-[var(--bg-primary)] text-[var(--text-primary)] font-mono font-medium">
         {children}
       </body>
     </html>
