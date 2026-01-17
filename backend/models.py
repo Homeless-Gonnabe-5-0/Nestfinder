@@ -6,9 +6,7 @@ from typing import Optional
 from datetime import datetime
 
 
-# =============================================================================
-# INPUT: What the user sends
-# =============================================================================
+# Input models
 
 @dataclass
 class SearchRequest:
@@ -25,13 +23,12 @@ class SearchRequest:
         return asdict(self)
 
 
-# =============================================================================
-# CORE: Apartment listing
-# =============================================================================
+# Core apartment model
 
 @dataclass
 class Apartment:
     """A single apartment listing - OUTPUT from Listing Agent"""
+    # Required fields
     id: str
     title: str
     address: str
@@ -39,23 +36,33 @@ class Apartment:
     price: int
     bedrooms: int
     bathrooms: float
+    
+    # Optional details
     sqft: Optional[int] = None
     amenities: list = field(default_factory=list)
+    
+    # Property features
     pet_friendly: bool = False
     parking_included: bool = False
     laundry_type: str = "none"
+    
+    # URLs and location
     image_url: Optional[str] = None
     source_url: Optional[str] = None
     lat: Optional[float] = None
     lng: Optional[float] = None
+    
+    # Lease and walkability
+    lease_term_months: int = 12
+    near_grocery: bool = False
+    near_park: bool = False
+    near_school: bool = False
 
     def to_dict(self):
         return asdict(self)
 
 
-# =============================================================================
-# ANALYSIS: Output from each analysis agent
-# =============================================================================
+# Analysis outputs
 
 @dataclass
 class CommuteAnalysis:
@@ -106,17 +113,15 @@ class BudgetAnalysis:
     price_difference_percent: float = 0.0
     price_per_sqft: Optional[float] = None
     is_good_deal: bool = False
-    budget_score: int = 0  # Based on price vs market
-    space_value_score: Optional[int] = None  # NEW! Based on $/sqft
+    budget_score: int = 0
+    space_value_score: Optional[int] = None
     summary: str = ""
 
     def to_dict(self):
         return asdict(self)
 
 
-# =============================================================================
-# FINAL OUTPUT: Recommendation shown to user
-# =============================================================================
+# Final output models
 
 @dataclass
 class Recommendation:
