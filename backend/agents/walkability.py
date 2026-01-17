@@ -59,8 +59,8 @@ class WalkabilityAgent:
         return R * c
     
     def _load_parks(self) -> List[dict]:
-        """Load parks from GeoJSON file."""
-        file_path = self.data_path / "Parks_and_Greenspace.geojson"
+        """Load parks from compressed JSON file."""
+        file_path = self.data_path / "parks.json"
         
         if not file_path.exists():
             print(f"[{self.name}] Warning: Parks file not found at {file_path}")
@@ -68,27 +68,9 @@ class WalkabilityAgent:
         
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+                parks = json.load(f)
             
-            parks = []
-            for feature in data.get("features", []):
-                props = feature.get("properties", {})
-                
-                # Get coordinates from properties (LATITUDE, LONGITUDE)
-                lat = props.get("LATITUDE")
-                lng = props.get("LONGITUDE")
-                
-                if lat is None or lng is None:
-                    continue
-                
-                parks.append({
-                    "name": props.get("NAME", "Unknown Park"),
-                    "lat": lat,
-                    "lng": lng,
-                    "type": props.get("PARK_TYPE", ""),
-                    "category": props.get("PARK_CATEGORY", "")
-                })
-            
+            # Already in simple format: {name, lat, lng}
             return parks
             
         except Exception as e:
@@ -96,8 +78,8 @@ class WalkabilityAgent:
             return []
     
     def _load_schools(self) -> List[dict]:
-        """Load schools from GeoJSON file."""
-        file_path = self.data_path / "Schools.geojson"
+        """Load schools from compressed JSON file."""
+        file_path = self.data_path / "schools.json"
         
         if not file_path.exists():
             print(f"[{self.name}] Warning: Schools file not found at {file_path}")
@@ -105,28 +87,9 @@ class WalkabilityAgent:
         
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+                schools = json.load(f)
             
-            schools = []
-            for feature in data.get("features", []):
-                props = feature.get("properties", {})
-                geom = feature.get("geometry", {})
-                coords = geom.get("coordinates", [])
-                
-                if len(coords) < 2:
-                    continue
-                
-                # GeoJSON coordinates are [lng, lat]
-                lng, lat = coords[0], coords[1]
-                
-                schools.append({
-                    "name": props.get("NAME", "Unknown School"),
-                    "lat": lat,
-                    "lng": lng,
-                    "category": props.get("CATEGORY", ""),
-                    "board": props.get("BOARD", "")
-                })
-            
+            # Already in simple format: {name, lat, lng}
             return schools
             
         except Exception as e:
