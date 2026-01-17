@@ -1,8 +1,10 @@
-# agents/commute.py - Commute Agent (Person 3 will improve this later)
+# agents/commute.py - Commute Agent
 
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import random
 from models import Apartment, CommuteAnalysis
