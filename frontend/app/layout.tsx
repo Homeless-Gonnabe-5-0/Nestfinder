@@ -12,6 +12,10 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Nestfinder - Find the best apartments in Ottawa",
   description: "Nestfinder ranks rentals by commute, safety, walkability, and price based on your priorities.",
+  icons: {
+    icon: "/images/1768631233-trimmy-Nestfinder logo.png",
+    apple: "/images/1768631233-trimmy-Nestfinder logo.png",
+  },
 };
 
 export default function RootLayout({
