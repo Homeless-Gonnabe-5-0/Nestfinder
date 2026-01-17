@@ -1,4 +1,4 @@
-# agents/budget.py - Budget Agent (Person 3 will improve this later)
+# agents/budget.py - Budget Agent (Person 3)
 
 import sys
 import os
@@ -15,7 +15,7 @@ class BudgetAgent:
     
     def __init__(self):
         self.name = "BudgetAgent"
-        print(f"💰 {self.name} initialized")
+        print(f"[{self.name}] initialized")
         
         # Mock market averages by neighborhood and bedroom count
         self.market_averages = {
@@ -51,26 +51,48 @@ class BudgetAgent:
         
         Returns: BudgetAnalysis object
         """
+        # Get market average for this neighborhood + bedroom count
         key = (apartment.neighborhood, apartment.bedrooms)
         market_average = self.market_averages.get(
             key,
             self.default_average.get(apartment.bedrooms, 1700)
         )
         
+        # Calculate price difference
         price_difference = apartment.price - market_average
         price_difference_percent = (price_difference / market_average) * 100
         
+        # Estimate utilities
         estimated_utilities = 100 if apartment.sqft and apartment.sqft < 700 else 150
         total_monthly = apartment.price + estimated_utilities
         
+        # Calculate price per sqft AND space value score
         price_per_sqft = None
+        space_value_score = None
+        
         if apartment.sqft and apartment.sqft > 0:
             price_per_sqft = round(apartment.price / apartment.sqft, 2)
+            
+            # Calculate space value score (0-100) - INFORMATIONAL ONLY
+            # Ottawa typical range: $2.00-$3.50/sqft for rentals
+            if price_per_sqft <= 2.00:
+                space_value_score = 100  # Excellent space value
+            elif price_per_sqft <= 2.50:
+                space_value_score = 85   # Good space value
+            elif price_per_sqft <= 3.00:
+                space_value_score = 70   # Fair space value
+            elif price_per_sqft <= 3.50:
+                space_value_score = 55   # Below average space value
+            else:
+                space_value_score = 40   # Poor space value
         
+        # Determine if it's a good deal
         is_good_deal = price_difference_percent < -5
         
+        # Calculate main budget score (based on price vs market only)
         budget_score = calculate_budget_score(apartment.price, market_average)
         
+        # Generate summary
         if price_difference_percent <= -15:
             summary = f"Excellent deal! {abs(price_difference_percent):.0f}% below market"
         elif price_difference_percent <= -5:
@@ -93,6 +115,7 @@ class BudgetAgent:
             price_per_sqft=price_per_sqft,
             is_good_deal=is_good_deal,
             budget_score=budget_score,
+            space_value_score=space_value_score,  # NEW FIELD!
             summary=summary
         )
 
@@ -119,6 +142,8 @@ if __name__ == "__main__":
         result = await agent.analyze(test_apt)
         print(f"Budget Score: {result.budget_score}")
         print(f"Market Average: ${result.market_average}")
+        print(f"Price per sqft: ${result.price_per_sqft}")
+        print(f"Space Value Score: {result.space_value_score}")
         print(f"Summary: {result.summary}")
     
     asyncio.run(test())

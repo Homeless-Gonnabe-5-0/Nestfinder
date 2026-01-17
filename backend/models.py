@@ -106,7 +106,8 @@ class BudgetAnalysis:
     price_difference_percent: float = 0.0
     price_per_sqft: Optional[float] = None
     is_good_deal: bool = False
-    budget_score: int = 0
+    budget_score: int = 0  # Based on price vs market
+    space_value_score: Optional[int] = None  # NEW! Based on $/sqft
     summary: str = ""
 
     def to_dict(self):

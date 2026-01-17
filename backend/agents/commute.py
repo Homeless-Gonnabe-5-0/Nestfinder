@@ -16,7 +16,7 @@ class CommuteAgent:
     
     def __init__(self):
         self.name = "CommuteAgent"
-        print(f"🚗 {self.name} initialized")
+        print(f"[{self.name}] initialized")
     
     async def analyze(
         self,

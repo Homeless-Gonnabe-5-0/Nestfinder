@@ -14,7 +14,7 @@ class NeighborhoodAgent:
     
     def __init__(self):
         self.name = "NeighborhoodAgent"
-        print(f"🏘️ {self.name} initialized")
+        print(f"[{self.name}] initialized")
         
         # Mock neighborhood data for Ottawa
         self.neighborhood_data = {
