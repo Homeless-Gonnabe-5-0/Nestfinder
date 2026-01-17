@@ -1,11 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import ThemeTogglePill from "../components/ThemeTogglePill";
+import dynamic from "next/dynamic";
 import { searchApartments, type SearchResponse } from "@/lib/api";
 import { parseUserMessage } from "@/lib/parseUserInput";
+
+// Dynamically import the map to avoid SSR issues with Leaflet
+const OttawaMap = dynamic(() => import("../components/OttawaMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-[var(--bg-secondary)] rounded-2xl flex items-center justify-center">
+      <div className="text-[var(--text-muted)] flex items-center gap-2">
+        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        Loading map...
+      </div>
+    </div>
+  ),
+});
 
 type Message = {
   role: "user" | "assistant";
@@ -13,10 +26,94 @@ type Message = {
   data?: SearchResponse;
 };
 
+interface SearchResult {
+  place_id: number;
+  display_name: string;
+  lat: string;
+  lon: string;
+  type?: string;
+  class?: string;
+  addresstype?: string;
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Close results when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLocationSelect = (lat: number, lng: number) => {
+    if (lat === 0 && lng === 0) {
+      setSelectedLocation(null);
+      setSearchQuery("");
+    } else {
+      setSelectedLocation([lat, lng]);
+    }
+  };
+
+  // Search for locations using Nominatim (OpenStreetMap geocoding)
+  const searchLocation = async (query: string) => {
+    if (query.length < 3) {
+      setSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ", Ottawa, Ontario, Canada")}&limit=3&viewbox=-76.0,45.55,-75.4,45.25&bounded=1`
+      );
+      const data: SearchResult[] = await response.json();
+      setSearchResults(data);
+      setShowResults(true);
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Debounced search
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    
+    debounceRef.current = setTimeout(() => {
+      searchLocation(value);
+    }, 300);
+  };
+
+  // Select a search result
+  const handleSelectResult = (result: SearchResult) => {
+    const lat = parseFloat(result.lat);
+    const lng = parseFloat(result.lon);
+    setSelectedLocation([lat, lng]);
+    setSearchQuery(result.display_name.split(",")[0]);
+    setShowResults(false);
+  };
 
   async function handleSend() {
     const text = input.trim();
@@ -80,175 +177,123 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col">
+    <main className="h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col overflow-hidden">
       {/* Top bar */}
-      <header className="sticky top-0 z-50 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/95 backdrop-blur-lg">
-        <div className="mx-auto flex max-w-4xl items-center px-6 h-20">
+      <header className="flex-shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/95 backdrop-blur-lg z-50">
+        <div className="flex items-center px-6 h-16">
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-70 transition-opacity">
             <Image 
               src="/images/1768631233-trimmy-Nestfinder logo.png" 
               alt="Nestfinder Logo" 
-              width={44}
-              height={44}
-              className="w-11 h-11 object-contain dark:hidden"
+              width={36}
+              height={36}
+              className="w-9 h-9 object-contain dark:hidden"
             />
             <Image 
               src="/images/nestfinder_logo_trimmed_black.png" 
               alt="Nestfinder Logo" 
-              width={44}
-              height={44}
-              className="w-11 h-11 object-contain hidden dark:block"
+              width={36}
+              height={36}
+              className="w-9 h-9 object-contain hidden dark:block"
             />
-            <span className="text-xl font-bold tracking-[-0.02em]">Nestfinder</span>
+            <span className="text-lg font-bold tracking-[-0.02em]">Nestfinder</span>
           </Link>
         </div>
       </header>
 
-      {/* Chat area */}
-      {messages.length === 0 ? (
-        /* Empty state - centered */
-        <section className="flex-1 flex items-center justify-center px-6">
-          <div className="w-full max-w-4xl">
-            <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold tracking-tight animate-slide-up">
-              Ask Nestfinder
-            </h1>
-            <p className="mt-2 text-sm text-[var(--text-muted)] animate-slide-up-delay-1">
-              Describe what you're looking for and we'll rank Ottawa apartments.
-            </p>
-
-              {/* Suggested prompts */}
-              <div className="mt-8 grid gap-3 md:grid-cols-2 animate-slide-up-delay-2">
-                <Suggestion
-                  text="Find me 1-bedroom apartments under $2100 near downtown with a short commute"
-                  onClick={(t) => setInput(t)}
-                />
-                <Suggestion
-                  text="I work at 99 Bank St — show me safe, quiet areas with good transit"
-                  onClick={(t) => setInput(t)}
-                />
-                <Suggestion
-                  text="Best neighborhoods for students near uOttawa with in-unit laundry"
-                  onClick={(t) => setInput(t)}
-                />
-                <Suggestion
-                  text="Compare Centretown vs Sandy Hill for walkability + nightlife"
-                  onClick={(t) => setInput(t)}
-                />
-              </div>
-            </div>
-
-            {/* Input bar - centered */}
-            <div className="w-full">
-              <div className="flex w-full items-end gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-5 py-4 shadow-lg dark:shadow-black/40 transition-all duration-300 focus-within:border-[var(--accent)] focus-within:shadow-xl animate-slide-up">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                  placeholder="Ask about Ottawa apartments..."
-                  rows={1}
-                  className="max-h-40 w-full resize-none bg-transparent text-base outline-none placeholder:text-[var(--text-muted)]"
-                />
-
-                <button
-                  onClick={handleSend}
-                  disabled={!input.trim() || isLoading}
-                  className="group flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md transition-all duration-200 hover:shadow-lg active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-md"
-                  aria-label="Send"
-                >
-                  {isLoading ? (
-                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="transition-transform duration-200 group-hover:-translate-y-0.5"
-                    >
-                      <path
-                        d="M8 3L8 13M8 3L4 7M8 3L12 7"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-
-              <p className="mt-3 text-center text-xs text-[var(--text-muted)]">
-                Nestfinder is in beta. Always verify listings manually.
-              </p>
-            </div>
-
-            {/* Footer - centered with content */}
-            <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
-              <div className="flex flex-col items-center gap-4">
-                <ThemeTogglePill />
-                <p className="text-xs text-[var(--text-muted)]">
-                  © 2026 Nestfinder. All rights reserved.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : (
-        /* Messages view - normal layout */
-        <>
-          <section className="mx-auto flex max-w-4xl flex-col px-6 flex-1">
-            {/* Messages */}
-            <div className="mt-10 flex flex-1 flex-col gap-4 pb-32 pt-8">
-              {messages.map((m, idx) => (
-                <div
-                  key={idx}
-                  className={[
-                    "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed animate-slide-up",
-                    m.role === "user"
-                      ? "ml-auto bg-[var(--accent)] text-white"
-                      : "mr-auto bg-[var(--bg-secondary)] text-[var(--text-primary)]",
-                  ].join(" ")}
-                >
-                  {m.content}
+      {/* Main content - 50/50 split */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left side - Chat */}
+        <div className="w-1/2 flex flex-col border-r border-[var(--border-color)]">
+          {messages.length === 0 ? (
+            /* Empty state */
+            <div className="flex-1 flex flex-col items-center justify-center px-6">
+              <div className="w-full max-w-lg">
+                <div className="text-center mb-6">
+                  <h1 className="text-2xl font-semibold tracking-tight animate-slide-up">
+                    Ask Nestfinder
+                  </h1>
+                  <p className="mt-2 text-sm text-[var(--text-muted)] animate-slide-up-delay-1">
+                    Describe what you're looking for — or search a location on the map.
+                  </p>
                 </div>
-              ))}
+
+                {/* Suggested prompts */}
+                <div className="grid gap-2 animate-slide-up-delay-2">
+                  <Suggestion
+                    text="Find me 1-bedroom apartments under $2100 near downtown"
+                    onClick={(t) => setInput(t)}
+                  />
+                  <Suggestion
+                    text="I work at 99 Bank St — show me safe areas with good transit"
+                    onClick={(t) => setInput(t)}
+                  />
+                  <Suggestion
+                    text="Best neighborhoods for students near uOttawa"
+                    onClick={(t) => setInput(t)}
+                  />
+                </div>
+              </div>
             </div>
-          </section>
+          ) : (
+            /* Messages view */
+            <div className="flex-1 overflow-y-auto px-4 py-6">
+              <div className="flex flex-col gap-4 max-w-lg mx-auto">
+                {messages.map((m, idx) => (
+                  <div
+                    key={idx}
+                    className={[
+                      "max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-relaxed animate-slide-up whitespace-pre-wrap",
+                      m.role === "user"
+                        ? "ml-auto bg-[var(--accent)] text-white"
+                        : "mr-auto bg-[var(--bg-secondary)] text-[var(--text-primary)]",
+                    ].join(" ")}
+                  >
+                    {m.content}
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="mr-auto bg-[var(--bg-secondary)] rounded-2xl px-4 py-3">
+                    <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                      Searching apartments...
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
-          {/* Input bar - fixed at bottom */}
-          <div className="fixed bottom-0 left-0 right-0 bg-[var(--bg-primary)]/95 backdrop-blur-lg border-t border-[var(--border-color)]">
-            <div className="mx-auto max-w-4xl px-6 py-4">
-              <div className="flex w-full items-end gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-5 py-4 shadow-lg dark:shadow-black/40 transition-all duration-300 focus-within:border-[var(--accent)] focus-within:shadow-xl">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                  placeholder="Ask about Ottawa apartments..."
-                  rows={1}
-                  className="max-h-40 w-full resize-none bg-transparent text-base outline-none placeholder:text-[var(--text-muted)]"
-                />
+          {/* Input bar */}
+          <div className="flex-shrink-0 p-4 border-t border-[var(--border-color)] bg-[var(--bg-primary)]">
+            <div className="flex w-full items-end gap-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3 shadow-md dark:shadow-black/30 transition-all duration-300 focus-within:border-[var(--accent)] focus-within:shadow-lg">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Ask about Ottawa apartments..."
+                rows={1}
+                className="max-h-32 w-full resize-none bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
+              />
 
-                <button
-                  onClick={handleSend}
-                  disabled={!input.trim()}
-                  className="group flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md transition-all duration-200 hover:shadow-lg active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-md"
-                  aria-label="Send"
-                >
+              <button
+                onClick={handleSend}
+                disabled={!input.trim() || isLoading}
+                className="group flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md transition-all duration-200 hover:shadow-lg active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-md"
+                aria-label="Send"
+              >
+                {isLoading ? (
+                  <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : (
                   <svg
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 16 16"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -262,19 +307,109 @@ export default function ChatPage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>
-              </div>
-
-              <div className="mt-2 flex items-center justify-between">
-                <p className="text-xs text-[var(--text-muted)]">
-                  Nestfinder is in beta. Always verify listings manually.
-                </p>
-                <ThemeTogglePill />
-              </div>
+                )}
+              </button>
             </div>
+
+            <p className="mt-2 text-center text-xs text-[var(--text-muted)]">
+              Nestfinder is in beta. Always verify listings manually.
+            </p>
           </div>
-        </>
-      )}
+        </div>
+
+        {/* Right side - Search + Map */}
+        <div className="w-1/2 flex flex-col bg-[var(--bg-secondary)]">
+          {/* Search bar above map */}
+          <div ref={searchRef} className="flex-shrink-0 p-4 pb-0 relative z-10">
+            <div className="flex items-center bg-[var(--bg-primary)] rounded-xl border border-[var(--border-color)] overflow-hidden shadow-sm transition-all focus-within:border-[var(--accent)] focus-within:shadow-md">
+              <div className="pl-4 text-[var(--text-muted)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                onFocus={() => searchResults.length > 0 && setShowResults(true)}
+                placeholder="Search location in Ottawa..."
+                className="w-full px-3 py-3 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none"
+              />
+              {isSearching && (
+                <div className="pr-4">
+                  <div className="w-4 h-4 border-2 border-[var(--text-muted)] border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+              {searchQuery && !isSearching && (
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSearchResults([]);
+                    setSelectedLocation(null);
+                  }}
+                  className="pr-4 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Search results dropdown */}
+            {showResults && searchResults.length > 0 && (
+              <div className="absolute top-full left-4 right-4 mt-2 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden z-50">
+                <div className="py-1">
+                  {searchResults.map((result, index) => {
+                    const parts = result.display_name.split(",");
+                    const mainName = parts[0].trim();
+                    const subAddress = parts.slice(1, 3).map(p => p.trim()).join(", ");
+
+                    return (
+                      <button
+                        key={result.place_id}
+                        onClick={() => handleSelectResult(result)}
+                        className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-all duration-150 ${
+                          index !== searchResults.length - 1 ? "border-b border-gray-100 dark:border-neutral-800" : ""
+                        }`}
+                      >
+                        {/* Location icon */}
+                        <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500 dark:text-gray-400">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                          </svg>
+                        </div>
+                        
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[15px] font-medium text-gray-900 dark:text-white truncate">
+                            {mainName}
+                          </p>
+                          {subAddress && (
+                            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                              {subAddress}
+                            </p>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Map */}
+          <div className="flex-1 p-4">
+            <OttawaMap 
+              onLocationSelect={handleLocationSelect}
+              selectedLocation={selectedLocation}
+            />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
@@ -289,7 +424,7 @@ function Suggestion({
   return (
     <button
       onClick={() => onClick(text)}
-      className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-left text-sm text-[var(--text-secondary)] hover:shadow-glow-card transition-all duration-300"
+      className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-3 text-left text-sm text-[var(--text-secondary)] hover:shadow-glow-card transition-all duration-300"
     >
       {text}
     </button>

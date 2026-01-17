@@ -15,19 +15,33 @@ YELLOWCAKE_API_KEY = os.getenv("YELLOWCAKE_API_KEY")
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "..", "cache")
 CACHE_EXPIRY_HOURS = 24
 
-SOURCES_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "listing_sources.json")
+SOURCES_DIR = os.path.join(os.path.dirname(__file__), "sources")
 
 
-def load_sources_config() -> Dict:
-    """Load listing sources configuration"""
-    with open(SOURCES_CONFIG_PATH, 'r') as f:
+def load_source_config(source_name: str) -> Optional[Dict]:
+    """Load a single source configuration"""
+    source_path = os.path.join(SOURCES_DIR, f"{source_name}.json")
+    if not os.path.exists(source_path):
+        return None
+    with open(source_path, 'r') as f:
         return json.load(f)
 
 
 def get_enabled_sources() -> List[Dict]:
-    """Get list of enabled listing sources"""
-    config = load_sources_config()
-    return [source for source in config['sources'] if source.get('enabled', True)]
+    """Get list of enabled listing sources from individual files"""
+    sources = []
+    if not os.path.exists(SOURCES_DIR):
+        return sources
+    
+    for filename in os.listdir(SOURCES_DIR):
+        if filename.endswith('.json'):
+            source_path = os.path.join(SOURCES_DIR, filename)
+            with open(source_path, 'r') as f:
+                source = json.load(f)
+                if source.get('enabled', True):
+                    sources.append(source)
+    
+    return sources
 
 
 def _get_cache_key(source_name: str, city: str, budget_min: int, budget_max: int, bedrooms: int) -> str:
