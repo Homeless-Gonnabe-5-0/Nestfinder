@@ -30,7 +30,7 @@ class TravelTimeService:
     def geocode_address(self, address: str, within_country=None, limit=1):
         """
         Convert address string to latitude/longitude coordinates.
-        
+    
         Args:
             address: Address string (e.g., "123 Main St, Ottawa, ON")
             within_country: ISO country code to limit results (e.g., "CA" for Canada)
@@ -47,7 +47,7 @@ class TravelTimeService:
             }
             
             if within_country:
-                params["within_countries"] = [within_country]
+                params["within_countries"] = [within_country]  # Changed to plural
             
             response = self.client.geocoding(**params)
             
@@ -75,101 +75,10 @@ class TravelTimeService:
             traceback.print_exc()
             return None
     
-    def _resolve_location(self, location):
-        """
-        Helper method to resolve a location to lat/lng coordinates.
-        
-        Args:
-            location: Can be:
-                - Dict with 'lat' and 'lng' keys
-                - Dict with 'address' key (will geocode)
-                - String address (will geocode)
-        
-        Returns:
-            Tuple of (lat, lng) or (None, None) if resolution fails
-        """
-        # Case 1: Already has coordinates
-        if isinstance(location, dict) and 'lat' in location and 'lng' in location:
-            return location['lat'], location['lng']
-        
-        # Case 2: Dict with address key
-        if isinstance(location, dict) and 'address' in location:
-            address = location['address']
-            result = self.geocode_address(address, within_country="CA")
-            if result:
-                return result['lat'], result['lng']
-            return None, None
-        
-        # Case 3: String address
-        if isinstance(location, str):
-            result = self.geocode_address(location, within_country="CA")
-            if result:
-                return result['lat'], result['lng']
-            return None, None
-        
-        return None, None
-    
-    def calculate_travel_time_flexible(self, origin, destination, 
-                                      transport_mode="public_transport", departure_time=None):
-        """
-        Calculate travel time with flexible input formats.
-        
-        Args:
-            origin: Can be:
-                - Dict with 'lat' and 'lng' keys
-                - Dict with 'address' key
-                - String address
-            destination: Same format options as origin
-            transport_mode: Mode of transport (driving, public_transport, walking, cycling)
-            departure_time: ISO 8601 formatted time (defaults to now)
-        
-        Returns:
-            Dictionary with travel_time (in minutes) and distance (in meters), or None if unreachable
-        """
-        # Resolve both locations to coordinates
-        origin_lat, origin_lng = self._resolve_location(origin)
-        dest_lat, dest_lng = self._resolve_location(destination)
-        
-        if not origin_lat or not dest_lat:
-            print("Failed to resolve origin or destination to coordinates")
-            return None
-        
-        # Use the existing method with coordinates
-        return self.calculate_travel_time(
-            origin_lat, origin_lng, dest_lat, dest_lng, 
-            transport_mode, departure_time
-        )
-    
-    def calculate_all_travel_times_flexible(self, origin, destination, departure_time=None):
-        """
-        Calculate travel times for ALL transportation modes with flexible input.
-        
-        Args:
-            origin: Can be dict with lat/lng, dict with address, or string address
-            destination: Same format options as origin
-            departure_time: ISO 8601 formatted time (defaults to now)
-        
-        Returns:
-            Dictionary with results for each mode
-        """
-        # Resolve both locations to coordinates
-        origin_lat, origin_lng = self._resolve_location(origin)
-        dest_lat, dest_lng = self._resolve_location(destination)
-        
-        if not origin_lat or not dest_lat:
-            print("Failed to resolve origin or destination to coordinates")
-            return None
-        
-        # Use the existing method with coordinates
-        return self.calculate_all_travel_times(
-            origin_lat, origin_lng, dest_lat, dest_lng, 
-            departure_time
-        )
-    
     def calculate_travel_time(self, origin_lat, origin_lng, dest_lat, dest_lng, 
                              transport_mode="public_transport", departure_time=None):
         """
-        Calculate travel time from origin to destination using coordinates.
+        Calculate travel time from origin to destination
         
         Args:
             origin_lat: Origin latitude
@@ -229,7 +138,7 @@ class TravelTimeService:
     
     def calculate_all_travel_times(self, origin_lat, origin_lng, dest_lat, dest_lng, departure_time=None):
         """
-        Calculate travel times for ALL transportation modes using coordinates.
+        Calculate travel times for ALL transportation modes
         
         Args:
             origin_lat: Origin latitude
@@ -263,40 +172,31 @@ if __name__ == "__main__":
     service = TravelTimeService()
     service.test_connection()
     
-    print("\nTest 1: Flexible input - string addresses")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin="University of Ottawa, Ottawa, ON",
-        destination="Parliament Hill, Ottawa, ON"
-    )
+    # Test geocoding
+    print("\nTesting geocoding...")
+    result = service.geocode_address("University of Ottawa, Ottawa, ON", within_country="CA")
+    if result:
+        print(f"Address: {result['formatted_address']}")
+        print(f"Coordinates: ({result['lat']}, {result['lng']})")
+    else:
+        print("Geocoding failed")
     
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
-    
-    print("\nTest 2: Flexible input - coordinates for property, address for work")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin={"lat": 45.4215, "lng": -75.6972},  # Property with coords
-        destination="University of Ottawa, Ottawa, ON"  # Work as string
-    )
-    
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
-    
-    print("\nTest 3: Mixed format - dict with address")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin={"lat": 45.4215, "lng": -75.6972},
-        destination={"address": "Carleton University, Ottawa"}
-    )
-    
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
+    # Test with all transportation modes using geocoded coordinates
+    if result:
+        print("\nCalculating travel times from Downtown Ottawa to uOttawa...")
+        results = service.calculate_all_travel_times(
+            origin_lat=45.4215,  # Downtown Ottawa
+            origin_lng=-75.6972,
+            dest_lat=result['lat'],
+            dest_lng=result['lng']
+        )
+        
+        print("\nTravel Times:")
+        print("=" * 50)
+        for mode, travel_result in results.items():
+            if travel_result:
+                print(f"{mode.upper()}: {travel_result['travel_time_minutes']} min ({travel_result['distance_meters']}m)")
+            else:
+                print(f"{mode.upper()}: Not available")
     
     service.close()
