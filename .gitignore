@@ -1,3 +1,4 @@
 backend/data/crime_data/*.geojson
 .vercel
 frontend/.vercel
+*.geojson
