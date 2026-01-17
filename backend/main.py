@@ -1,0 +1,148 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))    
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
+
+from models import SearchRequest, SearchResponse
+from agents.coordinator import CoordinatorAgent
+from constants import PRIORITIES, OTTAWA_NEIGHBORHOODS, TRANSPORT_MODES, API_VERSION
+
+class SearchRequestAPI(BaseModel):
+    """API request model (what frontend sends)"""
+    budget_min: int
+    budget_max: int
+    work_address: str
+    bedrooms: int = 1
+    priorities: list[str] = ["short_commute", "low_price"]
+    max_commute_minutes: int = 45
+    transport_mode: str = "transit"
+
+app = FastAPI(
+    title="NestFinder API",
+    description="Smart apartment hunting for Ottawa renters",
+    version=API_VERSION
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+coordinator: Optional[CoordinatorAgent] = None
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize agents when server starts"""
+    global coordinator
+    print("Starting NestFinder API...")
+    coordinator = CoordinatorAgent()
+    print("API ready!\n")
+
+
+@app.get("/")
+async def root():
+    """Root endpoint - health check"""
+    return {
+        "status": "ok",
+        "version": API_VERSION,
+        "message": "Welcome to NestFinder API! Use POST /api/v1/search to find apartments."
+    }
+
+
+@app.get("/api/v1/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "ok",
+        "version": API_VERSION,
+        "message": "NestFinder API is running"
+    }
+
+
+@app.get("/api/v1/priorities")
+async def get_priorities():
+    """Get list of available priorities"""
+    return {
+        "priorities": PRIORITIES,
+        "description": "Available priorities users can select"
+    }
+
+
+@app.get("/api/v1/neighborhoods")
+async def get_neighborhoods():
+    """Get list of Ottawa neighborhoods"""
+    return {
+        "neighborhoods": OTTAWA_NEIGHBORHOODS,
+        "city": "Ottawa"
+    }
+
+
+@app.get("/api/v1/transport-modes")
+async def get_transport_modes():
+    """Get list of transport modes"""
+    return {
+        "modes": TRANSPORT_MODES
+    }
+
+
+@app.post("/api/v1/search")
+async def search_apartments(request: SearchRequestAPI):
+    """
+    Search for apartments based on user preferences.
+    
+    This is the main endpoint that the frontend calls.
+    """
+    global coordinator
+    
+    if coordinator is None:
+        raise HTTPException(status_code=503, detail="Service not ready")
+    
+    # Validate request
+    if request.budget_min < 0 or request.budget_max < 0:
+        raise HTTPException(status_code=400, detail="Budget cannot be negative")
+    
+    if request.budget_min > request.budget_max:
+        raise HTTPException(status_code=400, detail="budget_min cannot be greater than budget_max")
+    
+    if request.bedrooms < 0 or request.bedrooms > 5:
+        raise HTTPException(status_code=400, detail="Bedrooms must be between 0 and 5")
+    
+    # Convert API model to internal model
+    search_request = SearchRequest(
+        budget_min=request.budget_min,
+        budget_max=request.budget_max,
+        work_address=request.work_address,
+        bedrooms=request.bedrooms,
+        priorities=request.priorities,
+        max_commute_minutes=request.max_commute_minutes,
+        transport_mode=request.transport_mode
+    )
+    
+    try:
+        # Run search
+        response = await coordinator.search(search_request)
+        return response.to_dict()
+    
+    except Exception as e:
+        print(f"Search error: {e}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    
+    print("\n" + "="*60)
+    print("🏠 NestFinder API Server")
+    print("="*60)
+    print("Starting server at http://localhost:8000")
+    print("API docs at http://localhost:8000/docs")
+    print("="*60 + "\n")
+    
+    uvicorn.run(app, host="0.0.0.0", port=8000)
