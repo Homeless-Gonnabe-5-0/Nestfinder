@@ -7,10 +7,24 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models import Apartment
 
 
-def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list:
+def get_mock_apartments(
+    budget_min: int,
+    budget_max: int,
+    bedrooms: int,
+    pets_required: bool = False
+) -> list:
     """
     Returns realistic mock apartments for Ottawa.
-    Filters by budget and bedrooms.
+    Filters by budget, bedrooms, and pet policy.
+    
+    Args:
+        budget_min: Minimum monthly rent
+        budget_max: Maximum monthly rent
+        bedrooms: Number of bedrooms required
+        pets_required: If True, only return pet-friendly apartments
+    
+    Returns:
+        List of Apartment objects matching criteria
     """
     
     all_apartments = [
@@ -30,7 +44,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
             source_url="https://rentals.ca/ottawa/180-metcalfe-street",
             lat=45.4201,
-            lng=-75.6941
+            lng=-75.6941,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=False
         ),
         Apartment(
             id="apt_002",
@@ -48,7 +66,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
             source_url="https://rentals.ca/ottawa/890-bank-street",
             lat=45.3989,
-            lng=-75.6897
+            lng=-75.6897,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_003",
@@ -66,7 +88,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
             source_url="https://rentals.ca/ottawa/222-queen-street",
             lat=45.4215,
-            lng=-75.6972
+            lng=-75.6972,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=False,
+            near_school=False
         ),
         Apartment(
             id="apt_004",
@@ -84,7 +110,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800",
             source_url="https://rentals.ca/ottawa/1080-wellington-west",
             lat=45.3975,
-            lng=-75.7330
+            lng=-75.7330,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=False
         ),
         Apartment(
             id="apt_005",
@@ -102,7 +132,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
             source_url="https://rentals.ca/ottawa/450-laurier-east",
             lat=45.4240,
-            lng=-75.6780
+            lng=-75.6780,
+            lease_term_months=12,
+            near_grocery=False,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_006",
@@ -120,7 +154,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800",
             source_url="https://rentals.ca/ottawa/388-richmond-road",
             lat=45.3925,
-            lng=-75.7540
+            lng=-75.7540,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_007",
@@ -138,7 +176,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800",
             source_url="https://rentals.ca/ottawa/255-montreal-road",
             lat=45.4380,
-            lng=-75.6650
+            lng=-75.6650,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=False,
+            near_school=False
         ),
         Apartment(
             id="apt_008",
@@ -156,7 +198,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=800",
             source_url="https://rentals.ca/ottawa/330-preston-street",
             lat=45.4062,
-            lng=-75.7145
+            lng=-75.7145,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=False
         ),
         Apartment(
             id="apt_009",
@@ -174,7 +220,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800",
             source_url="https://rentals.ca/ottawa/50-george-street",
             lat=45.4275,
-            lng=-75.6920
+            lng=-75.6920,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=False,
+            near_school=False
         ),
         Apartment(
             id="apt_010",
@@ -192,7 +242,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800",
             source_url="https://rentals.ca/ottawa/1541-alta-vista",
             lat=45.3850,
-            lng=-75.6690
+            lng=-75.6690,
+            lease_term_months=12,
+            near_grocery=False,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_011",
@@ -210,7 +264,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800",
             source_url="https://rentals.ca/ottawa/1100-bank-street",
             lat=45.3890,
-            lng=-75.6880
+            lng=-75.6880,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_012",
@@ -228,7 +286,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
             source_url="https://rentals.ca/ottawa/420-mackay-street",
             lat=45.4380,
-            lng=-75.6780
+            lng=-75.6780,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_013",
@@ -246,7 +308,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
             source_url="https://rentals.ca/ottawa/200-gloucester",
             lat=45.4180,
-            lng=-75.6950
+            lng=-75.6950,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_014",
@@ -264,7 +330,11 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
             source_url="https://rentals.ca/ottawa/780-bank-street",
             lat=45.4010,
-            lng=-75.6890
+            lng=-75.6890,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=True,
+            near_school=True
         ),
         Apartment(
             id="apt_015",
@@ -282,21 +352,41 @@ def get_mock_apartments(budget_min: int, budget_max: int, bedrooms: int) -> list
             image_url="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800",
             source_url="https://rentals.ca/ottawa/300-montreal-road",
             lat=45.4395,
-            lng=-75.6620
+            lng=-75.6620,
+            lease_term_months=12,
+            near_grocery=True,
+            near_park=False,
+            near_school=False
         ),
     ]
     
+    # Filter by criteria
     filtered = [
         apt for apt in all_apartments
         if budget_min <= apt.price <= budget_max
         and apt.bedrooms == bedrooms
+        and (not pets_required or apt.pet_friendly)
     ]
     
     return filtered
 
 
 if __name__ == "__main__":
+    # Test basic filtering
+    print("Test 1: 1BR apartments between $1500-$2000")
     apartments = get_mock_apartments(1500, 2000, 1)
-    print(f"Found {len(apartments)} apartments between $1500-$2000 (1BR):")
+    print(f"Found {len(apartments)} apartments:")
     for apt in apartments:
-        print(f"  • {apt.title}: ${apt.price}/mo in {apt.neighborhood}")
+        print(f"  - {apt.title}: ${apt.price}/mo in {apt.neighborhood}")
+    
+    print("\nTest 2: Pet-friendly 1BR apartments between $1500-$2000")
+    pet_apartments = get_mock_apartments(1500, 2000, 1, pets_required=True)
+    print(f"Found {len(pet_apartments)} pet-friendly apartments:")
+    for apt in pet_apartments:
+        print(f"  - {apt.title}: ${apt.price}/mo (Pets: {apt.pet_friendly})")
+    
+    print("\nTest 3: 2BR apartments between $2000-$2700")
+    big_apartments = get_mock_apartments(2000, 2700, 2)
+    print(f"Found {len(big_apartments)} 2BR apartments:")
+    for apt in big_apartments:
+        print(f"  - {apt.title}: ${apt.price}/mo")
