@@ -4,8 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { searchApartments, type SearchResponse } from "@/lib/api";
-import { parseUserMessage } from "@/lib/parseUserInput";
+import { chat, type SearchResponse, type ChatResponse } from "@/lib/api";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const OttawaMap = dynamic(() => import("../components/OttawaMap"), {
@@ -36,10 +35,21 @@ interface SearchResult {
   addresstype?: string;
 }
 
+  // Thinking messages that cycle while loading
+  const THINKING_MESSAGES = [
+    "Reading your message",
+    "Thinking",
+    "Understanding your needs",
+    "Searching Ottawa listings",
+    "Finding matches",
+  ];
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingIndex, setLoadingIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   
   // Search state
@@ -49,6 +59,25 @@ export default function ChatPage() {
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Smooth cycle through loading messages
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingIndex(0);
+      setIsFading(false);
+      return;
+    }
+    
+    const interval = setInterval(() => {
+      setIsFading(true);
+      setTimeout(() => {
+        setLoadingIndex((prev) => (prev + 1) % THINKING_MESSAGES.length);
+        setIsFading(false);
+      }, 200);
+    }, 1800);
+    
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   // Close results when clicking outside
   useEffect(() => {
@@ -115,6 +144,9 @@ export default function ChatPage() {
     setShowResults(false);
   };
 
+  // Generate a simple session ID (persists for the page session)
+  const sessionIdRef = useRef<string>(`session_${Date.now()}`);
+
   async function handleSend() {
     const text = input.trim();
     if (!text || isLoading) return;
@@ -125,42 +157,37 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Parse user input
-      const parsed = parseUserMessage(text);
-      
-      if (!parsed) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "I couldn't find a work address in your message. Please include where you work (e.g., '99 Bank St' or 'downtown Ottawa') so I can calculate commute times.",
-          },
-        ]);
-        setIsLoading(false);
-        return;
-      }
-
-      // Call backend API
-      const response = await searchApartments(parsed);
-      
-      // Format response message
-      let responseText = `Found ${response.total_found} apartments! Here are the top matches:\n\n`;
-      
-      response.recommendations.slice(0, 5).forEach((rec) => {
-        responseText += `${rec.rank}. ${rec.apartment.title}\n`;
-        responseText += `   📍 ${rec.apartment.address}, ${rec.apartment.neighborhood}\n`;
-        responseText += `   💰 $${rec.apartment.price}/month\n`;
-        responseText += `   🚇 ${rec.commute.best_time} min commute\n`;
-        responseText += `   ⭐ Score: ${rec.overall_score}/100\n`;
-        responseText += `   ${rec.headline}\n\n`;
+      // Call natural language chat API
+      const response = await chat({
+        message: text,
+        session_id: sessionIdRef.current,
+        pinned_lat: selectedLocation?.[0],
+        pinned_lng: selectedLocation?.[1],
       });
+      
+      // Build response message
+      let responseText = response.response;
+      
+      // If there are search results, append them
+      if (response.search_results && response.search_results.recommendations?.length > 0) {
+        responseText += `\n\nFound ${response.search_results.total_found} apartments! Here are the top matches:\n\n`;
+        
+        response.search_results.recommendations.slice(0, 5).forEach((rec) => {
+          responseText += `${rec.rank}. ${rec.apartment.title}\n`;
+          responseText += `   📍 ${rec.apartment.address}, ${rec.apartment.neighborhood}\n`;
+          responseText += `   💰 $${rec.apartment.price}/month\n`;
+          responseText += `   🚇 ${rec.commute.best_time} min commute\n`;
+          responseText += `   ⭐ Score: ${rec.overall_score}/100\n`;
+          responseText += `   ${rec.headline}\n\n`;
+        });
+      }
 
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
           content: responseText,
-          data: response,
+          data: response.search_results || undefined,
         },
       ]);
     } catch (error) {
@@ -212,11 +239,17 @@ export default function ChatPage() {
               <div className="w-full max-w-lg">
                 <div className="text-center mb-6">
                   <h1 className="text-2xl font-semibold tracking-tight animate-slide-up">
-                    Ask Nestfinder
+                    Chat with Nestfinder
                   </h1>
                   <p className="mt-2 text-sm text-[var(--text-muted)] animate-slide-up-delay-1">
-                    Describe what you're looking for — or search a location on the map.
+                    Ask me anything about Ottawa apartments — I'm here to help! 🏠
                   </p>
+                  {selectedLocation && (
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium animate-slide-up-delay-1">
+                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      📍 Location pinned for commute calculations
+                    </div>
+                  )}
                 </div>
 
                 {/* Suggested prompts */}
@@ -254,10 +287,18 @@ export default function ChatPage() {
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="mr-auto bg-[var(--bg-secondary)] rounded-2xl px-4 py-3">
-                    <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                      Searching apartments...
+                  <div className="mr-auto bg-[var(--bg-secondary)] rounded-2xl px-4 py-3 animate-slide-up">
+                    <div className="flex items-center gap-2">
+                      <span 
+                        className={`text-sm text-[var(--text-muted)] transition-all duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+                      >
+                        {THINKING_MESSAGES[loadingIndex]}
+                      </span>
+                      <span className="flex gap-0.5">
+                        <span className="w-1 h-1 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1 h-1 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1 h-1 bg-[var(--text-muted)] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </span>
                     </div>
                   </div>
                 )}
@@ -277,7 +318,7 @@ export default function ChatPage() {
                     handleSend();
                   }
                 }}
-                placeholder="Ask about Ottawa apartments..."
+                placeholder="Say hi or ask about apartments..."
                 rows={1}
                 className="max-h-32 w-full resize-none bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
               />

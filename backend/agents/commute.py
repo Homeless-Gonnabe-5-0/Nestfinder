@@ -1,6 +1,13 @@
 import os
+import sys
 from dotenv import load_dotenv
 from traveltimepy import Client
+from typing import Union
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from models import Apartment, CommuteAnalysis
 
 # Load environment variables from .env file
 load_dotenv()
@@ -81,6 +88,7 @@ class TravelTimeService:
         
         Args:
             location: Can be:
+                - Tuple of (lat, lng) - from map pin
                 - Dict with 'lat' and 'lng' keys
                 - Dict with 'address' key (will geocode)
                 - String address (will geocode)
@@ -88,7 +96,11 @@ class TravelTimeService:
         Returns:
             Tuple of (lat, lng) or (None, None) if resolution fails
         """
-        # Case 1: Already has coordinates
+        # Case 0: Tuple of coordinates (lat, lng) - from map pin
+        if isinstance(location, tuple) and len(location) == 2:
+            return location[0], location[1]
+        
+        # Case 1: Already has coordinates as dict
         if isinstance(location, dict) and 'lat' in location and 'lng' in location:
             return location['lat'], location['lng']
         
@@ -258,45 +270,213 @@ class TravelTimeService:
         """Close the client session"""
         self.client.close()
 
+class CommuteAgent:
+    """
+    Analyzes commute times from apartment to destination (work/school).
+    Uses TravelTimeService for real-time travel calculations.
+    
+    Supports destinations as:
+    - Tuple of (lat, lng) coordinates from map pin
+    - String address (will be geocoded)
+    """
+    
+    def __init__(self):
+        self.name = "CommuteAgent"
+        print(f"[{self.name}] initialized")
+        
+        try:
+            self.travel_service = TravelTimeService()
+            self.api_available = True
+        except Exception as e:
+            print(f"[{self.name}] Warning: TravelTime API not available ({e})")
+            self.travel_service = None
+            self.api_available = False
+    
+    def _mode_to_api(self, mode: str) -> str:
+        """Convert user-friendly mode to API mode."""
+        mode_map = {
+            "transit": "public_transport",
+            "driving": "driving",
+            "biking": "cycling",
+            "walking": "walking",
+            "public_transport": "public_transport",
+            "cycling": "cycling"
+        }
+        return mode_map.get(mode.lower(), "public_transport")
+    
+    async def analyze(
+        self,
+        apartment: Apartment,
+        destination: Union[tuple, str],
+        transport_mode: str = "transit"
+    ) -> CommuteAnalysis:
+        """
+        Analyze commute from apartment to destination.
+        
+        Args:
+            apartment: The apartment to analyze
+            destination: Either (lat, lng) tuple from map or string address
+            transport_mode: Preferred transport mode (transit, driving, biking, walking)
+            
+        Returns: CommuteAnalysis object
+        """
+        # Check if we have apartment coordinates
+        if apartment.lat is None or apartment.lng is None:
+            return self._fallback_analysis(apartment.id, transport_mode)
+        
+        origin = {"lat": apartment.lat, "lng": apartment.lng}
+        
+        # Log what destination type we're using
+        if isinstance(destination, tuple):
+            print(f"[{self.name}] Using pinned location: ({destination[0]:.4f}, {destination[1]:.4f})")
+        else:
+            print(f"[{self.name}] Using address: {destination}")
+        
+        if not self.api_available or self.travel_service is None:
+            return self._fallback_analysis(apartment.id, transport_mode)
+        
+        try:
+            # Get travel times for all modes
+            results = self.travel_service.calculate_all_travel_times_flexible(
+                origin=origin,
+                destination=destination
+            )
+            
+            if not results:
+                return self._fallback_analysis(apartment.id, transport_mode)
+            
+            # Extract times
+            transit_mins = results.get("public_transport", {})
+            driving_mins = results.get("driving", {})
+            biking_mins = results.get("cycling", {})
+            walking_mins = results.get("walking", {})
+            
+            transit_time = transit_mins.get("travel_time_minutes") if transit_mins else None
+            driving_time = driving_mins.get("travel_time_minutes") if driving_mins else None
+            biking_time = biking_mins.get("travel_time_minutes") if biking_mins else None
+            walking_time = walking_mins.get("travel_time_minutes") if walking_mins else None
+            
+            # Determine best mode and time
+            times = {
+                "transit": transit_time,
+                "driving": driving_time,
+                "biking": biking_time,
+                "walking": walking_time
+            }
+            
+            valid_times = {k: v for k, v in times.items() if v is not None}
+            
+            if valid_times:
+                best_mode = min(valid_times, key=valid_times.get)
+                best_time = valid_times[best_mode]
+            else:
+                best_mode = transport_mode
+                best_time = 30  # Fallback
+            
+            # Calculate commute score (0-100, higher is better)
+            if best_time <= 10:
+                commute_score = 100
+            elif best_time <= 20:
+                commute_score = 90
+            elif best_time <= 30:
+                commute_score = 75
+            elif best_time <= 45:
+                commute_score = 60
+            elif best_time <= 60:
+                commute_score = 40
+            else:
+                commute_score = 20
+            
+            # Generate summary
+            if best_time <= 15:
+                summary = f"Excellent! Only {best_time} min by {best_mode}"
+            elif best_time <= 30:
+                summary = f"Great {best_time} min commute by {best_mode}"
+            elif best_time <= 45:
+                summary = f"Reasonable {best_time} min by {best_mode}"
+            else:
+                summary = f"Long commute: {best_time} min by {best_mode}"
+            
+            return CommuteAnalysis(
+                apartment_id=apartment.id,
+                transit_minutes=transit_time,
+                driving_minutes=driving_time,
+                biking_minutes=biking_time,
+                walking_minutes=walking_time,
+                best_mode=best_mode,
+                best_time=best_time,
+                commute_score=commute_score,
+                summary=summary
+            )
+            
+        except Exception as e:
+            print(f"[{self.name}] Error analyzing commute: {e}")
+            return self._fallback_analysis(apartment.id, transport_mode)
+    
+    def _fallback_analysis(self, apartment_id: str, mode: str) -> CommuteAnalysis:
+        """Return a fallback analysis when API is unavailable."""
+        return CommuteAnalysis(
+            apartment_id=apartment_id,
+            transit_minutes=25,
+            driving_minutes=15,
+            biking_minutes=20,
+            walking_minutes=None,
+            best_mode=mode,
+            best_time=25,
+            commute_score=70,
+            summary="Estimated commute (API unavailable)"
+        )
+
+
 # Test it
 if __name__ == "__main__":
-    service = TravelTimeService()
-    service.test_connection()
+    import asyncio
     
-    print("\nTest 1: Flexible input - string addresses")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin="University of Ottawa, Ottawa, ON",
-        destination="Parliament Hill, Ottawa, ON"
-    )
+    async def test():
+        print("\n" + "="*60)
+        print("Testing CommuteAgent")
+        print("="*60)
+        
+        agent = CommuteAgent()
+        
+        # Create test apartment
+        test_apt = Apartment(
+            id="test_001",
+            title="Test Apartment",
+            address="200 Rideau St",
+            neighborhood="Byward Market",
+            price=1800,
+            bedrooms=1,
+            bathrooms=1.0,
+            lat=45.4275,
+            lng=-75.6919
+        )
+        
+        # Test 1: Using string address
+        print("\nTest 1: String address destination")
+        result = await agent.analyze(
+            test_apt,
+            "University of Ottawa, Ottawa, ON",
+            "transit"
+        )
+        print(f"  Result: {result.summary}")
+        print(f"  Transit: {result.transit_minutes} min")
+        print(f"  Score: {result.commute_score}")
+        
+        # Test 2: Using pinned coordinates (tuple)
+        print("\nTest 2: Pinned coordinates destination")
+        pinned_location = (45.4231, -75.6831)  # uOttawa coords
+        result = await agent.analyze(
+            test_apt,
+            pinned_location,
+            "transit"
+        )
+        print(f"  Result: {result.summary}")
+        print(f"  Transit: {result.transit_minutes} min")
+        print(f"  Score: {result.commute_score}")
+        
+        print("\n" + "="*60)
+        print("CommuteAgent tests complete!")
+        print("="*60)
     
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
-    
-    print("\nTest 2: Flexible input - coordinates for property, address for work")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin={"lat": 45.4215, "lng": -75.6972},  # Property with coords
-        destination="University of Ottawa, Ottawa, ON"  # Work as string
-    )
-    
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
-    
-    print("\nTest 3: Mixed format - dict with address")
-    print("=" * 50)
-    results = service.calculate_all_travel_times_flexible(
-        origin={"lat": 45.4215, "lng": -75.6972},
-        destination={"address": "Carleton University, Ottawa"}
-    )
-    
-    if results:
-        for mode, result in results.items():
-            if result:
-                print(f"{mode.upper()}: {result['travel_time_minutes']} min")
-    
-    service.close()
+    asyncio.run(test())

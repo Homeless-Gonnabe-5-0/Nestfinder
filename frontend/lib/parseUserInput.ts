@@ -8,9 +8,15 @@ export interface ParsedSearch {
   priorities: string[];
   max_commute_minutes: number;
   transport_mode: string;
+  // Pinned location from map (optional - takes priority over work_address)
+  pinned_lat?: number;
+  pinned_lng?: number;
 }
 
-export function parseUserMessage(message: string): ParsedSearch | null {
+export function parseUserMessage(
+  message: string,
+  pinnedLocation?: { lat: number; lng: number } | null
+): ParsedSearch | null {
   const lower = message.toLowerCase();
   
   // Extract budget
@@ -92,17 +98,26 @@ export function parseUserMessage(message: string): ParsedSearch | null {
   }
   
   // Validate we have minimum required info
-  if (!work_address) {
+  // Allow search if we have EITHER a work address OR a pinned location
+  if (!work_address && !pinnedLocation) {
     return null;
   }
+  
+  // If we have a pinned location but no address, use a placeholder
+  const finalWorkAddress = work_address || "Pinned Location";
   
   return {
     budget_min,
     budget_max,
-    work_address,
+    work_address: finalWorkAddress,
     bedrooms,
     priorities,
     max_commute_minutes,
     transport_mode,
+    // Include pinned location if provided
+    ...(pinnedLocation && {
+      pinned_lat: pinnedLocation.lat,
+      pinned_lng: pinnedLocation.lng,
+    }),
   };
 }

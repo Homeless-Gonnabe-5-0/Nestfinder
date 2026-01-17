@@ -18,9 +18,22 @@ class SearchRequest:
     priorities: list = field(default_factory=lambda: ["short_commute", "low_price"])
     max_commute_minutes: int = 45
     transport_mode: str = "transit"
+    # Pinned location from map (takes priority over work_address for commute calculations)
+    pinned_lat: Optional[float] = None
+    pinned_lng: Optional[float] = None
 
     def to_dict(self):
         return asdict(self)
+    
+    def has_pinned_location(self) -> bool:
+        """Check if user has pinned a location on the map"""
+        return self.pinned_lat is not None and self.pinned_lng is not None
+    
+    def get_destination_coords(self) -> Optional[tuple]:
+        """Get destination coordinates if pinned, otherwise None"""
+        if self.has_pinned_location():
+            return (self.pinned_lat, self.pinned_lng)
+        return None
 
 
 # Core apartment model
