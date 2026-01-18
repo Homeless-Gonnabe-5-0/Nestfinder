@@ -45,7 +45,7 @@ function TimelineWithMovingDot() {
   const [activeStep, setActiveStep] = useState(-1);
   const [dotY, setDotY] = useState(0);
   const [lineHeight, setLineHeight] = useState(0);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
   const targetY = useRef(0);
   const currentY = useRef(0);
   
