@@ -43,16 +43,28 @@ class ConversationAgent:
         """
         msg = message.lower()
         
-        # Check for search-related keywords
-        search_triggers = ["find", "search", "show", "looking for", "need", "want", 
-                          "apartment", "place", "rent", "bedroom", "bed", "studio"]
+        # MUST have housing-related keywords
+        housing_keywords = ["apartment", "place", "rent", "bedroom", "bed", "studio", 
+                           "condo", "flat", "housing", "living", "move", "lease"]
+        has_housing_context = any(kw in msg for kw in housing_keywords)
         
-        has_search_intent = any(trigger in msg for trigger in search_triggers)
+        # Check for price mentions (strong signal)
+        has_price = bool(re.search(r'\$\d{3,}|\d{3,}\s*(dollars|bucks|/month|per month)', msg))
         
-        # Also check for price mentions
-        has_price = bool(re.search(r'\$\d+|\d+\s*(dollars|bucks|/month|per month)', msg))
+        # Action words that suggest searching
+        action_words = ["find", "show", "looking for", "search for", "get me", "need a", "want a"]
+        has_action = any(action in msg for action in action_words)
         
-        if not (has_search_intent or has_price):
+        # Only trigger if:
+        # 1. Has price (strong signal) OR
+        # 2. Has both housing keywords AND action words
+        if not (has_price or (has_housing_context and has_action)):
+            return None
+        
+        # Extra check: ignore if it's clearly not about apartments
+        ignore_phrases = ["search him", "search her", "search it", "look him up", "look her up", 
+                         "who is", "what is", "google", "youtube"]
+        if any(phrase in msg for phrase in ignore_phrases):
             return None
         
         # Extract parameters from the message
