@@ -62,7 +62,8 @@ function TimelineWithMovingDot() {
       }
       
       setDotY(currentY.current);
-      setLineHeight(Math.max(0, currentY.current + 8));
+      // Line should extend to the dot position (not beyond it)
+      setLineHeight(Math.max(0, currentY.current));
       
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -89,8 +90,8 @@ function TimelineWithMovingDot() {
       const lastRect = lastStep.getBoundingClientRect();
       
       // Calculate Y positions relative to timeline container
-      const firstY = firstRect.top - timelineRect.top + firstRect.height / 2;
-      const lastY = lastRect.top - timelineRect.top + lastRect.height / 2;
+      const firstY = firstRect.top - timelineRect.top;
+      const lastY = lastRect.top - timelineRect.top;
       
       // Trigger point - 45% from top of viewport
       const triggerPoint = viewportHeight * 0.45;
@@ -256,6 +257,15 @@ function TimelineWithMovingDot() {
   );
 }
 
+// Sample queries that rotate in the demo
+const SAMPLE_QUERIES = [
+  "Find me 1-bedroom apartments under $2100 near downtown",
+  "Pet-friendly 2BR with parking near uOttawa under $1800",
+  "Studio apartments in Centretown with gym, max $1500",
+  "Family-friendly 3BR near good schools, budget $2500",
+  "Apartments with in-unit laundry near Shopify office",
+];
+
 // Thinking messages that cycle while loading (same as chat page)
 const THINKING_MESSAGES = [
   "Reading your message",
@@ -265,8 +275,10 @@ const THINKING_MESSAGES = [
   "Finding matches",
 ];
 
-// AI Response for the demo
-const AI_RESPONSE = `Found 14 apartments matching your criteria! Here are my top 3 picks:
+// AI Responses for different queries
+const AI_RESPONSES = [
+  // Response for 1BR downtown query
+  `Found 14 apartments matching your criteria! Here are my top 3 picks:
 
 **1. The Laurier** - $1,695/mo
 Sandy Hill • 1 bed • 12 min transit
@@ -283,13 +295,146 @@ The Glebe • 1 bed • 15 min transit
 Score: 87/100 - Safest Area
 Parking included • Near parks
 
-View all 14 results →`;
+View all 14 results →`,
 
-// Demo apartment markers for the mini map
-const DEMO_APARTMENTS = [
-  { id: 1, top: '28%', left: '52%', price: '$1,695' },
-  { id: 2, top: '42%', left: '48%', price: '$1,349' },
-  { id: 3, top: '55%', left: '58%', price: '$1,450' },
+  // Response for pet-friendly 2BR near uOttawa
+  `Found 8 pet-friendly apartments near uOttawa! Top matches:
+
+**1. Somerset Square** - $1,750/mo
+Sandy Hill • 2 bed • 5 min walk to campus
+Score: 95/100 - Perfect Match
+Pet-friendly • Underground parking • Balcony
+
+**2. Campus Towers** - $1,695/mo
+Lowertown • 2 bed • 10 min transit
+Score: 91/100 - Great Value
+Allows large dogs • Storage locker
+
+**3. King Edward Apartments** - $1,799/mo
+Sandy Hill • 2 bed • 8 min walk
+Score: 88/100 - Best Amenities
+Pet wash station • Gym • Study rooms
+
+View all 8 results →`,
+
+  // Response for studio with gym
+  `Found 11 studios in Centretown with gym access:
+
+**1. Metcalfe Towers** - $1,425/mo
+Centretown • Studio • 6 min to downtown
+Score: 93/100 - Best Overall
+24/7 gym • Yoga studio • Concierge
+
+**2. Bank Street Lofts** - $1,299/mo
+Centretown • Studio • 4 min walk to shops
+Score: 90/100 - Best Price
+Modern gym • Bike storage • Rooftop
+
+**3. Elgin Residences** - $1,495/mo
+Centretown • Studio • 3 min to transit
+Score: 87/100 - Newest Building
+Fitness center • Pool • Sauna
+
+View all 11 results →`,
+
+  // Response for family 3BR near schools
+  `Found 6 family-friendly 3BR apartments near top schools:
+
+**1. Riverside Gardens** - $2,350/mo
+Alta Vista • 3 bed • A+ school district
+Score: 94/100 - Best for Families
+Playground • Near parks • Quiet street
+
+**2. Elmvale Estates** - $2,450/mo
+Elmvale Acres • 3 bed • Top-rated schools
+Score: 91/100 - Safest Area
+In-unit laundry • 2 parking spots • Yard
+
+**3. Beacon Hill Place** - $2,299/mo
+Beacon Hill • 3 bed • Elementary nearby
+Score: 89/100 - Best Value
+Community center • Green space • Storage
+
+View all 6 results →`,
+
+  // Response for in-unit laundry near Shopify
+  `Found 12 apartments with in-unit laundry near Shopify:
+
+**1. Byward Blue** - $1,850/mo
+Byward Market • 1 bed • 8 min walk to Shopify
+Score: 96/100 - Perfect Commute
+In-unit W/D • Dishwasher • Balcony
+
+**2. Dalhousie Lofts** - $1,725/mo
+Lowertown • 1 bed • 12 min walk
+Score: 92/100 - Modern & Stylish
+W/D in unit • Exposed brick • High ceilings
+
+**3. Clarence Condos** - $1,950/mo
+Byward • 2 bed • 6 min walk to office
+Score: 90/100 - Most Space
+Full laundry • Parking • Gym access
+
+View all 12 results →`,
+];
+
+// Demo apartment markers for each query type
+const DEMO_APARTMENTS_BY_QUERY = [
+  // 1BR downtown - scattered around downtown core
+  [
+    { id: 1, top: '42%', left: '48%', price: '$1,695' },
+    { id: 2, top: '45%', left: '52%', price: '$1,349' },
+    { id: 3, top: '55%', left: '58%', price: '$1,450' },
+    { id: 4, top: '38%', left: '50%', price: '$1,575' },
+    { id: 5, top: '48%', left: '55%', price: '$1,825' },
+    { id: 6, top: '52%', left: '46%', price: '$1,299' },
+    { id: 7, top: '40%', left: '54%', price: '$1,650' },
+    { id: 8, top: '46%', left: '49%', price: '$1,425' },
+  ],
+  // Pet-friendly 2BR near uOttawa - clustered near campus
+  [
+    { id: 1, top: '42%', left: '52%', price: '$1,750' },
+    { id: 2, top: '40%', left: '50%', price: '$1,695' },
+    { id: 3, top: '44%', left: '54%', price: '$1,799' },
+    { id: 4, top: '41%', left: '48%', price: '$1,725' },
+    { id: 5, top: '43%', left: '56%', price: '$1,650' },
+    { id: 6, top: '39%', left: '52%', price: '$1,775' },
+    { id: 7, top: '45%', left: '51%', price: '$1,699' },
+    { id: 8, top: '42%', left: '49%', price: '$1,795' },
+  ],
+  // Studio in Centretown - tight cluster downtown
+  [
+    { id: 1, top: '45%', left: '50%', price: '$1,425' },
+    { id: 2, top: '46%', left: '48%', price: '$1,299' },
+    { id: 3, top: '44%', left: '52%', price: '$1,495' },
+    { id: 4, top: '47%', left: '49%', price: '$1,350' },
+    { id: 5, top: '43%', left: '51%', price: '$1,399' },
+    { id: 6, top: '46%', left: '52%', price: '$1,450' },
+    { id: 7, top: '45%', left: '47%', price: '$1,375' },
+    { id: 8, top: '44%', left: '49%', price: '$1,475' },
+  ],
+  // Family 3BR - spread out in residential areas
+  [
+    { id: 1, top: '58%', left: '62%', price: '$2,350' },
+    { id: 2, top: '62%', left: '58%', price: '$2,450' },
+    { id: 3, top: '35%', left: '55%', price: '$2,299' },
+    { id: 4, top: '60%', left: '65%', price: '$2,395' },
+    { id: 5, top: '32%', left: '52%', price: '$2,275' },
+    { id: 6, top: '56%', left: '60%', price: '$2,425' },
+    { id: 7, top: '38%', left: '58%', price: '$2,325' },
+    { id: 8, top: '64%', left: '56%', price: '$2,499' },
+  ],
+  // Near Shopify - clustered in Byward/Lowertown
+  [
+    { id: 1, top: '40%', left: '52%', price: '$1,850' },
+    { id: 2, top: '38%', left: '54%', price: '$1,725' },
+    { id: 3, top: '41%', left: '50%', price: '$1,950' },
+    { id: 4, top: '39%', left: '53%', price: '$1,795' },
+    { id: 5, top: '42%', left: '51%', price: '$1,825' },
+    { id: 6, top: '37%', left: '52%', price: '$1,775' },
+    { id: 7, top: '40%', left: '55%', price: '$1,899' },
+    { id: 8, top: '41%', left: '53%', price: '$1,750' },
+  ],
 ];
 
 // Streaming text component for demo
@@ -367,7 +512,31 @@ function LiveDemo() {
   const [locationSearch, setLocationSearch] = useState("");
   const [pinPosition, setPinPosition] = useState({ top: '35%', left: '45%' });
   const [showPin, setShowPin] = useState(true);
-  const query = "Find me 1-bedroom apartments under $2100 near downtown";
+  const currentQueryIndexRef = useRef(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const demoRef = useRef<HTMLDivElement>(null);
+  const isRunningRef = useRef(false);
+  const shouldStopRef = useRef(false);
+  
+  // Intersection Observer to detect if demo is in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+        // If scrolling away while running, mark to stop after current cycle
+        if (!entry.isIntersecting && isRunningRef.current) {
+          shouldStopRef.current = true;
+        }
+      },
+      { threshold: 0.3 } // Demo needs to be at least 30% visible
+    );
+    
+    if (demoRef.current) {
+      observer.observe(demoRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
   
   // Cycle through thinking messages
   useEffect(() => {
@@ -389,6 +558,19 @@ function LiveDemo() {
     if (isUserInteracting) return;
     
     const runDemo = async () => {
+      // Don't start new cycle if we should stop
+      if (shouldStopRef.current) {
+        shouldStopRef.current = false;
+        isRunningRef.current = false;
+        return;
+      }
+      
+      // Only start if visible
+      if (!isVisible) return;
+      
+      isRunningRef.current = true;
+      const currentQuery = SAMPLE_QUERIES[currentQueryIndexRef.current];
+      
       // Reset
       setPhase(0);
       setTypedText("");
@@ -397,8 +579,8 @@ function LiveDemo() {
       
       // Phase 0: Start typing
       setIsAutoTyping(true);
-      for (let i = 0; i <= query.length; i++) {
-        setTypedText(query.slice(0, i));
+      for (let i = 0; i <= currentQuery.length; i++) {
+        setTypedText(currentQuery.slice(0, i));
         await new Promise(r => setTimeout(r, 40));
       }
       setIsAutoTyping(false);
@@ -411,12 +593,22 @@ function LiveDemo() {
       // Phase 2: Show results (streaming animation takes ~4s, then pause to read)
       setPhase(2);
       await new Promise(r => setTimeout(r, 8000));
+      
+      // Cycle completed
+      isRunningRef.current = false;
+      
+      // Cycle to next query
+      currentQueryIndexRef.current = (currentQueryIndexRef.current + 1) % SAMPLE_QUERIES.length;
     };
     
     runDemo();
     const interval = setInterval(runDemo, 16000);
-    return () => clearInterval(interval);
-  }, [isUserInteracting]);
+    return () => {
+      clearInterval(interval);
+      isRunningRef.current = false;
+      shouldStopRef.current = false;
+    };
+  }, [isUserInteracting, isVisible]);
 
   // Handle user sending a message
   const handleSend = () => {
@@ -434,7 +626,7 @@ function LiveDemo() {
   };
 
   return (
-    <div className="relative">
+    <div id="live-demo" ref={demoRef} className="relative">
       {/* Browser Chrome */}
       <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] overflow-hidden shadow-2xl">
         {/* Title Bar */}
@@ -452,7 +644,7 @@ function LiveDemo() {
         </div>
         
         {/* Chat Interface - Matches actual chat page */}
-        <div className="flex min-h-[420px] bg-[var(--bg-primary)]">
+        <div className="flex min-h-[500px] bg-[var(--bg-primary)]">
           {/* Left: Chat */}
           <div className="w-1/2 flex flex-col border-r border-[var(--border-color)]">
             {/* Messages */}
@@ -499,7 +691,7 @@ function LiveDemo() {
                 {/* AI Response - Streaming */}
                 {phase === 2 && (
                   <div className="mr-auto max-w-[90%] rounded-2xl px-4 py-3 text-sm bg-[var(--bg-secondary)] text-[var(--text-primary)] animate-slide-up whitespace-pre-wrap">
-                    <DemoStreamingText text={AI_RESPONSE} isActive={phase === 2} />
+                    <DemoStreamingText text={AI_RESPONSES[currentQueryIndexRef.current]} isActive={phase === 2} />
                   </div>
                 )}
               </div>
@@ -604,7 +796,7 @@ function LiveDemo() {
               {/* Apartment markers - show when results are displayed */}
               {phase === 2 && (
                 <div className="absolute inset-0 pointer-events-none">
-                  {DEMO_APARTMENTS.map((apt, i) => (
+                  {DEMO_APARTMENTS_BY_QUERY[currentQueryIndexRef.current].map((apt, i) => (
                     <div
                       key={apt.id}
                       className="absolute -translate-x-1/2 -translate-y-1/2 animate-scale-in"
@@ -633,7 +825,7 @@ function LiveDemo() {
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                 <div className="px-3 py-2 rounded-lg bg-white/95 dark:bg-black/80 backdrop-blur shadow-lg border border-gray-200/60 dark:border-gray-700/60 text-xs pointer-events-auto">
                   <p className="text-gray-500 dark:text-gray-400 font-medium">
-                    {phase === 2 ? "4 matches shown" : showPin ? "Location set" : "Click to drop a pin"}
+                    {phase === 2 ? "8 matches shown" : showPin ? "Location set" : "Click to drop a pin"}
                   </p>
                 </div>
                 {showPin && (
@@ -709,7 +901,10 @@ export default function Home() {
 
             {/* Right: CTA Buttons */}
             <div className="flex items-center gap-3">
-              <button className="hidden sm:inline-flex items-center px-4 py-2 text-sm rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] font-medium hover:shadow-glow-subtle hover:border-[var(--accent)] transition-all duration-300">
+              <button 
+                onClick={() => document.getElementById('live-demo')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                className="hidden sm:inline-flex items-center px-4 py-2 text-sm rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] font-medium hover:shadow-glow-subtle hover:border-[var(--accent)] transition-all duration-300"
+              >
                 Try Demo
               </button>
               <Link
@@ -747,63 +942,29 @@ export default function Home() {
               >
                 Start Your Search
               </Link>
-              <button className="group w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 text-sm rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] font-medium hover:shadow-glow-subtle hover:border-[var(--accent)] transition-all duration-300">
+              <button 
+                onClick={() => document.getElementById('live-demo')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                className="group w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 text-sm rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] font-medium hover:shadow-glow-subtle hover:border-[var(--accent)] transition-all duration-300"
+              >
                 Watch Demo
               </button>
             </div>
 
-            {/* Hero Visual - Enhanced */}
-            <div className="max-w-5xl mx-auto animate-fade-in-slow">
-              <div className="relative bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-3xl p-8 shadow-2xl">
-                <div className="aspect-video bg-[var(--bg-primary)] rounded-2xl border border-[var(--border-color)] flex items-center justify-center overflow-hidden">
-                  <p className="text-[var(--text-muted)] font-medium text-lg">Video placeholder</p>
-                </div>
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[var(--accent)] rounded-2xl opacity-20 blur-2xl" />
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent)] rounded-2xl opacity-10 blur-3xl" />
-              </div>
+            {/* Hero Visual - Live Demo */}
+            <div className="max-w-7xl mx-auto animate-fade-in-slow">
+              <LiveDemo />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center animate-fade-in-slow" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">{stat.value}</div>
-              <div className="text-sm text-[var(--text-secondary)]">{stat.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
       {/* Logo Marquee Section */}
-      <LogoMarquee />
+      <section className="py-12 md:py-16">
+        <LogoMarquee />
+      </section>
 
-      {/* Features Section - Interactive Demo */}
+      {/* Features Section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-32">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" />
-            See it in action
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
-            From question to <span className="text-gradient">perfect match</span><br />
-            in seconds
-          </h2>
-          <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Watch how Nestfinder understands what you need and finds apartments that actually fit
-          </p>
-        </div>
-
-        {/* Live Demo */}
-        <div className="max-w-4xl mx-auto mb-20">
-          <LiveDemo />
-        </div>
-
         {/* Search Transformation - Visual Input/Output */}
         <div className="mb-28">
           {/* Giant search input visualization */}
@@ -815,10 +976,10 @@ export default function Home() {
             <div className="hidden lg:block absolute right-8 -top-3 px-4 py-2 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-sm font-medium text-amber-700 dark:text-amber-300 rotate-2 shadow-md z-10 border border-amber-200 dark:border-amber-800">
               under $2000
             </div>
-            <div className="hidden lg:block absolute -left-3 bottom-20 px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-sm font-medium text-blue-700 dark:text-blue-300 -rotate-6 shadow-md z-10 border border-blue-200 dark:border-blue-800">
+            <div className="hidden lg:block absolute -left-6 bottom-8 px-4 py-2 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-sm font-medium text-blue-700 dark:text-blue-300 -rotate-6 shadow-md z-10 border border-blue-200 dark:border-blue-800">
               safe area
             </div>
-            <div className="hidden lg:block absolute -right-3 bottom-16 px-4 py-2 rounded-xl bg-pink-100 dark:bg-pink-900/40 text-sm font-medium text-pink-700 dark:text-pink-300 rotate-6 shadow-md z-10 border border-pink-200 dark:border-pink-800">
+            <div className="hidden lg:block absolute -right-3 bottom-8 px-4 py-2 rounded-xl bg-pink-100 dark:bg-pink-900/40 text-sm font-medium text-pink-700 dark:text-pink-300 rotate-6 shadow-md z-10 border border-pink-200 dark:border-pink-800">
               pet-friendly
             </div>
             
@@ -866,8 +1027,8 @@ export default function Home() {
                   </div>
                   
                   <div className="group p-5 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--accent)]/50 transition-all">
-                    <div className="text-4xl font-bold text-[var(--accent)] mb-2">A+</div>
-                    <div className="text-sm text-[var(--text-primary)] font-medium">Safety rated</div>
+                    <div className="text-4xl font-bold text-[var(--accent)] mb-2">9.2/10</div>
+                    <div className="text-sm text-[var(--text-primary)] font-medium">Safety score</div>
                     <div className="text-xs text-[var(--text-muted)] mt-1">walkability included</div>
                   </div>
                 </div>
