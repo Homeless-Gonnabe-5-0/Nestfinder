@@ -139,28 +139,48 @@ class ConversationAgent:
         self,
         message: str,
         session_id: str = "default",
-        pinned_location: Optional[tuple] = None
+        pinned_location: Optional[tuple] = None,
+        filter_preferences: Optional[dict] = None
     ) -> dict:
         """Process message and return response."""
-        
+
+        # Save user message to conversation history
+        self._add_to_conversation(session_id, "user", message)
+
         # First, check if this is a search request
         search_params = self._detect_search_intent(message)
-        
+
         if search_params:
             # Add pinned location if available
             if pinned_location:
                 search_params["pinned_lat"] = pinned_location[0]
                 search_params["pinned_lng"] = pinned_location[1]
-            
+
+            # Apply filter preferences to search params
+            if filter_preferences:
+                if 'pet_friendly' in filter_preferences and filter_preferences['pet_friendly']:
+                    search_params["pet_friendly"] = True
+                if 'bedrooms_min' in filter_preferences:
+                    search_params["bedrooms"] = max(search_params.get("bedrooms", 0), filter_preferences['bedrooms_min'])
+                if 'bathrooms_min' in filter_preferences:
+                    search_params["bathrooms_min"] = filter_preferences['bathrooms_min']
+                if 'price_min' in filter_preferences:
+                    search_params["budget_min"] = max(search_params.get("budget_min", 0), filter_preferences['price_min'])
+                if 'price_max' in filter_preferences:
+                    search_params["budget_max"] = min(search_params.get("budget_max", 10000), filter_preferences['price_max'])
+
             return {
                 "response": "",  # Will be filled after search
                 "search_params": search_params,
                 "intent": "search"
             }
-        
+
         # Regular chat - let OpenAI handle it naturally
         ai_response = await self._get_openai_response(message, session_id)
-        
+
+        # Save assistant response to conversation history
+        self._add_to_conversation(session_id, "assistant", ai_response)
+
         return {
             "response": ai_response,
             "search_params": None,
@@ -169,10 +189,13 @@ class ConversationAgent:
     
     async def describe_apartments(self, apartments: list, user_request: str, session_id: str = "default") -> str:
         """Generate a natural response describing the found apartments."""
-        
+
         if not apartments:
-            return "I couldn't find any apartments matching your criteria. Try adjusting your budget or location."
-        
+            response = "I couldn't find any apartments matching your criteria. Try adjusting your budget or location."
+            # Save to history
+            self._add_to_conversation(session_id, "assistant", response)
+            return response
+
         # Build apartment summaries for the AI
         apt_summaries = []
         for i, rec in enumerate(apartments[:5]):
@@ -184,18 +207,23 @@ class ConversationAgent:
             if apt.get('source_url'):
                 summary += f" - Link: {apt.get('source_url')}"
             apt_summaries.append(summary)
-        
+
         prompt = f"""The user asked: "{user_request}"
 
 I found these apartments:
 {chr(10).join(apt_summaries)}
 
-Write a natural, helpful response presenting these options. Be conversational and friendly. 
+Write a natural, helpful response presenting these options. Be conversational and friendly.
 Include the price, location, commute time and the link for each apartment.
 Don't use bullet points or numbered lists - write it like a helpful friend would explain the options.
 Keep it concise but informative."""
 
-        return await self._get_openai_response(prompt, session_id)
+        response = await self._get_openai_response(prompt, session_id)
+
+        # Save assistant's apartment description to history
+        self._add_to_conversation(session_id, "assistant", response)
+
+        return response
     
     async def _get_openai_response(self, message: str, session_id: str) -> str:
         """Get response from OpenAI."""

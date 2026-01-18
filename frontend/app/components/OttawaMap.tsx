@@ -24,7 +24,7 @@ const OTTAWA_BOUNDS: L.LatLngBoundsExpression = [
 ];
 
 // Apple emoji pin 📍 for user location
-const emojiPinIcon = new L.DivIcon({
+const getEmojiPinIcon = () => new L.DivIcon({
   className: "emoji-pin-marker",
   html: `<span style="font-size: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">📍</span>`,
   iconSize: [36, 36],
@@ -39,7 +39,7 @@ const createApartmentIcon = (rank: number) => new L.DivIcon({
     <div style="
       width: 28px;
       height: 28px;
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      background: #1F4D2B;
       border: 2px solid white;
       border-radius: 50%;
       display: flex;
@@ -68,7 +68,7 @@ function LocationMarker({ position, setPosition }: LocationMarkerProps) {
     },
   });
 
-  return position ? <Marker position={position} icon={emojiPinIcon} /> : null;
+  return position ? <Marker position={position} icon={getEmojiPinIcon()} /> : null;
 }
 
 // Initial zoom animation - starts at uOttawa, zooms out 100%
@@ -119,24 +119,24 @@ function FlyToPosition({ position }: { position: [number, number] | null }) {
 function FitBoundsToMarkers({ markers, userPosition }: { markers: ApartmentMarker[]; userPosition: [number, number] | null }) {
   const map = useMap();
   const lastMarkersKey = useRef<string>("");
-  
+
   useEffect(() => {
     if (markers.length === 0) return;
-    
+
     // Create a key from marker IDs to detect changes
     const markersKey = markers.map(m => m.id).join(",");
     if (lastMarkersKey.current === markersKey) return;
     lastMarkersKey.current = markersKey;
-    
+
     // Collect all points
     const points: [number, number][] = markers.map(m => [m.lat, m.lng]);
     if (userPosition) {
       points.push(userPosition);
     }
-    
+
     if (points.length > 0) {
       const bounds = L.latLngBounds(points);
-      map.flyToBounds(bounds, { 
+      map.flyToBounds(bounds, {
         padding: [50, 50],
         duration: 1,
         maxZoom: 14
@@ -145,6 +145,40 @@ function FitBoundsToMarkers({ markers, userPosition }: { markers: ApartmentMarke
   }, [map, markers, userPosition]);
 
   return null;
+}
+
+// Component to render apartment markers safely
+function ApartmentMarkers({ markers }: { markers: ApartmentMarker[] }) {
+  const map = useMap();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (map) {
+      setReady(true);
+    }
+  }, [map]);
+
+  if (!ready) return null;
+
+  return (
+    <>
+      {markers.map((apt) => (
+        <Marker
+          key={apt.id}
+          position={[apt.lat, apt.lng]}
+          icon={createApartmentIcon(apt.rank)}
+        >
+          <Popup>
+            <div className="text-sm">
+              <p className="font-semibold text-gray-900">{apt.title}</p>
+              <p className="text-emerald-600 font-bold">${apt.price.toLocaleString()}/mo</p>
+              <p className="text-gray-500 text-xs">#{apt.rank} match</p>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
+    </>
+  );
 }
 
 // Sleek zoom controls - Google Maps style
@@ -235,24 +269,10 @@ export default function OttawaMap({ onLocationSelect, selectedLocation, apartmen
         <FlyToPosition position={position} />
         <InitialZoomAnimation />
         <CustomZoomControls />
-        
+
         {/* Apartment markers from search results */}
-        {apartmentMarkers.map((apt) => (
-          <Marker
-            key={apt.id}
-            position={[apt.lat, apt.lng]}
-            icon={createApartmentIcon(apt.rank)}
-          >
-            <Popup>
-              <div className="text-sm">
-                <p className="font-semibold text-gray-900">{apt.title}</p>
-                <p className="text-emerald-600 font-bold">${apt.price.toLocaleString()}/mo</p>
-                <p className="text-gray-500 text-xs">#{apt.rank} match</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-        
+        <ApartmentMarkers markers={apartmentMarkers} />
+
         {/* Fit bounds to show all markers */}
         <FitBoundsToMarkers markers={apartmentMarkers} userPosition={position} />
       </MapContainer>

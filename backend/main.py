@@ -33,6 +33,12 @@ class ChatRequestAPI(BaseModel):
     # Pinned location from map (optional)
     pinned_lat: Optional[float] = None
     pinned_lng: Optional[float] = None
+    # Filter preferences
+    pet_friendly: Optional[bool] = None
+    bedrooms_min: Optional[int] = None
+    bathrooms_min: Optional[int] = None
+    price_min: Optional[int] = None
+    price_max: Optional[int] = None
 
 app = FastAPI(
     title="NestFinder API",
@@ -124,12 +130,26 @@ async def chat(request: ChatRequestAPI):
     pinned_location = None
     if request.pinned_lat is not None and request.pinned_lng is not None:
         pinned_location = (request.pinned_lat, request.pinned_lng)
-    
+
+    # Build filter preferences dict
+    filter_prefs = {}
+    if request.pet_friendly is not None:
+        filter_prefs['pet_friendly'] = request.pet_friendly
+    if request.bedrooms_min is not None:
+        filter_prefs['bedrooms_min'] = request.bedrooms_min
+    if request.bathrooms_min is not None:
+        filter_prefs['bathrooms_min'] = request.bathrooms_min
+    if request.price_min is not None:
+        filter_prefs['price_min'] = request.price_min
+    if request.price_max is not None:
+        filter_prefs['price_max'] = request.price_max
+
     # Get AI response
     chat_result = await conversation_agent.chat(
         message=request.message,
         session_id=request.session_id,
-        pinned_location=pinned_location
+        pinned_location=pinned_location,
+        filter_preferences=filter_prefs if filter_prefs else None
     )
     
     # If AI detected search intent, run the search

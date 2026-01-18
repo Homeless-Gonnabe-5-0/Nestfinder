@@ -63,7 +63,7 @@ export default function ChatPage() {
   const [isFading, setIsFading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   const [apartmentMarkers, setApartmentMarkers] = useState<ApartmentMarker[]>([]);
-  
+
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -71,6 +71,13 @@ export default function ChatPage() {
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Filter state
+  const [showFilters, setShowFilters] = useState(false);
+  const [petFriendly, setPetFriendly] = useState(false);
+  const [bedrooms, setBedrooms] = useState<string>("any");
+  const [bathrooms, setBathrooms] = useState<string>("any");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   
   // Smooth cycle through loading messages
   useEffect(() => {
@@ -169,12 +176,18 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Call natural language chat API
+      // Call natural language chat API with filter preferences
       const response = await chat({
         message: text,
         session_id: sessionIdRef.current,
         pinned_lat: selectedLocation?.[0],
         pinned_lng: selectedLocation?.[1],
+        // Include filter values
+        pet_friendly: petFriendly || undefined,
+        bedrooms_min: bedrooms !== "any" ? parseInt(bedrooms) : undefined,
+        bathrooms_min: bathrooms !== "any" ? parseInt(bathrooms) : undefined,
+        price_min: priceRange[0] > 0 ? priceRange[0] : undefined,
+        price_max: priceRange[1] < 5000 ? priceRange[1] : undefined,
       });
       
       // Extract apartment markers if we have search results
@@ -414,6 +427,128 @@ export default function ChatPage() {
                 </button>
               )}
             </div>
+
+            {/* Filter button */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="mt-2 flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              Filters
+              {(petFriendly || bedrooms !== "any" || bathrooms !== "any" || priceRange[0] > 0 || priceRange[1] < 5000) && (
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+              )}
+            </button>
+
+            {/* Filters panel */}
+            {showFilters && (
+              <div className="mt-2 p-4 bg-[var(--bg-primary)] rounded-xl border border-[var(--border-color)] shadow-sm">
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Pet friendly */}
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={petFriendly}
+                      onChange={(e) => setPetFriendly(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-300 text-[var(--accent)] focus:ring-[var(--accent)]"
+                    />
+                    <span className="text-sm text-[var(--text-primary)]">Pet-friendly</span>
+                  </label>
+
+                  {/* Bedrooms */}
+                  <div className="col-span-2">
+                    <label className="block text-xs text-[var(--text-muted)] mb-2">
+                      Bedrooms: {bedrooms === "any" ? "Any" : bedrooms === "0" ? "Studio" : `${bedrooms}+`}
+                    </label>
+                    <div className="flex gap-2">
+                      {["any", "0", "1", "2", "3"].map((value) => (
+                        <button
+                          key={value}
+                          onClick={() => setBedrooms(value)}
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
+                            bedrooms === value
+                              ? "bg-[var(--accent)] text-white shadow-md"
+                              : "bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-gray-200 dark:hover:bg-neutral-700"
+                          }`}
+                        >
+                          {value === "any" ? "Any" : value === "0" ? "Studio" : `${value}+`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bathrooms */}
+                  <div className="col-span-2">
+                    <label className="block text-xs text-[var(--text-muted)] mb-2">
+                      Bathrooms: {bathrooms === "any" ? "Any" : `${bathrooms}+`}
+                    </label>
+                    <div className="flex gap-2">
+                      {["any", "1", "2", "3"].map((value) => (
+                        <button
+                          key={value}
+                          onClick={() => setBathrooms(value)}
+                          className={`flex-1 px-3 py-2 text-sm rounded-lg transition-all ${
+                            bathrooms === value
+                              ? "bg-[var(--accent)] text-white shadow-md"
+                              : "bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-gray-200 dark:hover:bg-neutral-700"
+                          }`}
+                        >
+                          {value === "any" ? "Any" : `${value}+`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Price range */}
+                  <div className="col-span-2">
+                    <label className="block text-xs text-[var(--text-muted)] mb-2">
+                      Price Range: ${priceRange[0]} - ${priceRange[1]}/mo
+                    </label>
+                    <div className="space-y-2">
+                      <input
+                        type="range"
+                        min="0"
+                        max="5000"
+                        step="100"
+                        value={priceRange[0]}
+                        onChange={(e) => setPriceRange([Math.min(parseInt(e.target.value), priceRange[1] - 100), priceRange[1]])}
+                        className="w-full h-2 bg-gray-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-[var(--accent)]"
+                        style={{
+                          background: `linear-gradient(to right, var(--accent) 0%, var(--accent) ${(priceRange[0] / 5000) * 100}%, rgb(229 231 235) ${(priceRange[0] / 5000) * 100}%, rgb(229 231 235) 100%)`
+                        }}
+                      />
+                      <input
+                        type="range"
+                        min="0"
+                        max="5000"
+                        step="100"
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], Math.max(parseInt(e.target.value), priceRange[0] + 100)])}
+                        className="w-full h-2 bg-gray-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-[var(--accent)]"
+                        style={{
+                          background: `linear-gradient(to right, rgb(229 231 235) 0%, rgb(229 231 235) ${(priceRange[1] / 5000) * 100}%, var(--accent) ${(priceRange[1] / 5000) * 100}%, var(--accent) 100%)`
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Clear filters */}
+                  <button
+                    onClick={() => {
+                      setPetFriendly(false);
+                      setBedrooms("any");
+                      setBathrooms("any");
+                      setPriceRange([0, 5000]);
+                    }}
+                    className="col-span-2 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] text-center py-1"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Search results dropdown */}
             {showResults && searchResults.length > 0 && (

@@ -266,27 +266,22 @@ const THINKING_MESSAGES = [
 ];
 
 // AI Response for the demo
-const AI_RESPONSE = `Found 14 apartments matching your criteria! Here are my top picks:
+const AI_RESPONSE = `Found 14 apartments matching your criteria! Here are my top 3 picks:
 
 **1. The Laurier** - $1,695/mo
-📍 Sandy Hill • 1 bed • 12 min transit
-⭐ Score: 92/100 - Best Overall Match
-✓ Pet-friendly • In-unit laundry
+Sandy Hill • 1 bed • 12 min transit
+Score: 92/100 - Best Overall Match
+Pet-friendly • In-unit laundry
 
 **2. Holbrook** - $1,349/mo
-📍 Centretown • Studio • 8 min transit
-⭐ Score: 89/100 - Best Value
-✓ Gym • Rooftop terrace
+Centretown • Studio • 8 min transit
+Score: 89/100 - Best Value
+Gym • Rooftop terrace
 
 **3. 321 Waverley** - $1,450/mo
-📍 The Glebe • 1 bed • 15 min transit
-⭐ Score: 87/100 - Safest Area
-✓ Parking included • Near parks
-
-**4. Island Park Towers** - $1,249/mo
-📍 Westboro • Studio • 18 min transit
-⭐ Score: 85/100 - Most Walkable
-✓ Steps from shops & cafes
+The Glebe • 1 bed • 15 min transit
+Score: 87/100 - Safest Area
+Parking included • Near parks
 
 View all 14 results →`;
 
@@ -295,7 +290,6 @@ const DEMO_APARTMENTS = [
   { id: 1, top: '28%', left: '52%', price: '$1,695' },
   { id: 2, top: '42%', left: '48%', price: '$1,349' },
   { id: 3, top: '55%', left: '58%', price: '$1,450' },
-  { id: 4, top: '35%', left: '32%', price: '$1,249' },
 ];
 
 // Streaming text component for demo
@@ -598,7 +592,7 @@ function LiveDemo() {
               {/* Overlay - 📍 emoji pin - Repositionable */}
               {showPin && (
                 <div className="absolute inset-0 pointer-events-none">
-                  <div 
+                  <div
                     className="absolute -translate-x-1/2 -translate-y-full transition-all duration-200"
                     style={{ top: pinPosition.top, left: pinPosition.left }}
                   >
@@ -639,7 +633,7 @@ function LiveDemo() {
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                 <div className="px-3 py-2 rounded-lg bg-white/95 dark:bg-black/80 backdrop-blur shadow-lg border border-gray-200/60 dark:border-gray-700/60 text-xs pointer-events-auto">
                   <p className="text-gray-500 dark:text-gray-400 font-medium">
-                    {phase === 2 ? "🏠 4 matches shown" : showPin ? "📍 Location set" : "Click to drop a pin"}
+                    {phase === 2 ? "4 matches shown" : showPin ? "Location set" : "Click to drop a pin"}
                   </p>
                 </div>
                 {showPin && (

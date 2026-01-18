@@ -118,6 +118,12 @@ export interface ChatRequest {
   session_id?: string;
   pinned_lat?: number;
   pinned_lng?: number;
+  // Filter preferences
+  pet_friendly?: boolean;
+  bedrooms_min?: number;
+  bathrooms_min?: number;
+  price_min?: number;
+  price_max?: number;
 }
 
 export interface ChatResponse {
