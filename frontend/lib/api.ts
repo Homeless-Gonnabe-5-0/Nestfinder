@@ -1,6 +1,6 @@
 // API client for NestFinder backend
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export interface SearchRequest {
   budget_min: number;
@@ -95,18 +95,22 @@ export interface SearchResponse {
   searched_at: string;
 }
 
-export async function searchApartments(request: SearchRequest): Promise<SearchResponse> {
+export async function searchApartments(
+  request: SearchRequest,
+): Promise<SearchResponse> {
   const response = await fetch(`${API_BASE_URL}/api/v1/search`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Search failed' }));
-    throw new Error(error.detail || 'Search failed');
+    const error = await response
+      .json()
+      .catch(() => ({ detail: "Search failed" }));
+    throw new Error(error.detail || "Search failed");
   }
 
   return response.json();
@@ -128,28 +132,33 @@ export interface ChatRequest {
 
 export interface ChatResponse {
   response: string;
-  intent: 'search' | 'chat' | 'error';
+  intent: "search" | "chat" | "error";
   search_results: SearchResponse | null;
 }
 
 export async function chat(request: ChatRequest): Promise<ChatResponse> {
   const response = await fetch(`${API_BASE_URL}/api/v1/chat`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Chat failed' }));
-    throw new Error(error.detail || 'Chat failed');
+    const error = await response
+      .json()
+      .catch(() => ({ detail: "Chat failed" }));
+    throw new Error(error.detail || "Chat failed");
   }
 
   return response.json();
 }
 
-export async function healthCheck(): Promise<{ status: string; version: string }> {
+export async function healthCheck(): Promise<{
+  status: string;
+  version: string;
+}> {
   const response = await fetch(`${API_BASE_URL}/api/v1/health`);
   return response.json();
 }
