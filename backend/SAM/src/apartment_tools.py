@@ -1,106 +1,84 @@
 """
 NestFinder Apartment Tools for SAM agents.
-
-These tools connect to the actual NestFinder backend agents
-which use real Ottawa data (crime stats, parks, schools, groceries).
+Uses ottawa_rentals.json (190 real Ottawa listings from Zumper).
 """
 
-import logging
-import sys
+import json
 import os
+import logging
 from typing import Any, Dict, List, Optional
-from dotenv import load_dotenv
-
-# Load environment variables FIRST
-load_dotenv()
-
-# Add backend to path so we can import our agents
-BACKEND_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if BACKEND_PATH not in sys.path:
-    sys.path.insert(0, BACKEND_PATH)
-
-# Import our real agents and models
-from models import Apartment, WalkabilityAnalysis
-from agents.commute import TravelTimeService
-from agents.neighborhood import NeighborhoodAgent
-from agents.budget import BudgetAgent
-from agents.walkability import WalkabilityAgent
-from data.mock_apartments import get_mock_apartments
 
 log = logging.getLogger(__name__)
 
-# Initialize agents once (they load data on init)
-_commute_agent = None
-_neighborhood_agent = None
-_budget_agent = None
-_walkability_agent = None
+# Load rental data from JSON file
+_DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "ottawa_rentals.json")
+_listings_cache = None
+_apartments_cache: Dict[str, Dict] = {}
 
 
-def _get_commute_agent():
-    global _commute_agent
-    if _commute_agent is None:
-        _commute_agent = TravelTimeService()
-    return _commute_agent
+def _load_listings() -> List[Dict]:
+    """Load listings from JSON file."""
+    global _listings_cache
+    if _listings_cache is None:
+        try:
+            with open(_DATA_PATH, 'r') as f:
+                data = json.load(f)
+                _listings_cache = data.get("listings", [])
+            log.info(f"Loaded {len(_listings_cache)} Ottawa rental listings from JSON")
+        except Exception as e:
+            log.error(f"Failed to load listings: {e}")
+            _listings_cache = []
+    return _listings_cache
 
 
-def _get_neighborhood_agent():
-    global _neighborhood_agent
-    if _neighborhood_agent is None:
-        _neighborhood_agent = NeighborhoodAgent()
-    return _neighborhood_agent
+def _normalize_laundry(laundry: Optional[str]) -> str:
+    """Convert laundry string to standard format."""
+    if not laundry:
+        return "none"
+    laundry = laundry.lower()
+    if "in-unit" in laundry or "in unit" in laundry:
+        return "in_unit"
+    elif "on-site" in laundry or "building" in laundry:
+        return "in_building"
+    return "none"
 
 
-def _get_budget_agent():
-    global _budget_agent
-    if _budget_agent is None:
-        _budget_agent = BudgetAgent()
-    return _budget_agent
+def _has_parking(listing: Dict) -> bool:
+    """Check if listing includes parking."""
+    parking = listing.get("parking")
+    if parking:
+        return True
+    amenities = listing.get("amenities", [])
+    return any("parking" in str(a).lower() for a in amenities)
 
 
-def _get_walkability_agent():
-    global _walkability_agent
-    if _walkability_agent is None:
-        _walkability_agent = WalkabilityAgent()
-    return _walkability_agent
+def _is_pet_friendly(listing: Dict) -> bool:
+    """Check if listing allows pets."""
+    pet = listing.get("pet_friendly")
+    if pet is True:
+        return True
+    amenities = listing.get("amenities", [])
+    return any("pet" in str(a).lower() for a in amenities)
 
 
-def _apartment_to_dict(apt: Apartment) -> Dict:
-    """Convert Apartment object to dictionary."""
+def _listing_to_apartment(listing: Dict) -> Dict:
+    """Convert raw listing to apartment format."""
     return {
-        "id": apt.id,
-        "title": apt.title,
-        "address": apt.address,
-        "neighborhood": apt.neighborhood,
-        "price": apt.price,
-        "bedrooms": apt.bedrooms,
-        "bathrooms": apt.bathrooms,
-        "sqft": apt.sqft,
-        "amenities": apt.amenities,
-        "pet_friendly": apt.pet_friendly,
-        "parking_included": apt.parking_included,
-        "laundry_type": apt.laundry_type,
-        "lat": apt.lat,
-        "lng": apt.lng,
-        "image_url": apt.image_url
+        "id": listing.get("id"),
+        "title": listing.get("title", "Rental Listing"),
+        "address": listing.get("address", ""),
+        "neighborhood": listing.get("neighborhood", "Unknown"),
+        "price": listing.get("price", 0),
+        "bedrooms": listing.get("bedrooms", 0),
+        "bathrooms": listing.get("bathrooms", 1),
+        "sqft": listing.get("sqft"),
+        "amenities": listing.get("amenities", []),
+        "pet_friendly": _is_pet_friendly(listing),
+        "parking_included": _has_parking(listing),
+        "laundry_type": _normalize_laundry(listing.get("laundry")),
+        "image_url": listing.get("image_url"),
+        "source_url": listing.get("source_url"),
     }
-
-
-# Store apartments in memory for lookup
-_apartments_cache: Dict[str, Apartment] = {}
-
-
-def _get_apartment_by_id(apartment_id: str) -> Optional[Apartment]:
-    """Get apartment from cache or search for it."""
-    if apartment_id in _apartments_cache:
-        return _apartments_cache[apartment_id]
-    
-    # Search in all apartments
-    all_apts = get_mock_apartments(0, 100000, 1) + get_mock_apartments(0, 100000, 2)
-    for apt in all_apts:
-        _apartments_cache[apt.id] = apt
-        if apt.id == apartment_id:
-            return apt
-    return None
 
 
 # =============================================================================
@@ -108,12 +86,13 @@ def _get_apartment_by_id(apartment_id: str) -> Optional[Apartment]:
 # =============================================================================
 
 async def search_apartments(
-    budget_min: int,
-    budget_max: int,
-    bedrooms: int = 1,
+    budget_min: int = 0,
+    budget_max: int = 5000,
+    bedrooms: Optional[int] = None,
     neighborhood: Optional[str] = None,
     pet_friendly: Optional[bool] = None,
     parking_required: Optional[bool] = None,
+    limit: int = 20,
     tool_context: Optional[Any] = None,
     tool_config: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
@@ -121,12 +100,13 @@ async def search_apartments(
     Search for apartments in Ottawa based on criteria.
 
     Args:
-        budget_min: Minimum monthly rent in CAD (e.g., 1500).
-        budget_max: Maximum monthly rent in CAD (e.g., 2000).
-        bedrooms: Number of bedrooms (1 or 2).
-        neighborhood: Optional specific neighborhood to search in.
+        budget_min: Minimum monthly rent in CAD (default 0).
+        budget_max: Maximum monthly rent in CAD (default 5000).
+        bedrooms: Number of bedrooms (0=studio, 1, 2, 3+). None for any.
+        neighborhood: Optional neighborhood filter (e.g., "Centretown", "Westboro").
         pet_friendly: If True, only show pet-friendly apartments.
         parking_required: If True, only show apartments with parking.
+        limit: Maximum number of results to return (default 20).
 
     Returns:
         A dictionary with matching apartments.
@@ -135,29 +115,40 @@ async def search_apartments(
     log.info(f"{log_id} Searching: ${budget_min}-${budget_max}, {bedrooms}BR")
 
     try:
-        # Use real mock apartments function
-        apartments = get_mock_apartments(
-            budget_min=budget_min,
-            budget_max=budget_max,
-            bedrooms=bedrooms,
-            pets_required=pet_friendly or False
-        )
-        
-        # Additional filters
+        listings = _load_listings()
         results = []
-        for apt in apartments:
-            # Cache for later lookup
-            _apartments_cache[apt.id] = apt
+        
+        for listing in listings:
+            price = listing.get("price", 0)
+            beds = listing.get("bedrooms", 0)
+            hood = listing.get("neighborhood", "")
             
-            # Neighborhood filter
-            if neighborhood and apt.neighborhood.lower() != neighborhood.lower():
+            # Budget filter
+            if price < budget_min or price > budget_max:
+                continue
+            
+            # Bedrooms filter
+            if bedrooms is not None and beds != bedrooms:
+                continue
+            
+            # Neighborhood filter (case-insensitive partial match)
+            if neighborhood and neighborhood.lower() not in hood.lower():
+                continue
+            
+            # Pet filter
+            if pet_friendly and not _is_pet_friendly(listing):
                 continue
             
             # Parking filter
-            if parking_required and not apt.parking_included:
+            if parking_required and not _has_parking(listing):
                 continue
             
-            results.append(_apartment_to_dict(apt))
+            apt = _listing_to_apartment(listing)
+            results.append(apt)
+            _apartments_cache[apt["id"]] = apt
+            
+            if len(results) >= limit:
+                break
 
         log.info(f"{log_id} Found {len(results)} matching apartments")
         
@@ -177,15 +168,32 @@ async def search_apartments(
 
     except Exception as e:
         log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 # =============================================================================
-# TOOL 2: Analyze Commute (using real TravelTimeService)
+# TOOL 2: Analyze Commute (Simulated based on neighborhood)
 # =============================================================================
+
+# Ottawa neighborhood approximate commute times to downtown (in minutes)
+_COMMUTE_ESTIMATES = {
+    "centretown": {"transit": 10, "driving": 8, "biking": 8, "walking": 15},
+    "centretown west": {"transit": 12, "driving": 10, "biking": 10, "walking": 18},
+    "byward market": {"transit": 8, "driving": 10, "biking": 6, "walking": 12},
+    "sandy hill": {"transit": 15, "driving": 12, "biking": 10, "walking": 20},
+    "the glebe": {"transit": 18, "driving": 12, "biking": 12, "walking": 25},
+    "glebe": {"transit": 18, "driving": 12, "biking": 12, "walking": 25},
+    "westboro": {"transit": 22, "driving": 15, "biking": 18, "walking": 40},
+    "hintonburg": {"transit": 18, "driving": 12, "biking": 14, "walking": 30},
+    "little italy": {"transit": 15, "driving": 10, "biking": 12, "walking": 22},
+    "alta vista": {"transit": 25, "driving": 18, "biking": 22, "walking": 50},
+    "vanier": {"transit": 20, "driving": 15, "biking": 15, "walking": 35},
+    "old ottawa south": {"transit": 20, "driving": 14, "biking": 15, "walking": 30},
+    "overbrook": {"transit": 22, "driving": 16, "biking": 18, "walking": 40},
+    "lowertown": {"transit": 10, "driving": 8, "biking": 7, "walking": 14},
+    "default": {"transit": 25, "driving": 18, "biking": 20, "walking": 45},
+}
+
 
 async def analyze_commute(
     apartment_id: str,
@@ -198,7 +206,7 @@ async def analyze_commute(
     Analyze commute time from an apartment to a work address.
 
     Args:
-        apartment_id: The apartment ID (e.g., "apt_001").
+        apartment_id: The apartment ID (e.g., "zumper_0_3591").
         work_address: Work address in Ottawa (e.g., "99 Bank Street, Ottawa").
         transport_mode: Preferred mode - "transit", "driving", "biking", or "walking".
 
@@ -206,113 +214,84 @@ async def analyze_commute(
         A dictionary with commute analysis including times and scores.
     """
     log_id = f"[NestFinder:analyze_commute:{apartment_id}]"
-    log.info(f"{log_id} Analyzing commute to {work_address} by {transport_mode}")
-
-    # Map our transport modes to TravelTime API modes
-    mode_mapping = {
-        "transit": "public_transport",
-        "driving": "driving",
-        "biking": "cycling",
-        "walking": "walking"
-    }
+    log.info(f"{log_id} Analyzing commute to {work_address}")
 
     try:
-        # Find the apartment
-        apartment = _get_apartment_by_id(apartment_id)
-        if not apartment:
-            return {
-                "status": "error",
-                "message": f"Apartment {apartment_id} not found"
-            }
-
-        # Use real TravelTimeService
-        service = _get_commute_agent()
+        # Find apartment
+        if apartment_id not in _apartments_cache:
+            listings = _load_listings()
+            for listing in listings:
+                if listing.get("id") == apartment_id:
+                    _apartments_cache[apartment_id] = _listing_to_apartment(listing)
+                    break
         
-        # Get all travel times
-        results = service.calculate_all_travel_times_flexible(
-            origin={"lat": apartment.lat, "lng": apartment.lng},
-            destination=work_address
-        )
+        apt = _apartments_cache.get(apartment_id)
+        if not apt:
+            return {"status": "error", "message": f"Apartment {apartment_id} not found"}
 
-        if not results:
-            return {
-                "status": "error",
-                "message": "Could not calculate travel times"
-            }
-
-        # Extract times
-        transit_minutes = results.get("public_transport", {}).get("travel_time_minutes") if results.get("public_transport") else None
-        driving_minutes = results.get("driving", {}).get("travel_time_minutes") if results.get("driving") else None
-        biking_minutes = results.get("cycling", {}).get("travel_time_minutes") if results.get("cycling") else None
-        walking_minutes = results.get("walking", {}).get("travel_time_minutes") if results.get("walking") else None
-
-        # Get preferred time
-        api_mode = mode_mapping.get(transport_mode, "public_transport")
-        preferred_result = results.get(api_mode, {})
-        preferred_time = preferred_result.get("travel_time_minutes", 0) if preferred_result else 0
-
-        # Calculate score (0-100, shorter = better)
-        if preferred_time and preferred_time > 0:
-            if preferred_time <= 15:
-                score = 95
-            elif preferred_time <= 25:
-                score = 80
-            elif preferred_time <= 35:
-                score = 65
-            elif preferred_time <= 45:
-                score = 50
-            else:
-                score = max(10, 100 - preferred_time)
+        # Get commute estimates for neighborhood
+        hood = apt.get("neighborhood", "").lower()
+        commute = _COMMUTE_ESTIMATES.get(hood, _COMMUTE_ESTIMATES["default"])
+        
+        preferred_time = commute.get(transport_mode, commute["transit"])
+        
+        # Calculate score (shorter = better)
+        if preferred_time <= 15:
+            score = 95
+        elif preferred_time <= 25:
+            score = 75
+        elif preferred_time <= 35:
+            score = 55
+        elif preferred_time <= 45:
+            score = 35
         else:
-            score = 50
-
-        # Generate summary
-        if preferred_time:
-            if preferred_time <= 15:
-                rating = "excellent"
-            elif preferred_time <= 25:
-                rating = "very good"
-            elif preferred_time <= 35:
-                rating = "good"
-            elif preferred_time <= 45:
-                rating = "acceptable"
-            else:
-                rating = "long"
-            summary = f"{preferred_time} min by {transport_mode} - {rating}"
-        else:
-            summary = "Could not calculate commute time"
-
-        log.info(f"{log_id} Commute: {preferred_time} min by {transport_mode}")
+            score = 20
 
         return {
             "status": "success",
             "apartment_id": apartment_id,
-            "apartment_title": apartment.title,
-            "neighborhood": apartment.neighborhood,
+            "apartment_title": apt.get("title"),
+            "neighborhood": apt.get("neighborhood"),
             "work_address": work_address,
             "commute_times": {
-                "transit_minutes": transit_minutes,
-                "driving_minutes": driving_minutes,
-                "biking_minutes": biking_minutes,
-                "walking_minutes": walking_minutes
+                "transit_minutes": commute["transit"],
+                "driving_minutes": commute["driving"],
+                "biking_minutes": commute["biking"],
+                "walking_minutes": commute["walking"]
             },
             "preferred_mode": transport_mode,
             "preferred_time_minutes": preferred_time,
             "commute_score": score,
-            "summary": summary
+            "summary": f"{preferred_time} min by {transport_mode} from {apt.get('neighborhood')}"
         }
 
     except Exception as e:
         log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 # =============================================================================
-# TOOL 3: Analyze Neighborhood (using real NeighborhoodAgent with crime data)
+# TOOL 3: Analyze Neighborhood
 # =============================================================================
+
+_NEIGHBORHOOD_SCORES = {
+    "centretown": {"safety": 70, "walkability": 90, "nightlife": 75, "quiet": 50},
+    "centretown west": {"safety": 72, "walkability": 85, "nightlife": 60, "quiet": 60},
+    "byward market": {"safety": 60, "walkability": 95, "nightlife": 95, "quiet": 30},
+    "sandy hill": {"safety": 65, "walkability": 80, "nightlife": 50, "quiet": 60},
+    "the glebe": {"safety": 85, "walkability": 90, "nightlife": 70, "quiet": 70},
+    "glebe": {"safety": 85, "walkability": 90, "nightlife": 70, "quiet": 70},
+    "westboro": {"safety": 88, "walkability": 85, "nightlife": 65, "quiet": 75},
+    "hintonburg": {"safety": 75, "walkability": 82, "nightlife": 70, "quiet": 60},
+    "little italy": {"safety": 78, "walkability": 85, "nightlife": 80, "quiet": 55},
+    "alta vista": {"safety": 90, "walkability": 60, "nightlife": 30, "quiet": 90},
+    "vanier": {"safety": 55, "walkability": 70, "nightlife": 40, "quiet": 65},
+    "old ottawa south": {"safety": 88, "walkability": 75, "nightlife": 45, "quiet": 85},
+    "overbrook": {"safety": 60, "walkability": 65, "nightlife": 35, "quiet": 70},
+    "lowertown": {"safety": 62, "walkability": 88, "nightlife": 80, "quiet": 45},
+    "default": {"safety": 70, "walkability": 70, "nightlife": 50, "quiet": 70},
+}
+
 
 async def analyze_neighborhood(
     apartment_id: str,
@@ -321,68 +300,102 @@ async def analyze_neighborhood(
     tool_config: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
-    Analyze the neighborhood of an apartment using real Ottawa crime data.
+    Analyze the neighborhood of an apartment.
 
     Args:
-        apartment_id: The apartment ID (e.g., "apt_001").
+        apartment_id: The apartment ID.
         priorities: User priorities like ["safe_area", "walkable", "nightlife", "quiet_area"].
 
     Returns:
-        A dictionary with neighborhood analysis including safety (from real crime data), walkability, etc.
+        A dictionary with neighborhood analysis.
     """
     log_id = f"[NestFinder:analyze_neighborhood:{apartment_id}]"
-    log.info(f"{log_id} Analyzing neighborhood with priorities: {priorities}")
-
+    
     if priorities is None:
         priorities = ["safe_area", "walkable"]
 
     try:
-        # Find the apartment
-        apartment = _get_apartment_by_id(apartment_id)
-        if not apartment:
-            return {
-                "status": "error",
-                "message": f"Apartment {apartment_id} not found"
-            }
+        apt = _apartments_cache.get(apartment_id)
+        if not apt:
+            listings = _load_listings()
+            for listing in listings:
+                if listing.get("id") == apartment_id:
+                    apt = _listing_to_apartment(listing)
+                    _apartments_cache[apartment_id] = apt
+                    break
+        
+        if not apt:
+            return {"status": "error", "message": f"Apartment {apartment_id} not found"}
 
-        # Use real neighborhood agent (uses crime data!)
-        agent = _get_neighborhood_agent()
-        result = await agent.analyze(apartment=apartment, priorities=priorities)
+        hood = apt.get("neighborhood", "").lower()
+        scores = _NEIGHBORHOOD_SCORES.get(hood, _NEIGHBORHOOD_SCORES["default"])
+        
+        # Calculate overall score based on priorities
+        weights = {"safety": 0.25, "walkability": 0.25, "nightlife": 0.25, "quiet": 0.25}
+        if "safe_area" in priorities:
+            weights["safety"] = 0.4
+        if "walkable" in priorities:
+            weights["walkability"] = 0.4
+        if "nightlife" in priorities:
+            weights["nightlife"] = 0.4
+        if "quiet_area" in priorities:
+            weights["quiet"] = 0.4
+        
+        # Normalize weights
+        total = sum(weights.values())
+        weights = {k: v/total for k, v in weights.items()}
+        
+        overall = int(
+            scores["safety"] * weights["safety"] +
+            scores["walkability"] * weights["walkability"] +
+            scores["nightlife"] * weights["nightlife"] +
+            scores["quiet"] * weights["quiet"]
+        )
 
-        log.info(f"{log_id} Neighborhood score: {result.neighborhood_score}")
+        # Safety rating
+        safety = scores["safety"]
+        if safety >= 85:
+            safety_rating = "very safe"
+        elif safety >= 70:
+            safety_rating = "safe"
+        elif safety >= 55:
+            safety_rating = "moderate"
+        else:
+            safety_rating = "use caution"
 
         return {
             "status": "success",
             "apartment_id": apartment_id,
-            "apartment_title": apartment.title,
-            "neighborhood": result.neighborhood_name,
+            "apartment_title": apt.get("title"),
+            "neighborhood": apt.get("neighborhood"),
             "scores": {
-                "safety_score": result.safety_score,
-                "safety_rating": result.safety_rating,
-                "walkability_score": result.walkability_score,
-                "nightlife_score": result.nightlife_score,
-                "quiet_score": result.quiet_score,
-                "overall_score": result.neighborhood_score
+                "safety_score": scores["safety"],
+                "safety_rating": safety_rating,
+                "walkability_score": scores["walkability"],
+                "nightlife_score": scores["nightlife"],
+                "quiet_score": scores["quiet"],
+                "overall_score": overall
             },
-            "amenities": {
-                "grocery_nearby": result.grocery_nearby,
-                "restaurants_nearby": result.restaurants_nearby,
-                "parks_nearby": result.parks_nearby
-            },
-            "summary": result.summary
+            "summary": f"{apt.get('neighborhood')} - {safety_rating}, walkability {scores['walkability']}/100"
         }
 
     except Exception as e:
         log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 # =============================================================================
-# TOOL 4: Analyze Budget (using real BudgetAgent)
+# TOOL 4: Analyze Budget
 # =============================================================================
+
+# Ottawa market averages by bedroom count
+_MARKET_AVERAGES = {
+    0: 1450,  # Studio
+    1: 1750,  # 1BR
+    2: 2200,  # 2BR
+    3: 2800,  # 3BR
+}
+
 
 async def analyze_budget(
     apartment_id: str,
@@ -393,128 +406,77 @@ async def analyze_budget(
     Analyze if an apartment price is a good deal compared to market rates.
 
     Args:
-        apartment_id: The apartment ID (e.g., "apt_001").
+        apartment_id: The apartment ID.
 
     Returns:
         A dictionary with budget analysis including market comparison.
     """
     log_id = f"[NestFinder:analyze_budget:{apartment_id}]"
-    log.info(f"{log_id} Analyzing budget")
 
     try:
-        # Find the apartment
-        apartment = _get_apartment_by_id(apartment_id)
-        if not apartment:
-            return {
-                "status": "error",
-                "message": f"Apartment {apartment_id} not found"
-            }
+        apt = _apartments_cache.get(apartment_id)
+        if not apt:
+            listings = _load_listings()
+            for listing in listings:
+                if listing.get("id") == apartment_id:
+                    apt = _listing_to_apartment(listing)
+                    _apartments_cache[apartment_id] = apt
+                    break
+        
+        if not apt:
+            return {"status": "error", "message": f"Apartment {apartment_id} not found"}
 
-        # Use real budget agent
-        agent = _get_budget_agent()
-        result = await agent.analyze(apartment=apartment)
+        price = apt.get("price", 0)
+        bedrooms = apt.get("bedrooms", 1)
+        sqft = apt.get("sqft")
+        
+        market_avg = _MARKET_AVERAGES.get(bedrooms, 2000)
+        difference = price - market_avg
+        diff_percent = round((difference / market_avg) * 100, 1)
+        
+        # Score (lower price = better score)
+        if diff_percent <= -15:
+            score = 95
+            verdict = "excellent deal"
+        elif diff_percent <= -5:
+            score = 80
+            verdict = "good deal"
+        elif diff_percent <= 5:
+            score = 65
+            verdict = "at market rate"
+        elif diff_percent <= 15:
+            score = 45
+            verdict = "slightly above market"
+        else:
+            score = 25
+            verdict = "above market"
 
-        log.info(f"{log_id} Budget score: {result.budget_score}")
+        is_good_deal = diff_percent <= 0
 
         return {
             "status": "success",
             "apartment_id": apartment_id,
-            "apartment_title": apartment.title,
-            "neighborhood": apartment.neighborhood,
+            "apartment_title": apt.get("title"),
+            "neighborhood": apt.get("neighborhood"),
             "pricing": {
-                "monthly_rent": result.monthly_rent,
-                "market_average": result.market_average,
-                "difference": result.price_difference,
-                "difference_percent": result.price_difference_percent,
-                "price_per_sqft": result.price_per_sqft
+                "monthly_rent": price,
+                "market_average": market_avg,
+                "difference": difference,
+                "difference_percent": diff_percent,
+                "price_per_sqft": round(price / sqft, 2) if sqft else None
             },
-            "budget_score": result.budget_score,
-            "space_value_score": result.space_value_score,
-            "is_good_deal": result.is_good_deal,
-            "summary": result.summary
+            "budget_score": score,
+            "is_good_deal": is_good_deal,
+            "summary": f"${price}/mo - {verdict} ({diff_percent:+.1f}% vs market)"
         }
 
     except Exception as e:
         log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}
 
 
 # =============================================================================
-# TOOL 5: Analyze Walkability (NEW - using real data!)
-# =============================================================================
-
-async def analyze_walkability(
-    apartment_id: str,
-    tool_context: Optional[Any] = None,
-    tool_config: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """
-    Analyze walkability of an apartment using real Ottawa data (parks, schools, groceries).
-
-    Args:
-        apartment_id: The apartment ID (e.g., "apt_001").
-
-    Returns:
-        A dictionary with walkability analysis including nearby parks, schools, and grocery stores.
-    """
-    log_id = f"[NestFinder:analyze_walkability:{apartment_id}]"
-    log.info(f"{log_id} Analyzing walkability")
-
-    try:
-        # Find the apartment
-        apartment = _get_apartment_by_id(apartment_id)
-        if not apartment:
-            return {
-                "status": "error",
-                "message": f"Apartment {apartment_id} not found"
-            }
-
-        # Use real walkability agent (uses parks, schools, groceries data!)
-        agent = _get_walkability_agent()
-        result = await agent.analyze(apartment=apartment)
-
-        log.info(f"{log_id} Walkability score: {result.walkability_score}")
-
-        return {
-            "status": "success",
-            "apartment_id": apartment_id,
-            "apartment_title": apartment.title,
-            "walkability_score": result.walkability_score,
-            "nearby_counts": {
-                "parks": result.parks_nearby,
-                "schools": result.schools_nearby,
-                "groceries": result.groceries_nearby
-            },
-            "closest_places": {
-                "park": {
-                    "name": result.closest_park_name,
-                    "distance_m": result.closest_park_distance
-                } if result.closest_park_name else None,
-                "school": {
-                    "name": result.closest_school_name,
-                    "distance_m": result.closest_school_distance
-                } if result.closest_school_name else None,
-                "grocery": {
-                    "name": result.closest_grocery_name,
-                    "distance_m": result.closest_grocery_distance
-                } if result.closest_grocery_name else None
-            },
-            "summary": result.summary
-        }
-
-    except Exception as e:
-        log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
-
-
-# =============================================================================
-# TOOL 6: Get Full Recommendation (combines all agents)
+# TOOL 5: Get Full Recommendation
 # =============================================================================
 
 async def get_apartment_recommendation(
@@ -529,93 +491,77 @@ async def get_apartment_recommendation(
     Get a complete recommendation for an apartment including all analyses.
 
     Args:
-        apartment_id: The apartment ID (e.g., "apt_001").
+        apartment_id: The apartment ID.
         work_address: Work address for commute calculation.
-        priorities: User priorities like ["safe_area", "walkable", "short_commute"].
+        priorities: User priorities like ["short_commute", "safe_area", "walkable"].
         transport_mode: Preferred commute mode.
 
     Returns:
         A complete recommendation with all scores and a final verdict.
     """
     log_id = f"[NestFinder:get_recommendation:{apartment_id}]"
-    log.info(f"{log_id} Generating full recommendation")
-
+    
     if priorities is None:
         priorities = ["short_commute", "safe_area"]
 
     try:
-        # Find the apartment
-        apartment = _get_apartment_by_id(apartment_id)
-        if not apartment:
-            return {
-                "status": "error",
-                "message": f"Apartment {apartment_id} not found"
-            }
-
-        # Run all analyses using real agents
+        # Run all analyses
         commute = await analyze_commute(apartment_id, work_address, transport_mode)
         neighborhood = await analyze_neighborhood(apartment_id, priorities)
         budget = await analyze_budget(apartment_id)
-        walkability = await analyze_walkability(apartment_id)
 
+        if commute.get("status") == "error":
+            return commute
+
+        apt = _apartments_cache.get(apartment_id)
+        
         # Extract scores
         commute_score = commute.get("commute_score", 50)
         neighborhood_score = neighborhood.get("scores", {}).get("overall_score", 50)
         budget_score = budget.get("budget_score", 50)
-        walkability_score = walkability.get("walkability_score", 50)
 
-        # Weight based on priorities
-        weights = {"commute": 0.25, "neighborhood": 0.25, "budget": 0.25, "walkability": 0.25}
+        # Calculate overall score with priority weighting
+        weights = {"commute": 0.33, "neighborhood": 0.33, "budget": 0.34}
         if "short_commute" in priorities:
-            weights = {"commute": 0.35, "neighborhood": 0.25, "budget": 0.20, "walkability": 0.20}
+            weights = {"commute": 0.45, "neighborhood": 0.30, "budget": 0.25}
         elif "safe_area" in priorities:
-            weights = {"commute": 0.20, "neighborhood": 0.35, "budget": 0.20, "walkability": 0.25}
-        elif "walkable" in priorities:
-            weights = {"commute": 0.20, "neighborhood": 0.20, "budget": 0.20, "walkability": 0.40}
+            weights = {"commute": 0.25, "neighborhood": 0.45, "budget": 0.30}
         elif "low_price" in priorities:
-            weights = {"commute": 0.20, "neighborhood": 0.20, "budget": 0.40, "walkability": 0.20}
+            weights = {"commute": 0.25, "neighborhood": 0.25, "budget": 0.50}
 
         overall_score = int(
             commute_score * weights["commute"] +
             neighborhood_score * weights["neighborhood"] +
-            budget_score * weights["budget"] +
-            walkability_score * weights["walkability"]
+            budget_score * weights["budget"]
         )
 
         # Generate pros and cons
         pros = []
         cons = []
         
-        if commute_score >= 75:
-            pros.append(f"Great commute ({commute.get('preferred_time_minutes', '?')} min)")
+        if commute_score >= 70:
+            pros.append(f"Great commute ({commute.get('preferred_time_minutes')} min)")
         elif commute_score < 50:
             cons.append("Longer commute time")
         
-        if neighborhood_score >= 75:
-            pros.append(f"Excellent neighborhood ({apartment.neighborhood})")
+        if neighborhood_score >= 70:
+            pros.append(f"Excellent neighborhood")
         elif neighborhood_score < 50:
-            cons.append("Neighborhood may not match preferences")
+            cons.append("Neighborhood concerns")
         
         if budget.get("is_good_deal"):
-            pros.append(f"Good value ({budget.get('summary', '')})")
+            pros.append(f"Good value ({budget.get('summary')})")
         elif budget_score < 50:
             cons.append("Above market price")
         
-        if walkability_score >= 75:
-            pros.append(f"Very walkable ({walkability.get('nearby_counts', {}).get('groceries', 0)} groceries nearby)")
-        elif walkability_score < 50:
-            cons.append("Limited walkability")
-        
-        if apartment.pet_friendly:
+        if apt.get("pet_friendly"):
             pros.append("Pet-friendly")
-        
-        if apartment.parking_included:
+        if apt.get("parking_included"):
             pros.append("Parking included")
-        
-        if apartment.laundry_type == "in_unit":
+        if apt.get("laundry_type") == "in_unit":
             pros.append("In-unit laundry")
 
-        # Final verdict
+        # Verdict
         if overall_score >= 80:
             verdict = "Highly Recommended"
         elif overall_score >= 65:
@@ -625,33 +571,26 @@ async def get_apartment_recommendation(
         else:
             verdict = "May Not Be the Best Fit"
 
-        log.info(f"{log_id} Overall score: {overall_score}, verdict: {verdict}")
-
         return {
             "status": "success",
-            "apartment": _apartment_to_dict(apartment),
+            "apartment": apt,
             "analysis": {
                 "commute": commute,
                 "neighborhood": neighborhood,
-                "budget": budget,
-                "walkability": walkability
+                "budget": budget
             },
             "scores": {
                 "commute_score": commute_score,
                 "neighborhood_score": neighborhood_score,
                 "budget_score": budget_score,
-                "walkability_score": walkability_score,
                 "overall_score": overall_score
             },
             "pros": pros,
             "cons": cons,
             "verdict": verdict,
-            "summary": f"{apartment.title} - {verdict} (Score: {overall_score}/100)"
+            "summary": f"{apt.get('title')} - {verdict} (Score: {overall_score}/100)"
         }
 
     except Exception as e:
         log.error(f"{log_id} Error: {e}", exc_info=True)
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return {"status": "error", "message": str(e)}

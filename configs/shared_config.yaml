@@ -1,0 +1,31 @@
+# Broker connection - dev mode (no external broker needed)
+broker_connection: &broker_connection
+  dev_mode: true
+
+# LLM Model configuration
+planning_model: &planning_model
+  model: ${LLM_SERVICE_PLANNING_MODEL_NAME}
+  api_base: ${LLM_SERVICE_ENDPOINT}
+  api_key: ${LLM_SERVICE_API_KEY}
+  parallel_tool_calls: true
+
+general_model: &general_model
+  model: ${LLM_SERVICE_GENERAL_MODEL_NAME}
+  api_base: ${LLM_SERVICE_ENDPOINT}
+  api_key: ${LLM_SERVICE_API_KEY}
+
+# Services
+default_artifact_service: &default_artifact_service
+  type: filesystem
+  base_path: ./artifacts
+  artifact_scope: namespace
+
+default_session_service: &default_session_service
+  type: memory
+  default_behavior: PERSISTENT
+
+# Data tools config (needed by orchestrator)
+default_data_tools_config: &default_data_tools_config
+  sqlite_memory_threshold_mb: 100
+  max_result_preview_rows: 50
+  max_result_preview_bytes: 4096

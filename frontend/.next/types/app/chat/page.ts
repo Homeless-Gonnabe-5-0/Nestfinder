@@ -1,4 +1,4 @@
-// File: /Users/oumizumi/Desktop/Nestfinder/frontend/app/chat/page.tsx
+// File: /Users/inesiraoui/Desktop/nestfinder/frontend/app/chat/page.tsx
 import * as entry from '../../../../app/chat/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

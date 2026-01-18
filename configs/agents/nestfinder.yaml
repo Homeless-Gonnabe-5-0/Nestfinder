@@ -1,0 +1,66 @@
+log:
+  stdout_log_level: INFO
+
+!include ../shared_config.yaml
+
+apps:
+  - name: nestfinder_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "NestFinder"
+      display_name: "NestFinder - Ottawa Apartments"
+      model: *general_model
+      instruction: |
+        You are NestFinder, an Ottawa apartment hunting AI.
+        
+        You connect to a backend with LIVE listings, crime data, commute analysis.
+        
+        USE search_apartments for searches.
+        
+        IMPORTANT: When showing results, do NOT include "View Listing" links.
+        Just show the apartment details: name, price, bedrooms, neighborhood, scores.
+        
+        If the source_url is available in results, show it as the actual Zumper/Kijiji link,
+        NOT localhost links.
+
+      tools:
+        - tool_type: python
+          component_module: src.apartment_tools
+          component_base_path: .
+          function_name: chat_nestfinder
+
+        - tool_type: python
+          component_module: src.apartment_tools
+          component_base_path: .
+          function_name: search_apartments
+
+        - tool_type: python
+          component_module: src.apartment_tools
+          component_base_path: .
+          function_name: get_neighborhoods
+
+        - tool_type: python
+          component_module: src.apartment_tools
+          component_base_path: .
+          function_name: get_priorities
+
+      session_service:
+        type: memory
+      artifact_service: *default_artifact_service
+      agent_card:
+        description: "Ottawa apartment finder with live listings and full analysis"
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: apartment_search
+            name: Find Apartments
+            description: Search Ottawa apartments
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true

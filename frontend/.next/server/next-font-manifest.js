@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/oumizumi/Desktop/Nestfinder/frontend/app/layout\":[\"static/media/558ca1a6aa3cb55e-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/inesiraoui/Desktop/nestfinder/frontend/app/layout\":[\"static/media/558ca1a6aa3cb55e-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

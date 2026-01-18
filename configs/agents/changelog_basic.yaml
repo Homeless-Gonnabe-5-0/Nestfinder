@@ -1,0 +1,36 @@
+log:
+  stdout_log_level: INFO
+
+!include ../shared_config.yaml
+
+apps:
+  - name: changelog-basic_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "ChangelogBasic"
+      display_name: "Changelog Writer (Basic)"
+      model: *general_model
+      instruction: |
+        You are a changelog writer. Transform commits into clear changelog entries.
+        Use categories: Added, Changed, Fixed, Removed, Security.
+        Use present tense. Be concise.
+      session_service:
+        type: memory
+      artifact_service: *default_artifact_service
+      agent_card:
+        description: "Transforms commits into formatted changelog entries"
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text"]
+        skills:
+          - id: write_changelog
+            name: Write Changelog
+            description: Converts commits to changelog format
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true

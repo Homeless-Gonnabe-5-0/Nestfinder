@@ -1,4 +1,4 @@
-// File: /Users/oumizumi/Desktop/Nestfinder/frontend/app/layout.tsx
+// File: /Users/inesiraoui/Desktop/nestfinder/frontend/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,0 +1,55 @@
+log:
+  stdout_log_level: INFO
+
+!include ../shared_config.yaml
+
+apps:
+  - name: changelog-github_app
+    app_base_path: .
+    app_module: solace_agent_mesh.agent.sac.app
+    broker:
+      <<: *broker_connection
+    app_config:
+      namespace: ${NAMESPACE}
+      supports_streaming: true
+      agent_name: "ChangelogGitHub"
+      display_name: "Changelog Writer (GitHub)"
+      model: *general_model
+      instruction: |
+        You query GitHub repos to generate changelogs.
+        Use github_get_commits, github_get_releases, github_compare_commits.
+        Repos are "owner/repo" format (e.g., "facebook/react").
+      tools:
+        - tool_type: python
+          component_module: src.git_tools
+          component_base_path: .
+          function_name: github_get_commits
+        - tool_type: python
+          component_module: src.git_tools
+          component_base_path: .
+          function_name: github_get_releases
+        - tool_type: python
+          component_module: src.git_tools
+          component_base_path: .
+          function_name: github_compare_commits
+        - tool_type: python
+          component_module: src.git_tools
+          component_base_path: .
+          function_name: github_get_repo_info
+        - tool_type: builtin-group
+          group_name: artifact_management
+      session_service:
+        type: memory
+      artifact_service: *default_artifact_service
+      agent_card:
+        description: "Generates changelogs from any public GitHub repository"
+        defaultInputModes: ["text"]
+        defaultOutputModes: ["text", "file"]
+        skills:
+          - id: github_changelog
+            name: GitHub Changelog
+            description: Generate changelog from GitHub repo
+      agent_card_publishing:
+        interval_seconds: 10
+      agent_discovery:
+        enabled: true
