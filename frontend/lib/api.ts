@@ -10,6 +10,9 @@ export interface SearchRequest {
   priorities: string[];
   max_commute_minutes: number;
   transport_mode: string;
+  // Pinned location from map (optional - takes priority over work_address for commute)
+  pinned_lat?: number;
+  pinned_lng?: number;
 }
 
 export interface Apartment {
@@ -104,6 +107,37 @@ export async function searchApartments(request: SearchRequest): Promise<SearchRe
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Search failed' }));
     throw new Error(error.detail || 'Search failed');
+  }
+
+  return response.json();
+}
+
+// Chat request/response types
+export interface ChatRequest {
+  message: string;
+  session_id?: string;
+  pinned_lat?: number;
+  pinned_lng?: number;
+}
+
+export interface ChatResponse {
+  response: string;
+  intent: 'search' | 'chat' | 'error';
+  search_results: SearchResponse | null;
+}
+
+export async function chat(request: ChatRequest): Promise<ChatResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Chat failed' }));
+    throw new Error(error.detail || 'Chat failed');
   }
 
   return response.json();

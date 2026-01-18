@@ -9,6 +9,7 @@ from typing import Optional
 
 from models import SearchRequest, SearchResponse
 from agents.coordinator import CoordinatorAgent
+from agents.conversation import ConversationAgent
 from constants import PRIORITIES, OTTAWA_NEIGHBORHOODS, TRANSPORT_MODES, API_VERSION
 
 class SearchRequestAPI(BaseModel):
@@ -20,6 +21,18 @@ class SearchRequestAPI(BaseModel):
     priorities: list[str] = ["short_commute", "low_price"]
     max_commute_minutes: int = 45
     transport_mode: str = "transit"
+    # Pinned location from map (optional - takes priority over work_address)
+    pinned_lat: float | None = None
+    pinned_lng: float | None = None
+
+
+class ChatRequestAPI(BaseModel):
+    """Chat request model - natural language conversation"""
+    message: str
+    session_id: str = "default"
+    # Pinned location from map (optional)
+    pinned_lat: float | None = None
+    pinned_lng: float | None = None
 
 app = FastAPI(
     title="NestFinder API",
@@ -36,13 +49,15 @@ app.add_middleware(
 )
 
 coordinator: Optional[CoordinatorAgent] = None
+conversation_agent: Optional[ConversationAgent] = None
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize agents when server starts"""
-    global coordinator
+    global coordinator, conversation_agent
     print("Starting NestFinder API...")
     coordinator = CoordinatorAgent()
+    conversation_agent = ConversationAgent()
     print("API ready!\n")
 
 
@@ -92,6 +107,66 @@ async def get_transport_modes():
     }
 
 
+@app.post("/api/v1/chat")
+async def chat(request: ChatRequestAPI):
+    """
+    Natural language chat endpoint.
+    
+    This handles all user messages - greetings, questions, and search requests.
+    The AI decides when to trigger apartment searches.
+    """
+    global coordinator, conversation_agent
+    
+    if conversation_agent is None:
+        raise HTTPException(status_code=503, detail="Conversation service not ready")
+    
+    # Build pinned location tuple if provided
+    pinned_location = None
+    if request.pinned_lat is not None and request.pinned_lng is not None:
+        pinned_location = (request.pinned_lat, request.pinned_lng)
+    
+    # Get AI response
+    chat_result = await conversation_agent.chat(
+        message=request.message,
+        session_id=request.session_id,
+        pinned_location=pinned_location
+    )
+    
+    # If AI detected search intent, run the search
+    search_results = None
+    if chat_result["intent"] == "search" and chat_result["search_params"]:
+        try:
+            params = chat_result["search_params"]
+            
+            # Build search request with defaults for missing params
+            search_request = SearchRequest(
+                budget_min=params.get("budget_min", 0),
+                budget_max=params.get("budget_max", 3000),
+                work_address=params.get("work_address", ""),
+                bedrooms=params.get("bedrooms", 1),
+                priorities=params.get("priorities", ["short_commute", "low_price"]),
+                max_commute_minutes=params.get("max_commute_minutes", 45),
+                transport_mode=params.get("transport_mode", "transit"),
+                pinned_lat=params.get("pinned_lat"),
+                pinned_lng=params.get("pinned_lng")
+            )
+            
+            # Run search
+            response = await coordinator.search(search_request)
+            search_results = response.to_dict()
+            
+        except Exception as e:
+            print(f"Search error in chat: {e}")
+            # Don't fail the whole request, just note the error
+            chat_result["response"] += f"\n\n(I tried to search but ran into an issue: {str(e)})"
+    
+    return {
+        "response": chat_result["response"],
+        "intent": chat_result["intent"],
+        "search_results": search_results
+    }
+
+
 @app.post("/api/v1/search")
 async def search_apartments(request: SearchRequestAPI):
     """
@@ -122,7 +197,9 @@ async def search_apartments(request: SearchRequestAPI):
         bedrooms=request.bedrooms,
         priorities=request.priorities,
         max_commute_minutes=request.max_commute_minutes,
-        transport_mode=request.transport_mode
+        transport_mode=request.transport_mode,
+        pinned_lat=request.pinned_lat,
+        pinned_lng=request.pinned_lng
     )
     
     try:

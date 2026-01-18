@@ -70,6 +70,8 @@ class CoordinatorAgent:
         print(f"   Budget: ${request.budget_min}-${request.budget_max}")
         print(f"   Bedrooms: {request.bedrooms}")
         print(f"   Work: {request.work_address}")
+        if request.has_pinned_location():
+            print(f"   📍 Pinned Location: ({request.pinned_lat:.4f}, {request.pinned_lng:.4f})")
         print(f"   Priorities: {request.priorities}")
         print(f"{'='*60}\n")
 
@@ -102,9 +104,11 @@ class CoordinatorAgent:
             print(f"Analyzing {i+1}/{len(apartments)}: {apartment.title[:40]}...")
             
             # Run all analysis agents in PARALLEL (faster!)
+            # Use pinned coordinates if available, otherwise use work address
+            destination = request.get_destination_coords() or request.work_address
             commute_task = self.commute_agent.analyze(
                 apartment,
-                request.work_address,
+                destination,
                 request.transport_mode
             )
             neighborhood_task = self.neighborhood_agent.analyze(
