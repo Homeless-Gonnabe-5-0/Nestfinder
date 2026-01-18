@@ -159,3 +159,25 @@ class SearchResponse:
             "search_params": self.search_params.to_dict(),
             "searched_at": self.searched_at
         }
+
+# =============================================================================
+# WALKABILITY ANALYSIS
+# =============================================================================
+@dataclass
+class WalkabilityAnalysis:
+    """Output from Walkability Agent"""
+    apartment_id: str
+    walkability_score: int = 50        # 0-100
+    parks_nearby: int = 0
+    schools_nearby: int = 0
+    groceries_nearby: int = 0
+    closest_park_name: Optional[str] = None
+    closest_park_distance: Optional[int] = None  # meters
+    closest_school_name: Optional[str] = None
+    closest_school_distance: Optional[int] = None
+    closest_grocery_name: Optional[str] = None
+    closest_grocery_distance: Optional[int] = None
+    summary: str = ""
+    
+    def to_dict(self):
+        return asdict(self)
