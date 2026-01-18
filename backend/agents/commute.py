@@ -322,7 +322,7 @@ class CommuteAgent:
         """
         # Check if we have apartment coordinates
         if apartment.lat is None or apartment.lng is None:
-            return self._fallback_analysis(apartment.id, transport_mode)
+            return self._fallback_analysis(apartment.id, transport_mode, apartment, destination)
         
         origin = {"lat": apartment.lat, "lng": apartment.lng}
         
@@ -333,7 +333,7 @@ class CommuteAgent:
             print(f"[{self.name}] Using address: {destination}")
         
         if not self.api_available or self.travel_service is None:
-            return self._fallback_analysis(apartment.id, transport_mode)
+            return self._fallback_analysis(apartment.id, transport_mode, apartment, destination)
         
         try:
             # Get travel times for all modes
@@ -343,7 +343,7 @@ class CommuteAgent:
             )
             
             if not results:
-                return self._fallback_analysis(apartment.id, transport_mode)
+                return self._fallback_analysis(apartment.id, transport_mode, apartment, destination)
             
             # Extract times
             transit_mins = results.get("public_transport", {})
@@ -411,20 +411,77 @@ class CommuteAgent:
             
         except Exception as e:
             print(f"[{self.name}] Error analyzing commute: {e}")
-            return self._fallback_analysis(apartment.id, transport_mode)
+            return self._fallback_analysis(apartment.id, transport_mode, apartment, destination)
     
-    def _fallback_analysis(self, apartment_id: str, mode: str) -> CommuteAnalysis:
-        """Return a fallback analysis when API is unavailable."""
+    def _fallback_analysis(self, apartment_id: str, mode: str, apartment: Apartment = None, destination = None) -> CommuteAnalysis:
+        """Return a distance-based estimate when API is unavailable."""
+        import math
+        
+        # Try to calculate actual distance if we have coordinates
+        if apartment and apartment.lat and apartment.lng and destination:
+            if isinstance(destination, tuple):
+                dest_lat, dest_lng = destination
+            else:
+                # Default downtown Ottawa if we can't parse destination
+                dest_lat, dest_lng = 45.4215, -75.6972
+            
+            # Haversine formula for distance in km
+            R = 6371  # Earth's radius in km
+            lat1, lon1 = math.radians(apartment.lat), math.radians(apartment.lng)
+            lat2, lon2 = math.radians(dest_lat), math.radians(dest_lng)
+            dlat = lat2 - lat1
+            dlon = lon2 - lon1
+            a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+            c = 2 * math.asin(math.sqrt(a))
+            distance_km = R * c
+            
+            # Estimate times based on distance
+            transit_mins = int(distance_km * 4 + 10)  # ~15km/h + wait time
+            driving_mins = int(distance_km * 2 + 5)   # ~30km/h + traffic
+            biking_mins = int(distance_km * 4)        # ~15km/h
+            walking_mins = int(distance_km * 12)      # ~5km/h
+            
+            # Pick best time for mode
+            times = {"transit": transit_mins, "driving": driving_mins, "biking": biking_mins, "walking": walking_mins}
+            best_time = times.get(mode, transit_mins)
+            
+            # Score based on distance
+            if distance_km <= 2:
+                commute_score = 95
+                summary = f"Excellent! Only {distance_km:.1f}km away (~{best_time} min)"
+            elif distance_km <= 5:
+                commute_score = 80
+                summary = f"Great location - {distance_km:.1f}km (~{best_time} min by {mode})"
+            elif distance_km <= 10:
+                commute_score = 65
+                summary = f"Reasonable distance - {distance_km:.1f}km (~{best_time} min)"
+            else:
+                commute_score = 40
+                summary = f"Far - {distance_km:.1f}km (~{best_time} min)"
+            
+            return CommuteAnalysis(
+                apartment_id=apartment_id,
+                transit_minutes=transit_mins,
+                driving_minutes=driving_mins,
+                biking_minutes=biking_mins,
+                walking_minutes=walking_mins if distance_km < 5 else None,
+                best_mode=mode,
+                best_time=best_time,
+                commute_score=commute_score,
+                summary=summary
+            )
+        
+        # Ultimate fallback if no coordinates
         return CommuteAnalysis(
             apartment_id=apartment_id,
-            transit_minutes=25,
-            driving_minutes=15,
-            biking_minutes=20,
+            transit_minutes=None,
+            driving_minutes=None,
+            biking_minutes=None,
             walking_minutes=None,
             best_mode=mode,
-            best_time=25,
-            commute_score=70,
-            summary="Estimated commute (API unavailable)"
+            best_time=0,
+            commute_score=50,
+            summary="Location unknown"
         )
 
 

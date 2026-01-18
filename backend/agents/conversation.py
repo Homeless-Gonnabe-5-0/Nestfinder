@@ -1,4 +1,4 @@
-# agents/conversation.py - Natural Conversation Agent using Ollama
+# agents/conversation.py - Natural Conversation Agent using OpenAI
 
 import os
 import sys
@@ -12,31 +12,29 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
-# Simple prompt - let the AI be natural
-SYSTEM_PROMPT = """You are Nestfinder, a friendly assistant helping people find apartments in Ottawa.
+# Natural conversational prompt
+SYSTEM_PROMPT = """You are Nestfinder, a friendly AI assistant helping people find apartments in Ottawa, Canada.
 
-Rules:
 - Be natural and conversational
-- Keep responses short (1-3 sentences)
-- If someone asks about apartments, say you'll search for them
-- NEVER make up apartment listings or prices - you don't have that data
-- If you don't know something, say so honestly
-- Ottawa neighborhoods include: Centretown, Byward Market, The Glebe, Westboro, Hintonburg, Sandy Hill, Little Italy, Vanier"""
+- Answer any question the user asks - use your knowledge
+- Keep responses concise (2-4 sentences)
+- When users want to search for apartments, acknowledge it - the system handles the actual search
+- Never make up specific apartment listings or prices"""
 
 
 class ConversationAgent:
-    """Natural conversation using Ollama + smart intent detection."""
+    """Natural conversation using OpenAI + smart intent detection."""
     
     def __init__(self):
         self.name = "ConversationAgent"
-        self.base_url = OLLAMA_BASE_URL
-        self.model = OLLAMA_MODEL
+        self.api_key = OPENAI_API_KEY
+        self.model = OPENAI_MODEL
         self.client = httpx.AsyncClient(timeout=60.0)
         self.conversations: dict[str, list] = {}
-        print(f"[{self.name}] initialized with Ollama ({self.model})")
+        print(f"[{self.name}] initialized with OpenAI ({self.model})")
     
     def _detect_search_intent(self, message: str) -> Optional[dict]:
         """
@@ -142,8 +140,8 @@ class ConversationAgent:
                 search_params["pinned_lat"] = pinned_location[0]
                 search_params["pinned_lng"] = pinned_location[1]
             
-            # Get a natural response from Ollama
-            ai_response = await self._get_ollama_response(
+            # Get a natural response from OpenAI
+            ai_response = await self._get_openai_response(
                 f"User wants to search for apartments: '{message}'. Give a brief, friendly acknowledgment (1 sentence). Don't list any apartments.",
                 session_id
             )
@@ -154,8 +152,8 @@ class ConversationAgent:
                 "intent": "search"
             }
         
-        # Regular chat - let Ollama handle it naturally
-        ai_response = await self._get_ollama_response(message, session_id)
+        # Regular chat - let OpenAI handle it naturally
+        ai_response = await self._get_openai_response(message, session_id)
         
         return {
             "response": ai_response,
@@ -163,51 +161,52 @@ class ConversationAgent:
             "intent": "chat"
         }
     
-    async def _get_ollama_response(self, message: str, session_id: str) -> str:
-        """Get response from Ollama."""
+    async def _get_openai_response(self, message: str, session_id: str) -> str:
+        """Get response from OpenAI."""
         
         history = self._get_conversation(session_id)
         
-        # Build prompt
-        prompt = SYSTEM_PROMPT + "\n\n"
+        # Build messages array for OpenAI
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        
         for msg in history[-4:]:
-            role = "User" if msg["role"] == "user" else "Assistant"
-            prompt += f"{role}: {msg['content']}\n"
-        prompt += f"User: {message}\nAssistant:"
+            messages.append({"role": msg["role"], "content": msg["content"]})
+        
+        messages.append({"role": "user", "content": message})
         
         try:
             response = await self.client.post(
-                f"{self.base_url}/api/generate",
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json"
+                },
                 json={
                     "model": self.model,
-                    "prompt": prompt,
-                    "stream": False,
-                    "options": {
-                        "temperature": 0.7,
-                        "num_predict": 80,  # Shorter responses = faster
-                        "top_k": 20,        # Faster sampling
-                        "top_p": 0.9
-                    }
+                    "messages": messages,
+                    "temperature": 0.8,
+                    "max_tokens": 300
                 }
             )
             
             if response.status_code != 200:
-                return "Hey! How can I help you find an apartment today?"
+                print(f"[{self.name}] OpenAI error: {response.status_code} - {response.text}")
+                return "Hey there! What can I help you with today?"
             
             result = response.json()
-            ai_response = result.get("response", "").strip()
+            ai_response = result["choices"][0]["message"]["content"].strip()
             
             # Store in history
             self._add_to_history(session_id, "user", message)
             self._add_to_history(session_id, "assistant", ai_response)
             
-            return ai_response if ai_response else "Hey! What are you looking for?"
+            return ai_response if ai_response else "Hey! What's on your mind?"
             
         except httpx.ConnectError:
-            return "I'm having trouble thinking right now. Make sure Ollama is running!"
+            return "I'm having a bit of trouble connecting right now. Try again in a sec!"
         except Exception as e:
             print(f"[{self.name}] Error: {e}")
-            return "Something went wrong on my end. What were you looking for?"
+            return "Oops, something went wrong on my end. What were you saying?"
     
     def clear_history(self, session_id: str):
         if session_id in self.conversations:
@@ -222,23 +221,22 @@ if __name__ == "__main__":
         
         print("\n=== Testing ConversationAgent ===\n")
         
-        # Test greeting
-        r = await agent.chat("yo")
-        print(f"User: yo")
-        print(f"Bot: {r['response']}")
-        print(f"Intent: {r['intent']}\n")
+        test_messages = [
+            "hey!",
+            "what's the weather like in ottawa?",
+            "tell me about the glebe neighborhood",
+            "find me a 2 bedroom under $2000",
+            "what's the best area for students?",
+            "how's the transit system there?",
+        ]
         
-        # Test search
-        r = await agent.chat("find me a 2 bedroom under $2000")
-        print(f"User: find me a 2 bedroom under $2000")
-        print(f"Bot: {r['response']}")
-        print(f"Intent: {r['intent']}")
-        print(f"Params: {r['search_params']}\n")
-        
-        # Test question
-        r = await agent.chat("what neighborhoods are safe?")
-        print(f"User: what neighborhoods are safe?")
-        print(f"Bot: {r['response']}")
-        print(f"Intent: {r['intent']}")
+        for msg in test_messages:
+            r = await agent.chat(msg)
+            print(f"User: {msg}")
+            print(f"Bot: {r['response']}")
+            print(f"Intent: {r['intent']}")
+            if r['search_params']:
+                print(f"Params: {r['search_params']}")
+            print()
     
     asyncio.run(test())

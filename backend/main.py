@@ -18,12 +18,12 @@ class SearchRequestAPI(BaseModel):
     budget_max: int
     work_address: str
     bedrooms: int = 1
-    priorities: list[str] = ["short_commute", "low_price"]
+    priorities: list = ["short_commute", "low_price"]
     max_commute_minutes: int = 45
     transport_mode: str = "transit"
     # Pinned location from map (optional - takes priority over work_address)
-    pinned_lat: float | None = None
-    pinned_lng: float | None = None
+    pinned_lat: Optional[float] = None
+    pinned_lng: Optional[float] = None
 
 
 class ChatRequestAPI(BaseModel):
@@ -31,8 +31,8 @@ class ChatRequestAPI(BaseModel):
     message: str
     session_id: str = "default"
     # Pinned location from map (optional)
-    pinned_lat: float | None = None
-    pinned_lng: float | None = None
+    pinned_lat: Optional[float] = None
+    pinned_lng: Optional[float] = None
 
 app = FastAPI(
     title="NestFinder API",

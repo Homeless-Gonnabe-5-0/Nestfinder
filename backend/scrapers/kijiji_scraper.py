@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import time
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -13,10 +14,14 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "scraped")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, "kijiji.json")
 
-CONFIG = {
-    "name": "kijiji",
-    "url": "https://www.kijiji.ca/b-apartments-condos/ottawa/c37l1700185",
-    "prompt": """Get all rental listings. For each one extract:
+# Target number of listings
+TARGET_LISTINGS = 1000
+MAX_PAGES = 30  # Safety limit
+
+BASE_URL = "https://www.kijiji.ca/b-apartments-condos/ottawa"
+CATEGORY = "c37l1700185"
+
+PROMPT = """Get all rental listings. For each one extract:
 - listing_title
 - monthly_rent
 - location
@@ -32,20 +37,24 @@ CONFIG = {
 - lease_terms
 - move_in_date
 - listing_url"""
-}
 
 
-def scrape():
-    print(f"[KIJIJI] Starting scrape...")
-    print(f"[KIJIJI] URL: {CONFIG['url']}")
-    
+def get_page_url(page_num):
+    """Generate URL for a specific page number."""
+    if page_num == 1:
+        return f"{BASE_URL}/{CATEGORY}"
+    return f"{BASE_URL}/page-{page_num}/{CATEGORY}"
+
+
+def scrape_page(url):
+    """Scrape a single page and return listings."""
     if not YELLOWCAKE_API_KEY:
         print("[KIJIJI] ERROR: No YELLOWCAKE_API_KEY set")
         return []
     
     payload = {
-        "url": CONFIG["url"],
-        "prompt": CONFIG["prompt"]
+        "url": url,
+        "prompt": PROMPT
     }
     
     headers = {
@@ -82,27 +91,64 @@ def scrape():
                     data = json.loads(text[5:].strip())
                     if data.get("success") and data.get("data"):
                         listings.extend(data.get("data", []))
-                    print(f"[KIJIJI] Got {len(listings)} listings")
                     break
                 elif 'error' in text.lower() and 'data:' in text and 'ERROR' in text:
                     print(f"[KIJIJI] API Error: {text}")
                     break
         
-        if listings:
-            save_results(listings)
-        
         return listings
         
     except Exception as e:
-        print(f"[KIJIJI] Error: {e}")
+        print(f"[KIJIJI] Error scraping page: {e}")
         return []
+
+
+def scrape():
+    """Scrape multiple pages until we reach target listings."""
+    print(f"[KIJIJI] Starting scrape - Target: {TARGET_LISTINGS} listings")
+    
+    all_listings = []
+    seen_urls = set()  # Track unique listings by URL
+    
+    for page in range(1, MAX_PAGES + 1):
+        url = get_page_url(page)
+        print(f"[KIJIJI] Scraping page {page}: {url}")
+        
+        page_listings = scrape_page(url)
+        
+        if not page_listings:
+            print(f"[KIJIJI] No listings on page {page}, stopping.")
+            break
+        
+        # Deduplicate by listing URL
+        new_count = 0
+        for listing in page_listings:
+            listing_url = listing.get('listing_url', '')
+            if listing_url and listing_url not in seen_urls:
+                seen_urls.add(listing_url)
+                all_listings.append(listing)
+                new_count += 1
+        
+        print(f"[KIJIJI] Page {page}: {new_count} new listings (Total: {len(all_listings)})")
+        
+        if len(all_listings) >= TARGET_LISTINGS:
+            print(f"[KIJIJI] Reached target of {TARGET_LISTINGS} listings!")
+            break
+        
+        # Be nice to the API
+        time.sleep(2)
+    
+    if all_listings:
+        save_results(all_listings)
+    
+    return all_listings
 
 
 def save_results(listings):
     output = {
         "source": "kijiji",
         "scraped_at": datetime.now().isoformat(),
-        "url": CONFIG["url"],
+        "pages_scraped": "multiple",
         "count": len(listings),
         "listings": listings
     }
@@ -117,7 +163,8 @@ if __name__ == "__main__":
     results = scrape()
     
     if results:
-        print(f"\n[KIJIJI] Sample listing:")
+        print(f"\n[KIJIJI] Total: {len(results)} listings")
+        print(f"[KIJIJI] Sample listing:")
         print(json.dumps(results[0], indent=2))
     else:
         print("[KIJIJI] No results")

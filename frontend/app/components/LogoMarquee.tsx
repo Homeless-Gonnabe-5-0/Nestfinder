@@ -18,6 +18,11 @@ const websites = [
     logo: '/logos/Zillow-Logo-removebg-preview.png',
     url: 'https://www.zillow.com',
   },
+  { 
+    name: 'Rentals.ca', 
+    logo: '/logos/rentalsca_logo-removebg-preview.png',
+    url: 'https://www.rentals.ca',
+  },
 ];
 
 // Create a longer array by repeating logos for a fuller marquee

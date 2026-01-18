@@ -35,6 +35,16 @@ TRANSPORT_MODES = {
 }
 
 # =============================================================================
+# SAFETY RATINGS
+# =============================================================================
+SAFETY_RATINGS = {
+    "excellent": {"label": "Excellent", "min_score": 85},
+    "good": {"label": "Good", "min_score": 70},
+    "moderate": {"label": "Moderate", "min_score": 50},
+    "caution": {"label": "Use Caution", "min_score": 0}
+}
+
+# =============================================================================
 # OTTAWA NEIGHBORHOODS
 # =============================================================================
 OTTAWA_NEIGHBORHOODS = [
