@@ -1,0 +1,14 @@
+{
+  "name": "kijiji",
+  "enabled": true,
+  "url_template": "https://www.kijiji.ca/b-apartments-condos/{city}/c37l1700185",
+  "prompt_template": "Extract ALL apartment rental listings visible on this page. Get exactly {max_results} listings. For EACH listing shown, extract:\n- listing_headline: the full title or headline of the rental listing\n- rental_price: the monthly rent amount in dollars (include ranges if shown)\n- listing_location: the address or location shown (street, neighborhood, or general area)\n- bedrooms: number of bedrooms (Studio, 1, 2, 3, or ranges)\n- full_details: complete description with all amenities, utilities, features mentioned\n- listing_page_url: the full URL link to view this listing\n\nScrape ALL {max_results} visible listings with complete information.",
+  "field_mapping": {
+    "title": "listing_headline",
+    "price": "rental_price",
+    "address": "listing_location",
+    "bedrooms": "bedrooms",
+    "description": "full_details",
+    "link": "listing_page_url"
+  }
+}

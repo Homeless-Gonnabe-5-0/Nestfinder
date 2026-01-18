@@ -1,0 +1,1833 @@
+{
+  "source": "zumper",
+  "scraped_at": "2026-01-17T19:28:09.499333",
+  "url": "https://www.zumper.com/apartments-for-rent/ottawa-on",
+  "count": 93,
+  "listings": [
+    {
+      "listing_title": "Maison Riverain - Studio",
+      "monthly_rent": "$1,913",
+      "bedrooms": 0,
+      "full_address": "280 Montgomery St, Ottawa, ON K1L 0B9, CAN",
+      "neighborhood": "Vanier",
+      "sqft": 380,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1238812/maison-riverain-vanier-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/7b_W7QpctJU/hqdefault.jpg"
+    },
+    {
+      "listing_title": "Maison Riverain - 1 Bedroom",
+      "monthly_rent": "$2,009",
+      "bedrooms": 1,
+      "full_address": "280 Montgomery St, Ottawa, ON K1L 0B9, CAN",
+      "neighborhood": "Vanier",
+      "sqft": 548,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1238812/maison-riverain-vanier-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/7b_W7QpctJU/hqdefault.jpg"
+    },
+    {
+      "listing_title": "Maison Riverain - 1 Bedroom plus Den",
+      "monthly_rent": "$2,142",
+      "bedrooms": 1,
+      "full_address": "280 Montgomery St, Ottawa, ON K1L 0B9, CAN",
+      "neighborhood": "Vanier",
+      "sqft": 597,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1238812/maison-riverain-vanier-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/7b_W7QpctJU/hqdefault.jpg"
+    },
+    {
+      "listing_title": "Maison Riverain - 2 Bedroom",
+      "monthly_rent": "$2,599",
+      "bedrooms": 2,
+      "full_address": "280 Montgomery St, Ottawa, ON K1L 0B9, CAN",
+      "neighborhood": "Vanier",
+      "sqft": 757,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1238812/maison-riverain-vanier-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/7b_W7QpctJU/hqdefault.jpg"
+    },
+    {
+      "listing_title": "Maison Riverain - 2 bedroom plus Den",
+      "monthly_rent": "$2,982",
+      "bedrooms": 2,
+      "full_address": "280 Montgomery St, Ottawa, ON K1L 0B9, CAN",
+      "neighborhood": "Vanier",
+      "sqft": 938,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1238812/maison-riverain-vanier-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/7b_W7QpctJU/hqdefault.jpg"
+    },
+    {
+      "listing_title": "58 McClintock - 3 Bedroom",
+      "monthly_rent": "$2,200",
+      "bedrooms": 3,
+      "full_address": "58 Mcclintock Way, Kanata, ON K2L 2A2, CAN",
+      "neighborhood": "Katimavik - Hazeldean",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pool",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1147330/58-mcclintock-katimavik-hazeldean-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "105 Rosemount Ave. - 1 Bedroom",
+      "monthly_rent": "$1,650",
+      "bedrooms": 1,
+      "full_address": "105 Rosemount Ave, Ottawa, ON K1Y 1P5, CAN",
+      "neighborhood": "Hintonburg",
+      "sqft": null,
+      "amenities": [
+        "In-Unit Laundry",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p517672/105-rosemount-ave-hintonburg-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Cross Winds - 1 Bedroom  + Den",
+      "monthly_rent": "$2,995",
+      "bedrooms": 1,
+      "full_address": "641 Bathgate Dr, Ottawa, ON K1K 3Y3, CAN",
+      "neighborhood": "Carson Meadows",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p305649/the-cross-winds-carson-meadows-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Cross Winds - 2 Bedroom + Den",
+      "monthly_rent": "$3,495",
+      "bedrooms": 2,
+      "full_address": "641 Bathgate Dr, Ottawa, ON K1K 3Y3, CAN",
+      "neighborhood": "Carson Meadows",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p305649/the-cross-winds-carson-meadows-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Langs - 1 Bedroom",
+      "monthly_rent": "$1,699",
+      "bedrooms": 1,
+      "full_address": "550 Lang'S Rd, Ottawa, ON K1K 4C2, CAN",
+      "neighborhood": "Fairhaven",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p430875/langs-apartments-fairhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Langs - 1 Bedroom (Premium)",
+      "monthly_rent": "$1,725",
+      "bedrooms": 1,
+      "full_address": "550 Lang'S Rd, Ottawa, ON K1K 4C2, CAN",
+      "neighborhood": "Fairhaven",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p430875/langs-apartments-fairhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Langs - 2 Bedroom",
+      "monthly_rent": "$1,925",
+      "bedrooms": 2,
+      "full_address": "550 Lang'S Rd, Ottawa, ON K1K 4C2, CAN",
+      "neighborhood": "Fairhaven",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p430875/langs-apartments-fairhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "1140 Wellington - 1 Bedroom",
+      "monthly_rent": "$2,078",
+      "bedrooms": 1,
+      "full_address": "1140 Wellington St W, Ottawa, ON K1Y 4H4, CAN",
+      "neighborhood": "Hintonburg",
+      "sqft": 601,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p539503/1140-wellington-hintonburg-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "1140 Wellington - 1 Bedroom",
+      "monthly_rent": "$2,360",
+      "bedrooms": 1,
+      "full_address": "1140 Wellington St W, Ottawa, ON K1Y 4H4, CAN",
+      "neighborhood": "Hintonburg",
+      "sqft": 697,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p539503/1140-wellington-hintonburg-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "1140 Wellington - 2 Bedroom",
+      "monthly_rent": "$3,326",
+      "bedrooms": 2,
+      "full_address": "1140 Wellington St W, Ottawa, ON K1Y 4H4, CAN",
+      "neighborhood": "Hintonburg",
+      "sqft": 1062,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p539503/1140-wellington-hintonburg-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "1140 Wellington - 2 Bedroom",
+      "monthly_rent": "$3,380",
+      "bedrooms": 2,
+      "full_address": "1140 Wellington St W, Ottawa, ON K1Y 4H4, CAN",
+      "neighborhood": "Hintonburg",
+      "sqft": 1052,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p539503/1140-wellington-hintonburg-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "625 Borthwick Ave - Studio",
+      "monthly_rent": "$1,400",
+      "bedrooms": 0,
+      "full_address": "625 Borthwick Ave, Ottawa, ON K1K 2L8, CAN",
+      "neighborhood": "Forbes",
+      "sqft": 222,
+      "amenities": [
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p275735/625-borthwick-ave-forbes-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "625 Borthwick Ave - 1 Bedroom",
+      "monthly_rent": "$1,850",
+      "bedrooms": 1,
+      "full_address": "625 Borthwick Ave, Ottawa, ON K1K 2L8, CAN",
+      "neighborhood": "Forbes",
+      "sqft": 452,
+      "amenities": [
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p275735/625-borthwick-ave-forbes-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "5-80 Weeping Willow Lane - 3 Bedrooms",
+      "monthly_rent": "$2,699",
+      "bedrooms": 3,
+      "full_address": "5-80 Weeping Willow Lane, Kanata, ON K2K 1E4, CAN",
+      "neighborhood": "Beaverbrook",
+      "sqft": 1406,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p213676/80-varley-lane-beaverbrook-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "449-451 Roosevelt - 1 Bedroom",
+      "monthly_rent": "$2,150",
+      "bedrooms": 1,
+      "full_address": "451 Roosevelt Ave, Ottawa, ON K2A 1Z7, CAN",
+      "neighborhood": "Westboro",
+      "sqft": 776,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1524720/449-451-roosevelt-westboro-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "449-451 Roosevelt - 1 Bedroom",
+      "monthly_rent": "$2,250",
+      "bedrooms": 1,
+      "full_address": "451 Roosevelt Ave, Ottawa, ON K2A 1Z7, CAN",
+      "neighborhood": "Westboro",
+      "sqft": 865,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1524720/449-451-roosevelt-westboro-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "449-451 Roosevelt - 1 Bedroom",
+      "monthly_rent": "$2,350",
+      "bedrooms": 1,
+      "full_address": "451 Roosevelt Ave, Ottawa, ON K2A 1Z7, CAN",
+      "neighborhood": "Westboro",
+      "sqft": 845,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1524720/449-451-roosevelt-westboro-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "449-451 Roosevelt - 2 Bedroom",
+      "monthly_rent": "$2,300",
+      "bedrooms": 2,
+      "full_address": "451 Roosevelt Ave, Ottawa, ON K2A 1Z7, CAN",
+      "neighborhood": "Westboro",
+      "sqft": 880,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1524720/449-451-roosevelt-westboro-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "449-451 Roosevelt - 2 Bedroom",
+      "monthly_rent": "$2,500",
+      "bedrooms": 2,
+      "full_address": "451 Roosevelt Ave, Ottawa, ON K2A 1Z7, CAN",
+      "neighborhood": "Westboro",
+      "sqft": 845,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1524720/449-451-roosevelt-westboro-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "177 Hopewell Ave - 3 Bedroom",
+      "monthly_rent": "$2,990",
+      "bedrooms": 3,
+      "full_address": "177 Hopewell Ave, Ottawa, ON K1S 2Z4, CAN",
+      "neighborhood": "Old Ottawa South",
+      "sqft": 750,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p354363/177-hopewell-ave-old-ottawa-south-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Slater - 1 Bedroom",
+      "monthly_rent": "$3,900",
+      "bedrooms": 1,
+      "full_address": "199 Slater St, Ottawa, ON K1P 0C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 754,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p324152/2103-199-slater-street-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Slater - 2 Bedroom",
+      "monthly_rent": "$4,350",
+      "bedrooms": 2,
+      "full_address": "199 Slater St, Ottawa, ON K1P 0C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 754,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p324152/2103-199-slater-street-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 - 1 Bedroom",
+      "monthly_rent": "$2,140",
+      "bedrooms": 1,
+      "full_address": "400 Albert St, Ottawa, ON K1R 0G6, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 556,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1283354/releve-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 - 1 Bedroom",
+      "monthly_rent": "$2,270",
+      "bedrooms": 1,
+      "full_address": "400 Albert St, Ottawa, ON K1R 0G6, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1283354/releve-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 - 2 Bedroom",
+      "monthly_rent": "$2,735",
+      "bedrooms": 2,
+      "full_address": "400 Albert St, Ottawa, ON K1R 0G6, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1283354/releve-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 - 2 Bedroom",
+      "monthly_rent": "$2,955",
+      "bedrooms": 2,
+      "full_address": "400 Albert St, Ottawa, ON K1R 0G6, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1283354/releve-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "132 Carillon Street - 3 Bedroom",
+      "monthly_rent": "$2,995",
+      "bedrooms": 3,
+      "full_address": "132 Carillon St, Ottawa, ON K1L 5Y3, CAN",
+      "neighborhood": "Vanier",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1308993/132-carillon-street-vanier-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "408 Albert St. - 2 Bedroom",
+      "monthly_rent": "$2,000",
+      "bedrooms": 2,
+      "full_address": "408 Albert St, Ottawa, ON K1R 5B2, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p471221/408-albert-st-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "169 Lisgar St. - Studio",
+      "monthly_rent": "$1,750",
+      "bedrooms": 0,
+      "full_address": "169 Lisgar St, Ottawa, ON K2P 0C3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": 418,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p353789/169-lisgar-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "169 Lisgar St. - 1 Bedroom",
+      "monthly_rent": "$1,875",
+      "bedrooms": 1,
+      "full_address": "169 Lisgar St, Ottawa, ON K2P 0C3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p353789/169-lisgar-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "169 Lisgar St. - 1 Bedroom",
+      "monthly_rent": "$1,875",
+      "bedrooms": 1,
+      "full_address": "169 Lisgar St, Ottawa, ON K2P 0C3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p353789/169-lisgar-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "169 Lisgar St. - 1 Bedroom",
+      "monthly_rent": "$1,875",
+      "bedrooms": 1,
+      "full_address": "169 Lisgar St, Ottawa, ON K2P 0C3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p353789/169-lisgar-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "169 Lisgar St. - 1 Bedroom",
+      "monthly_rent": "$1,875",
+      "bedrooms": 1,
+      "full_address": "169 Lisgar St, Ottawa, ON K2P 0C3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p353789/169-lisgar-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "MOUNTSHANNON - 2 Bedroom",
+      "monthly_rent": "$2,075",
+      "bedrooms": 2,
+      "full_address": "114 Mountshannon Dr, Nepean, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1028,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1502824/mountshannon-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "MOUNTSHANNON - 2 Bedroom",
+      "monthly_rent": "$2,175",
+      "bedrooms": 2,
+      "full_address": "114 Mountshannon Dr, Nepean, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1179,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1502824/mountshannon-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "MOUNTSHANNON - 2 Bedroom",
+      "monthly_rent": "$2,175",
+      "bedrooms": 2,
+      "full_address": "114 Mountshannon Dr, Nepean, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1097,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1502824/mountshannon-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "MOUNTSHANNON - 2 Bedroom",
+      "monthly_rent": "$2,200",
+      "bedrooms": 2,
+      "full_address": "114 Mountshannon Dr, Nepean, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1196,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1502824/mountshannon-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "MOUNTSHANNON - 2 Bedroom",
+      "monthly_rent": "$2,475",
+      "bedrooms": 2,
+      "full_address": "114 Mountshannon Dr, Nepean, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1445,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1502824/mountshannon-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Brittany Drive - 1 Bedroom",
+      "monthly_rent": "$1,539",
+      "bedrooms": 1,
+      "full_address": "230/240 Brittany Dr, Ottawa, ON K1K None, CAN",
+      "neighborhood": "Manor Park South",
+      "sqft": 554,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p456892/brittany-drive-apartments-manor-park-south-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Brittany Drive - 2 Bedroom A",
+      "monthly_rent": "$1,794",
+      "bedrooms": 2,
+      "full_address": "230/240 Brittany Dr, Ottawa, ON K1K None, CAN",
+      "neighborhood": "Manor Park South",
+      "sqft": 800,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p456892/brittany-drive-apartments-manor-park-south-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Brittany Drive - 2 Bedroom B",
+      "monthly_rent": "$1,894",
+      "bedrooms": 2,
+      "full_address": "230/240 Brittany Dr, Ottawa, ON K1K None, CAN",
+      "neighborhood": "Manor Park South",
+      "sqft": 662,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p456892/brittany-drive-apartments-manor-park-south-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Brittany Drive - 2 Bedroom C",
+      "monthly_rent": "$1,894",
+      "bedrooms": 2,
+      "full_address": "230/240 Brittany Dr, Ottawa, ON K1K None, CAN",
+      "neighborhood": "Manor Park South",
+      "sqft": 740,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p456892/brittany-drive-apartments-manor-park-south-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "340 Cooper St. - Studio",
+      "monthly_rent": "$1,400",
+      "bedrooms": 0,
+      "full_address": "340 Cooper St, Ottawa, ON K2P 0G7, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p466562/340-cooper-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "360 Laurier - Studio",
+      "monthly_rent": "$1,799",
+      "bedrooms": 0,
+      "full_address": "360 Laurier Ave W, Ottawa, ON K1P 1C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 460,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1379998/360-laurier-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "360 Laurier - Studio",
+      "monthly_rent": "$1,949",
+      "bedrooms": 0,
+      "full_address": "360 Laurier Ave W, Ottawa, ON K1P 1C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 460,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1379998/360-laurier-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "360 Laurier - Studio",
+      "monthly_rent": "$1,949",
+      "bedrooms": 0,
+      "full_address": "360 Laurier Ave W, Ottawa, ON K1P 1C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 460,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1379998/360-laurier-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "360 Laurier - 1 Bedroom Promotional Price For 12 Months*",
+      "monthly_rent": "$1,849",
+      "bedrooms": 1,
+      "full_address": "360 Laurier Ave W, Ottawa, ON K1P 1C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 521,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1379998/360-laurier-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "360 Laurier - 1 Bedroom",
+      "monthly_rent": "$2,049",
+      "bedrooms": 1,
+      "full_address": "360 Laurier Ave W, Ottawa, ON K1P 1C8, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 521,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1379998/360-laurier-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "321 Waverley Street - 1 Bedroom",
+      "monthly_rent": "$1,395",
+      "bedrooms": 1,
+      "full_address": "321 Waverley St W, Ottawa, ON K2P 0W2, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p450547/321-waverley-street-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Holbrook - Studio",
+      "monthly_rent": "$1,349",
+      "bedrooms": 0,
+      "full_address": "404 Elgin St, Ottawa, ON K2P 1N3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": 264,
+      "amenities": [
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p274798/holbrook-apartments-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Holbrook - 1 Bedroom",
+      "monthly_rent": "$1,469",
+      "bedrooms": 1,
+      "full_address": "404 Elgin St, Ottawa, ON K2P 1N3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p274798/holbrook-apartments-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Juliana - Studio",
+      "monthly_rent": "$1,564",
+      "bedrooms": 0,
+      "full_address": "100 Bronson Ave, Ottawa, ON K1R 6G8, CAN",
+      "neighborhood": "Lebreton",
+      "sqft": 500,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p217922/the-juliana-lebreton-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Anthem- Barrhaven - 2 Bedroom Unit",
+      "monthly_rent": "$2,250",
+      "bedrooms": 2,
+      "full_address": "20-299 Glenroy Gilbert Dr, Ottawa, ON K2J None, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": 1200,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1472306/801-glenroy-gilbert-drive-ts-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "88 Nepean St. - Studio",
+      "monthly_rent": "$1,500",
+      "bedrooms": 0,
+      "full_address": "88 Nepean St, Ottawa, ON K2P 0B3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p466564/88-nepean-st-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "200 Laurier Ave. East - 1 Bedroom",
+      "monthly_rent": "$1,650",
+      "bedrooms": 1,
+      "full_address": "200 Laurier Ave E, Ottawa, ON K1N 6P3, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p466558/200-laurier-ave-east-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "200 Laurier Ave. East - 1 Bedroom + Den",
+      "monthly_rent": "$1,700",
+      "bedrooms": 1,
+      "full_address": "200 Laurier Ave E, Ottawa, ON K1N 6P3, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p466558/200-laurier-ave-east-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Les Terrasses Francesca - 1 Bedroom",
+      "monthly_rent": "$2,499",
+      "bedrooms": 1,
+      "full_address": "1425 Vanier Pky, Ottawa, ON K1K 3W6, CAN",
+      "neighborhood": "Overbrooke",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p820387/les-terrasses-francesca-overbrooke-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Les Terrasses Francesca - 1 Bedroom + Den",
+      "monthly_rent": "$2,549",
+      "bedrooms": 1,
+      "full_address": "1425 Vanier Pky, Ottawa, ON K1K 3W6, CAN",
+      "neighborhood": "Overbrooke",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p820387/les-terrasses-francesca-overbrooke-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Les Terrasses Francesca - 2 Bedroom",
+      "monthly_rent": "$3,399",
+      "bedrooms": 2,
+      "full_address": "1425 Vanier Pky, Ottawa, ON K1K 3W6, CAN",
+      "neighborhood": "Overbrooke",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p820387/les-terrasses-francesca-overbrooke-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Les Terrasses Francesca - 2 Bedroom (Terrace)",
+      "monthly_rent": "$3,499",
+      "bedrooms": 2,
+      "full_address": "1425 Vanier Pky, Ottawa, ON K1K 3W6, CAN",
+      "neighborhood": "Overbrooke",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p820387/les-terrasses-francesca-overbrooke-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 II - 1 Bedroom",
+      "monthly_rent": "$2,115",
+      "bedrooms": 1,
+      "full_address": "391 Slater St, Ottawa, ON K1R 0G7, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 588,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1460344/releve-ii-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 II - 2 Bedroom",
+      "monthly_rent": "$2,710",
+      "bedrooms": 2,
+      "full_address": "391 Slater St, Ottawa, ON K1R 0G7, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1460344/releve-ii-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 II - 2 Bedroom",
+      "monthly_rent": "$2,855",
+      "bedrooms": 2,
+      "full_address": "391 Slater St, Ottawa, ON K1R 0G7, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1460344/releve-ii-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Relev\u00e9 II - 3 Bedroom",
+      "monthly_rent": "$3,210",
+      "bedrooms": 3,
+      "full_address": "391 Slater St, Ottawa, ON K1R 0G7, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pool",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1460344/releve-ii-downtown-ottawa-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Lennox - 1 Bedroom",
+      "monthly_rent": "$2,100",
+      "bedrooms": 1,
+      "full_address": "90 Champagne Ave S, Ottawa, ON K1S 5X8, CAN",
+      "neighborhood": "Civic Hospital",
+      "sqft": 557,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p899031/the-lennox-civic-hospital-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Lennox - 1 Bedroom",
+      "monthly_rent": "$2,100",
+      "bedrooms": 1,
+      "full_address": "90 Champagne Ave S, Ottawa, ON K1S 5X8, CAN",
+      "neighborhood": "Civic Hospital",
+      "sqft": 586,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p899031/the-lennox-civic-hospital-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Lennox - 1 Bedroom",
+      "monthly_rent": "$2,100",
+      "bedrooms": 1,
+      "full_address": "90 Champagne Ave S, Ottawa, ON K1S 5X8, CAN",
+      "neighborhood": "Civic Hospital",
+      "sqft": 569,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p899031/the-lennox-civic-hospital-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Lennox - 1 Bedroom",
+      "monthly_rent": "$2,100",
+      "bedrooms": 1,
+      "full_address": "90 Champagne Ave S, Ottawa, ON K1S 5X8, CAN",
+      "neighborhood": "Civic Hospital",
+      "sqft": 557,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p899031/the-lennox-civic-hospital-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Lennox - 1 Bedroom",
+      "monthly_rent": "$2,100",
+      "bedrooms": 1,
+      "full_address": "90 Champagne Ave S, Ottawa, ON K1S 5X8, CAN",
+      "neighborhood": "Civic Hospital",
+      "sqft": 569,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p899031/the-lennox-civic-hospital-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Recital Act IV - Studio",
+      "monthly_rent": "$1,690",
+      "bedrooms": 0,
+      "full_address": "36 Robinson Ave, Ottawa, ON K1N 0G4, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": 430,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p886160/recital-iv-36-robinson-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Recital Act IV - Studio",
+      "monthly_rent": "$1,700",
+      "bedrooms": 0,
+      "full_address": "36 Robinson Ave, Ottawa, ON K1N 0G4, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": 491,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p886160/recital-iv-36-robinson-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Recital Act IV - 1 Bedroom",
+      "monthly_rent": "$1,800",
+      "bedrooms": 1,
+      "full_address": "36 Robinson Ave, Ottawa, ON K1N 0G4, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": 593,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p886160/recital-iv-36-robinson-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Recital Act IV - 1 Bedroom",
+      "monthly_rent": "$1,935",
+      "bedrooms": 1,
+      "full_address": "36 Robinson Ave, Ottawa, ON K1N 0G4, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": 593,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p886160/recital-iv-36-robinson-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "Recital Act IV - 2 Bedroom",
+      "monthly_rent": "$2,425",
+      "bedrooms": 2,
+      "full_address": "36 Robinson Ave, Ottawa, ON K1N 0G4, CAN",
+      "neighborhood": "Sandy Hill",
+      "sqft": 828,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p886160/recital-iv-36-robinson-sandy-hill-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "190 Stanley Ave. - 1 Bedroom",
+      "monthly_rent": "$1,600",
+      "bedrooms": 1,
+      "full_address": "190 Stanley Ave, Ottawa, ON K1M 1P3, CAN",
+      "neighborhood": "New Edinburgh",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Balcony",
+        "Pet Friendly"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p505779/190-stanley-ave-new-edinburgh-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "The Slayte - Studio",
+      "monthly_rent": "$1,879",
+      "bedrooms": 0,
+      "full_address": "473 Albert St, Ottawa, ON K1R 5B4, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 499,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p767807/the-slayte-downtown-ottawa-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/xgShKQrzoRQ/hqdefault.jpg"
+    },
+    {
+      "listing_title": "The Slayte - 1 Bedroom",
+      "monthly_rent": "$1,924",
+      "bedrooms": 1,
+      "full_address": "473 Albert St, Ottawa, ON K1R 5B4, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 535,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p767807/the-slayte-downtown-ottawa-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/xgShKQrzoRQ/hqdefault.jpg"
+    },
+    {
+      "listing_title": "The Slayte - 1 Bedroom",
+      "monthly_rent": "$1,959",
+      "bedrooms": 1,
+      "full_address": "473 Albert St, Ottawa, ON K1R 5B4, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 499,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p767807/the-slayte-downtown-ottawa-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/xgShKQrzoRQ/hqdefault.jpg"
+    },
+    {
+      "listing_title": "The Slayte - 1 Bedroom",
+      "monthly_rent": "$2,029",
+      "bedrooms": 1,
+      "full_address": "473 Albert St, Ottawa, ON K1R 5B4, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 528,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p767807/the-slayte-downtown-ottawa-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/xgShKQrzoRQ/hqdefault.jpg"
+    },
+    {
+      "listing_title": "The Slayte - 1 Bedroom",
+      "monthly_rent": "$2,099",
+      "bedrooms": 1,
+      "full_address": "473 Albert St, Ottawa, ON K1R 5B4, CAN",
+      "neighborhood": "Downtown Ottawa",
+      "sqft": 529,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p767807/the-slayte-downtown-ottawa-ottawa-on",
+      "image_url": "https://img.youtube.com/vi/xgShKQrzoRQ/hqdefault.jpg"
+    },
+    {
+      "listing_title": "Rockcliffe Arms - 1 Bedroom",
+      "monthly_rent": "$1,929",
+      "bedrooms": 1,
+      "full_address": "124 Springfield Rd, Ottawa, ON K1M 2C8, CAN",
+      "neighborhood": "",
+      "sqft": 900,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Elevator",
+        "Balcony",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p217926/the-rockcliffe-arms-new-edinburgh-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "1 Berkshire Way - 3 Bedroom",
+      "monthly_rent": "$2,650",
+      "bedrooms": 3,
+      "full_address": "1 Berkshire Way, Ottawa, ON K2J 2B1, CAN",
+      "neighborhood": "Barrhaven",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p1468782/1-berkshire-way-barrhaven-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "170 Metcalfe Street - Studio",
+      "monthly_rent": "$2,200",
+      "bedrooms": 0,
+      "full_address": "170 Metcalfe St, Ottawa, ON K2P 1P3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": 585,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p362816/the-met-170-metcalfe-street-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "170 Metcalfe Street - 1 Bedroom",
+      "monthly_rent": "$1,899",
+      "bedrooms": 1,
+      "full_address": "170 Metcalfe St, Ottawa, ON K2P 1P3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p362816/the-met-170-metcalfe-street-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "170 Metcalfe Street - 1 Bedroom",
+      "monthly_rent": "$1,899",
+      "bedrooms": 1,
+      "full_address": "170 Metcalfe St, Ottawa, ON K2P 1P3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p362816/the-met-170-metcalfe-street-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "170 Metcalfe Street - 1 Bedroom",
+      "monthly_rent": "$1,899",
+      "bedrooms": 1,
+      "full_address": "170 Metcalfe St, Ottawa, ON K2P 1P3, CAN",
+      "neighborhood": "Centretown",
+      "sqft": null,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Gym/Fitness Center",
+        "Elevator",
+        "Pet Friendly",
+        "Storage",
+        "Air Conditioning"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p362816/the-met-170-metcalfe-street-centretown-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "112 Beaverbrook Lane - 2 Bedrooms",
+      "monthly_rent": "$2,199",
+      "bedrooms": 2,
+      "full_address": "120 Beaverbrook Lane, Kanata, ON K2K 1L8, CAN",
+      "neighborhood": "Beaverbrook",
+      "sqft": 1222,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p213675/1-120-beaverbrook-beaverbrook-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    },
+    {
+      "listing_title": "112 Beaverbrook Lane - 3 Bedrooms",
+      "monthly_rent": "$2,608",
+      "bedrooms": 3,
+      "full_address": "120 Beaverbrook Lane, Kanata, ON K2K 1L8, CAN",
+      "neighborhood": "Beaverbrook",
+      "sqft": 1412,
+      "amenities": [
+        "Dishwasher",
+        "Fridge",
+        "In-Unit Laundry",
+        "Parking",
+        "Pet Friendly",
+        "Storage"
+      ],
+      "listing_url": "https://www.zumper.com/apartment-buildings/p213675/1-120-beaverbrook-beaverbrook-ottawa-on",
+      "image_url": "https://www.zumper.com/default-image.jpg"
+    }
+  ]
+}

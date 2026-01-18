@@ -1,0 +1,261 @@
+{
+  "source": "homestead",
+  "scraped_at": "2026-01-17T20:43:55",
+  "url": "https://www.homestead.ca",
+  "count": 30,
+  "listings": [
+    {
+      "id": "homestead_-6366067748110925368",
+      "title": "ARLINGTON APARTMENTS",
+      "price": 1499,
+      "address": "33 BANNER ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/33-banner-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Ottawa"
+    },
+    {
+      "id": "homestead_2746043080129810937",
+      "title": "ISLAND PARK TOWERS",
+      "price": 1249,
+      "address": "185/195/200 CLEARVIEW AVENUE, OTTAWA",
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/island-park-towers",
+      "image_url": null,
+      "neighborhood": "Ottawa"
+    },
+    {
+      "id": "homestead_-3222992252731645518",
+      "title": "LORD RICHMOND",
+      "price": 1450,
+      "address": "851 RICHMOND ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/851-richmond-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Ottawa"
+    },
+    {
+      "id": "homestead_-2710780550161489268",
+      "title": "PARK RIDGE PLACE I-III",
+      "price": 2347,
+      "address": "7303/7305/7307 CAMPEAU DRIVE, OTTAWA",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "url": "https://www.homestead.ca/residential/7303-7305-7307-campeau-drive-ottawa",
+      "image_url": null,
+      "neighborhood": "Kanata"
+    },
+    {
+      "id": "homestead_-8107395106196558624",
+      "title": "PHOENIX APARTMENTS",
+      "price": 1500,
+      "address": "1316 CARLING AVENUE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/phoenix-apartments",
+      "image_url": null,
+      "neighborhood": "Carlington"
+    },
+    {
+      "id": "homestead_-6810769355254637627",
+      "title": "RICHMOND PARK SQUARE",
+      "price": 1549,
+      "address": "1275/1285 RICHMOND ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/1275-1285-richmond-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Westboro"
+    },
+    {
+      "id": "homestead_5952549955311854461",
+      "title": "THE DUCHESS",
+      "price": 1685,
+      "address": "833 RICHMOND ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/the-duchess-apartments",
+      "image_url": null,
+      "neighborhood": "Westboro"
+    },
+    {
+      "id": "homestead_-4061855899308956676",
+      "title": "WATERFORD",
+      "price": 1499,
+      "address": "1241 KILBORN PLACE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/1241-kilborn-place-ottawa",
+      "image_url": null,
+      "neighborhood": "Alta Vista"
+    },
+    {
+      "id": "homestead_-7491922080724554780",
+      "title": "WINDFIELDS III",
+      "price": 1419,
+      "address": "1170 FISHER AVENUE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/1170-fisher-avenue-ottawa",
+      "image_url": null,
+      "neighborhood": "Carleton Heights"
+    },
+    {
+      "id": "homestead_-825792058181132852",
+      "title": "50 LAURIER",
+      "price": 2049,
+      "address": "50 LAURIER AVENUE EAST, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/50-laurier",
+      "image_url": null,
+      "neighborhood": "Sandy Hill"
+    },
+    {
+      "id": "homestead_-8302931433837604558",
+      "title": "BROMLEY SQUARE",
+      "price": 1315,
+      "address": "2001 CARLING AVENUE, OTTAWA",
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/2001-carling-avenue-ottawa",
+      "image_url": null,
+      "neighborhood": "Carlington"
+    },
+    {
+      "id": "homestead_5303156705184455552",
+      "title": "CHAMPLAIN TOWERS",
+      "price": 1399,
+      "address": "200 RIDEAU TERRACE, OTTAWA",
+      "bedrooms": 0,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/200-rideau-terrace-ottawa",
+      "image_url": null,
+      "neighborhood": "New Edinburgh"
+    },
+    {
+      "id": "homestead_9114459500375424953",
+      "title": "COLONEL BY TOWERS",
+      "price": 1579,
+      "address": "315 HOLMWOOD AVENUE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/315-holmwood-avenue-ottawa",
+      "image_url": null,
+      "neighborhood": "The Glebe"
+    },
+    {
+      "id": "homestead_-8823198810489117169",
+      "title": "DRIVEWAY PLACE",
+      "price": 1995,
+      "address": "350 QUEEN ELIZABETH DRIVE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/350-queen-elizabeth-drive-ottawa",
+      "image_url": null,
+      "neighborhood": "The Glebe"
+    },
+    {
+      "id": "homestead_-7045987365431161585",
+      "title": "EDGEWORTH",
+      "price": 1899,
+      "address": "810 EDGEWORTH AVENUE, OTTAWA",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/810-edgeworth-ottawa",
+      "image_url": null,
+      "neighborhood": "Manor Park"
+    },
+    {
+      "id": "homestead_-1499868666666837716",
+      "title": "RIVIERA GATE",
+      "price": 1579,
+      "address": "1300/1310 MCWATTERS ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/1300-1310-mcwatters-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Overbrook"
+    },
+    {
+      "id": "homestead_-1380531642941643400",
+      "title": "RIVIERA SUITES",
+      "price": 2000,
+      "address": "1306 MCWATTERS ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/riviera-suites",
+      "image_url": null,
+      "neighborhood": "Overbrook"
+    },
+    {
+      "id": "homestead_713156449377733686",
+      "title": "SANDRINGHAM",
+      "price": 2049,
+      "address": "85 RANGE ROAD, OTTAWA",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "url": "https://www.homestead.ca/residential/85-range-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Sandy Hill"
+    },
+    {
+      "id": "homestead_-6763150564701524872",
+      "title": "SOPHIA APARTMENTS",
+      "price": 2110,
+      "address": "91 VALLEY STREAM DRIVE, OTTAWA",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/sophia",
+      "image_url": null,
+      "neighborhood": "Nepean"
+    },
+    {
+      "id": "homestead_-7599685826564870070",
+      "title": "THE WOODBINE",
+      "price": 1449,
+      "address": "2750 CAROUSEL CRESCENT, GLOUCESTER",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/2750-carousel-crescent-ottawa",
+      "image_url": null,
+      "neighborhood": "Gloucester"
+    },
+    {
+      "id": "homestead_-2179483106126449626",
+      "title": "WENTWORTH ARMS",
+      "price": 1439,
+      "address": "525 WENTWORTH AVENUE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/525-wentworth-avenue-ottawa",
+      "image_url": null,
+      "neighborhood": "Alta Vista"
+    },
+    {
+      "id": "homestead_-4976405929660760710",
+      "title": "WILLIAM MOSGROVE TOWER",
+      "price": 1499,
+      "address": "2881 RICHMOND ROAD, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/2881-richmond-road-ottawa",
+      "image_url": null,
+      "neighborhood": "Westboro"
+    },
+    {
+      "id": "homestead_-9203624616661716848",
+      "title": "WINDFIELDS",
+      "price": 1599,
+      "address": "1140/1150 FISHER AVENUE, OTTAWA",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "url": "https://www.homestead.ca/residential/1140-1150-fisher-avenue-ottawa",
+      "image_url": null,
+      "neighborhood": "Carleton Heights"
+    }
+  ]
+}

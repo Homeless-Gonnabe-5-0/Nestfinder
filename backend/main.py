@@ -155,10 +155,16 @@ async def chat(request: ChatRequestAPI):
             response = await coordinator.search(search_request)
             search_results = response.to_dict()
             
+            # Generate natural response about the apartments
+            chat_result["response"] = await conversation_agent.describe_apartments(
+                search_results.get("recommendations", []),
+                request.message,
+                request.session_id
+            )
+            
         except Exception as e:
             print(f"Search error in chat: {e}")
-            # Don't fail the whole request, just note the error
-            chat_result["response"] += f"\n\n(I tried to search but ran into an issue: {str(e)})"
+            chat_result["response"] = f"I tried to search but ran into an issue. Please try again."
     
     return {
         "response": chat_result["response"],

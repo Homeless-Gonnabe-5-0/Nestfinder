@@ -117,10 +117,10 @@ def calculate_overall_score(
     return int(overall)
 
 
-def generate_headline(rank: int, scores: dict, priorities: list, has_commute: bool = True) -> str:
+def generate_headline(rank: int, scores: dict, priorities: list) -> str:
     """Generate a catchy headline for the recommendation."""
     if rank == 1:
-        return "🏆 Best Overall Match"
+        return "Best Overall Match"
     
     # Filter out commute from consideration if no work address
     filtered_scores = scores.copy()
@@ -133,10 +133,10 @@ def generate_headline(rank: int, scores: dict, priorities: list, has_commute: bo
     best_category = max(filtered_scores, key=lambda k: filtered_scores[k] or 0)
     
     headlines = {
-        "commute": "⚡ Best for Commuters",
-        "neighborhood": "🏘️ Best Neighborhood",
-        "budget": "💰 Best Value",
-        "amenities": "✨ Best Amenities"
+        "commute": "Best for Commuters",
+        "neighborhood": "Best Neighborhood",
+        "budget": "Best Value",
+        "amenities": "Best Amenities"
     }
     
     return headlines.get(best_category, f"#{rank} Recommendation")

@@ -20,7 +20,7 @@ const websites = [
   },
   { 
     name: 'Rentals.ca', 
-    logo: '/logos/rentalsca_logo-removebg-preview.png',
+    logo: '/logos/rentals.ca_logo.png',
     url: 'https://www.rentals.ca',
   },
 ];

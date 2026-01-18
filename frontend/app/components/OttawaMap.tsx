@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+// Apartment marker type
+type ApartmentMarker = {
+  id: string;
+  lat: number;
+  lng: number;
+  title: string;
+  price: number;
+  rank: number;
+};
 
 // Coordinates
 const OTTAWA_CENTER: [number, number] = [45.4215, -75.6972];
@@ -13,13 +23,37 @@ const OTTAWA_BOUNDS: L.LatLngBoundsExpression = [
   [45.55, -75.4], // Northeast
 ];
 
-// Apple emoji pin 📍
+// Apple emoji pin 📍 for user location
 const emojiPinIcon = new L.DivIcon({
   className: "emoji-pin-marker",
   html: `<span style="font-size: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">📍</span>`,
   iconSize: [36, 36],
   iconAnchor: [18, 36],
   popupAnchor: [0, -36],
+});
+
+// Create apartment marker icon with rank number
+const createApartmentIcon = (rank: number) => new L.DivIcon({
+  className: "apartment-marker",
+  html: `
+    <div style="
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border: 2px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    ">${rank}</div>
+  `,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14],
 });
 
 interface LocationMarkerProps {
@@ -81,6 +115,38 @@ function FlyToPosition({ position }: { position: [number, number] | null }) {
   return null;
 }
 
+// Component to fit bounds when apartment markers change
+function FitBoundsToMarkers({ markers, userPosition }: { markers: ApartmentMarker[]; userPosition: [number, number] | null }) {
+  const map = useMap();
+  const lastMarkersKey = useRef<string>("");
+  
+  useEffect(() => {
+    if (markers.length === 0) return;
+    
+    // Create a key from marker IDs to detect changes
+    const markersKey = markers.map(m => m.id).join(",");
+    if (lastMarkersKey.current === markersKey) return;
+    lastMarkersKey.current = markersKey;
+    
+    // Collect all points
+    const points: [number, number][] = markers.map(m => [m.lat, m.lng]);
+    if (userPosition) {
+      points.push(userPosition);
+    }
+    
+    if (points.length > 0) {
+      const bounds = L.latLngBounds(points);
+      map.flyToBounds(bounds, { 
+        padding: [50, 50],
+        duration: 1,
+        maxZoom: 14
+      });
+    }
+  }, [map, markers, userPosition]);
+
+  return null;
+}
+
 // Sleek zoom controls - Google Maps style
 function CustomZoomControls() {
   const map = useMap();
@@ -112,9 +178,10 @@ function CustomZoomControls() {
 interface OttawaMapProps {
   onLocationSelect?: (lat: number, lng: number) => void;
   selectedLocation?: [number, number] | null;
+  apartmentMarkers?: ApartmentMarker[];
 }
 
-export default function OttawaMap({ onLocationSelect, selectedLocation }: OttawaMapProps) {
+export default function OttawaMap({ onLocationSelect, selectedLocation, apartmentMarkers = [] }: OttawaMapProps) {
   const [position, setPosition] = useState<[number, number] | null>(selectedLocation || null);
   const [mounted, setMounted] = useState(false);
 
@@ -168,6 +235,26 @@ export default function OttawaMap({ onLocationSelect, selectedLocation }: Ottawa
         <FlyToPosition position={position} />
         <InitialZoomAnimation />
         <CustomZoomControls />
+        
+        {/* Apartment markers from search results */}
+        {apartmentMarkers.map((apt) => (
+          <Marker
+            key={apt.id}
+            position={[apt.lat, apt.lng]}
+            icon={createApartmentIcon(apt.rank)}
+          >
+            <Popup>
+              <div className="text-sm">
+                <p className="font-semibold text-gray-900">{apt.title}</p>
+                <p className="text-emerald-600 font-bold">${apt.price.toLocaleString()}/mo</p>
+                <p className="text-gray-500 text-xs">#{apt.rank} match</p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+        
+        {/* Fit bounds to show all markers */}
+        <FitBoundsToMarkers markers={apartmentMarkers} userPosition={position} />
       </MapContainer>
 
       {/* Instruction hint - bottom left, compact */}

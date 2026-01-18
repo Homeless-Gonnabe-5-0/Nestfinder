@@ -1,0 +1,14 @@
+{
+  "name": "zillow",
+  "enabled": true,
+  "url_template": "https://www.zillow.com/{city}-on/rentals",
+  "prompt_template": "Scrape exactly {max_results} rental listings visible on this page. For EACH listing card or property shown, extract:\n- property_name: the apartment building name or property title\n- monthly_rent: the monthly rental price shown (include ranges like $1,739-$2,599)\n- property_address: the full street address with city\n- bedroom_count: number of bedrooms listed (include ranges like 1-3 beds)\n- amenities_features: all amenities, features, square footage, bathrooms listed\n- property_url: the complete URL link to view this specific listing\n\nExtract ALL {max_results} visible rental listings from the page with complete data.",
+  "field_mapping": {
+    "title": "property_name",
+    "price": "monthly_rent",
+    "address": "property_address",
+    "bedrooms": "bedroom_count",
+    "description": "amenities_features",
+    "link": "property_url"
+  }
+}

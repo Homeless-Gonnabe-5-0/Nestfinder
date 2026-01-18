@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { chat, type SearchResponse, type ChatResponse } from "@/lib/api";
+import { chat, type SearchResponse, type ChatResponse, type Apartment } from "@/lib/api";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const OttawaMap = dynamic(() => import("../components/OttawaMap"), {
@@ -19,10 +19,21 @@ const OttawaMap = dynamic(() => import("../components/OttawaMap"), {
   ),
 });
 
+// Apartment marker type for the map
+export type ApartmentMarker = {
+  id: string;
+  lat: number;
+  lng: number;
+  title: string;
+  price: number;
+  rank: number;
+};
+
 type Message = {
   role: "user" | "assistant";
   content: string;
   data?: SearchResponse;
+  isNew?: boolean; // Flag for streaming animation
 };
 
 interface SearchResult {
@@ -51,6 +62,7 @@ export default function ChatPage() {
   const [loadingIndex, setLoadingIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
+  const [apartmentMarkers, setApartmentMarkers] = useState<ApartmentMarker[]>([]);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
@@ -165,37 +177,38 @@ export default function ChatPage() {
         pinned_lng: selectedLocation?.[1],
       });
       
-      // Build response message
-      let responseText = response.response;
-      
-      // If there are search results, append them
-      if (response.search_results && response.search_results.recommendations?.length > 0) {
-        responseText += `\n\nFound ${response.search_results.total_found} apartments! Here are the top matches:\n\n`;
-        
-        response.search_results.recommendations.slice(0, 5).forEach((rec) => {
-          responseText += `${rec.rank}. ${rec.apartment.title}\n`;
-          responseText += `   📍 ${rec.apartment.address}, ${rec.apartment.neighborhood}\n`;
-          responseText += `   💰 $${rec.apartment.price}/month\n`;
-          responseText += `   🚇 ${rec.commute.best_time} min commute\n`;
-          responseText += `   ⭐ Score: ${rec.overall_score}/100\n`;
-          responseText += `   ${rec.headline}\n\n`;
-        });
+      // Extract apartment markers if we have search results
+      if (response.search_results?.recommendations) {
+        const markers: ApartmentMarker[] = response.search_results.recommendations
+          .filter(rec => rec.apartment.lat && rec.apartment.lng)
+          .map(rec => ({
+            id: rec.apartment.id,
+            lat: rec.apartment.lat!,
+            lng: rec.apartment.lng!,
+            title: rec.apartment.title,
+            price: rec.apartment.price,
+            rank: rec.rank,
+          }));
+        setApartmentMarkers(markers);
       }
-
+      
+      // Just use the AI's natural response - mark as new for streaming
       setMessages((prev) => [
-        ...prev,
+        ...prev.map(m => ({ ...m, isNew: false })), // Mark all previous as not new
         {
           role: "assistant",
-          content: responseText,
+          content: response.response,
           data: response.search_results || undefined,
+          isNew: true, // This one will stream
         },
       ]);
     } catch (error) {
       setMessages((prev) => [
-        ...prev,
+        ...prev.map(m => ({ ...m, isNew: false })),
         {
           role: "assistant",
           content: `Sorry, something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}. Make sure the backend is running at http://localhost:8000`,
+          isNew: true,
         },
       ]);
     } finally {
@@ -242,12 +255,12 @@ export default function ChatPage() {
                     Chat with Nestfinder
                   </h1>
                   <p className="mt-2 text-sm text-[var(--text-muted)] animate-slide-up-delay-1">
-                    Ask me anything about Ottawa apartments — I'm here to help! 🏠
+                    Ask me anything about Ottawa apartments — I'm here to help.
                   </p>
                   {selectedLocation && (
                     <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium animate-slide-up-delay-1">
                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                      📍 Location pinned for commute calculations
+                      Location pinned for commute calculations
                     </div>
                   )}
                 </div>
@@ -283,7 +296,11 @@ export default function ChatPage() {
                         : "mr-auto bg-[var(--bg-secondary)] text-[var(--text-primary)]",
                     ].join(" ")}
                   >
-                    {m.content}
+                    <MessageContent 
+                      content={m.content} 
+                      isUser={m.role === "user"} 
+                      shouldStream={m.role === "assistant" && m.isNew === true}
+                    />
                   </div>
                 ))}
                 {isLoading && (
@@ -447,6 +464,7 @@ export default function ChatPage() {
             <OttawaMap 
               onLocationSelect={handleLocationSelect}
               selectedLocation={selectedLocation}
+              apartmentMarkers={apartmentMarkers}
             />
           </div>
         </div>
@@ -469,5 +487,77 @@ function Suggestion({
     >
       {text}
     </button>
+  );
+}
+
+// Streaming text animation like ChatGPT
+function StreamingText({ content, onComplete }: { content: string; onComplete?: () => void }) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  
+  useEffect(() => {
+    setDisplayedText("");
+    setIsComplete(false);
+    
+    let index = 0;
+    const speed = 15; // ms per character (adjust for faster/slower)
+    
+    const timer = setInterval(() => {
+      if (index < content.length) {
+        // Add characters in chunks for smoother appearance
+        const chunkSize = Math.random() > 0.8 ? 3 : 1; // Occasionally add multiple chars
+        const nextIndex = Math.min(index + chunkSize, content.length);
+        setDisplayedText(content.slice(0, nextIndex));
+        index = nextIndex;
+      } else {
+        clearInterval(timer);
+        setIsComplete(true);
+        onComplete?.();
+      }
+    }, speed);
+    
+    return () => clearInterval(timer);
+  }, [content, onComplete]);
+  
+  return (
+    <>
+      <MessageContentInner content={displayedText} isUser={false} />
+      {!isComplete && <span className="inline-block w-1.5 h-4 bg-[var(--text-muted)] ml-0.5 animate-pulse" />}
+    </>
+  );
+}
+
+function MessageContent({ content, isUser, shouldStream = false }: { content: string; isUser: boolean; shouldStream?: boolean }) {
+  if (!isUser && shouldStream) {
+    return <StreamingText content={content} />;
+  }
+  return <MessageContentInner content={content} isUser={isUser} />;
+}
+
+function MessageContentInner({ content, isUser }: { content: string; isUser: boolean }) {
+  // Regex to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  
+  const parts = content.split(urlRegex);
+  
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.match(urlRegex)) {
+          return (
+            <a
+              key={i}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline hover:opacity-80 ${isUser ? "text-white" : "text-blue-600 dark:text-blue-400"}`}
+            >
+              View Listing
+            </a>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
   );
 }

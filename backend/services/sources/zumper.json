@@ -1,0 +1,14 @@
+{
+  "name": "zumper",
+  "enabled": true,
+  "url_template": "https://www.zumper.com/apartments-for-rent/{city}-on",
+  "prompt_template": "Scrape ALL apartment building listings visible on this page. Extract exactly {max_results} properties. For EACH building shown, get:\n- building_name: the apartment building or property name (like Forest Ridge Apartments, The Lennox, etc.)\n- rent_range: the monthly rent shown (include full ranges like $1,739-$2,599)\n- property_address: complete street address with city and postal code\n- bedroom_range: bedroom options shown (include ranges like 1-3 beds or Studio-2 beds)\n- property_features: ALL amenities listed (in-unit laundry, parking, gym, pool, sqft, bathrooms, etc.)\n- building_url: the complete clickable URL to this building listing\n\nExtract ALL {max_results} building listings visible on the page with complete details.",
+  "field_mapping": {
+    "title": "building_name",
+    "price": "rent_range",
+    "address": "property_address",
+    "bedrooms": "bedroom_range",
+    "description": "property_features",
+    "link": "building_url"
+  }
+}

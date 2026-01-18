@@ -152,14 +152,8 @@ class ConversationAgent:
                 search_params["pinned_lat"] = pinned_location[0]
                 search_params["pinned_lng"] = pinned_location[1]
             
-            # Get a natural response from OpenAI
-            ai_response = await self._get_openai_response(
-                f"User wants to search for apartments: '{message}'. Give a brief, friendly acknowledgment (1 sentence). Don't list any apartments.",
-                session_id
-            )
-            
             return {
-                "response": ai_response,
+                "response": "",  # Will be filled after search
                 "search_params": search_params,
                 "intent": "search"
             }
@@ -172,6 +166,36 @@ class ConversationAgent:
             "search_params": None,
             "intent": "chat"
         }
+    
+    async def describe_apartments(self, apartments: list, user_request: str, session_id: str = "default") -> str:
+        """Generate a natural response describing the found apartments."""
+        
+        if not apartments:
+            return "I couldn't find any apartments matching your criteria. Try adjusting your budget or location."
+        
+        # Build apartment summaries for the AI
+        apt_summaries = []
+        for i, rec in enumerate(apartments[:5]):
+            apt = rec.get("apartment", {})
+            commute = rec.get("commute", {})
+            summary = f"{i+1}. {apt.get('title', 'Apartment')} - ${apt.get('price', 0)}/month in {apt.get('neighborhood', 'Ottawa')}"
+            summary += f", {commute.get('best_time', 0)} min away"
+            summary += f", score {rec.get('overall_score', 0)}/100"
+            if apt.get('source_url'):
+                summary += f" - Link: {apt.get('source_url')}"
+            apt_summaries.append(summary)
+        
+        prompt = f"""The user asked: "{user_request}"
+
+I found these apartments:
+{chr(10).join(apt_summaries)}
+
+Write a natural, helpful response presenting these options. Be conversational and friendly. 
+Include the price, location, commute time and the link for each apartment.
+Don't use bullet points or numbered lists - write it like a helpful friend would explain the options.
+Keep it concise but informative."""
+
+        return await self._get_openai_response(prompt, session_id)
     
     async def _get_openai_response(self, message: str, session_id: str) -> str:
         """Get response from OpenAI."""
