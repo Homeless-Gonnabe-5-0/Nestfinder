@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-load_dotenv()
+# Load .env from project root
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv(os.path.join(project_root, ".env"))
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
@@ -145,7 +147,7 @@ class ConversationAgent:
         """Process message and return response."""
 
         # Save user message to conversation history
-        self._add_to_conversation(session_id, "user", message)
+        self._add_to_history(session_id, "user", message)
 
         # First, check if this is a search request
         search_params = self._detect_search_intent(message)
@@ -179,7 +181,7 @@ class ConversationAgent:
         ai_response = await self._get_openai_response(message, session_id)
 
         # Save assistant response to conversation history
-        self._add_to_conversation(session_id, "assistant", ai_response)
+        self._add_to_history(session_id, "assistant", ai_response)
 
         return {
             "response": ai_response,
@@ -193,7 +195,7 @@ class ConversationAgent:
         if not apartments:
             response = "I couldn't find any apartments matching your criteria. Try adjusting your budget or location."
             # Save to history
-            self._add_to_conversation(session_id, "assistant", response)
+            self._add_to_history(session_id, "assistant", response)
             return response
 
         # Build apartment summaries for the AI
@@ -214,14 +216,15 @@ I found these apartments:
 {chr(10).join(apt_summaries)}
 
 Write a natural, helpful response presenting these options. Be conversational and friendly.
-Include the price, location, commute time and the link for each apartment.
+Include the price, location, and commute time for each apartment.
+IMPORTANT: Include the FULL URL for each apartment as a clickable markdown link like [View Listing](https://full-url-here).
 Don't use bullet points or numbered lists - write it like a helpful friend would explain the options.
 Keep it concise but informative."""
 
         response = await self._get_openai_response(prompt, session_id)
 
         # Save assistant's apartment description to history
-        self._add_to_conversation(session_id, "assistant", response)
+        self._add_to_history(session_id, "assistant", response)
 
         return response
     

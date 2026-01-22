@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST="{\"app/chat/page.tsx -> ../components/OttawaMap\":{\"id\":\"app/chat/page.tsx -> ../components/OttawaMap\",\"files\":[\"static/css/_app-pages-browser_app_components_OttawaMap_tsx.css\",\"static/chunks/_app-pages-browser_app_components_OttawaMap_tsx.js\"]}}"

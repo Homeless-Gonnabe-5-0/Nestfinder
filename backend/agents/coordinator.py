@@ -22,7 +22,7 @@ from scoring import (
     generate_match_reasons,
     generate_concerns
 )
-from yellowcake import ListingAgent
+from agents.listing import ListingAgent
 from agents.commute import CommuteAgent
 from agents.neighborhood import NeighborhoodAgent
 from agents.budget import BudgetAgent

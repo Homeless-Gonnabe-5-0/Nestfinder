@@ -31,6 +31,9 @@ node_modules/
 .pnp.js
 .yarn/install-state.gz
 /.next/
+.next/
+**/**.next/
+frontend/.next/
 /out/
 /build
 npm-debug.log*

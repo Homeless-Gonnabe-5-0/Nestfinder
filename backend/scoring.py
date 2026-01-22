@@ -117,11 +117,11 @@ def calculate_overall_score(
     return int(overall)
 
 
-def generate_headline(rank: int, scores: dict, priorities: list) -> str:
+def generate_headline(rank: int, scores: dict, priorities: list, has_commute: bool = True) -> str:
     """Generate a catchy headline for the recommendation."""
     if rank == 1:
         return "Best Overall Match"
-    
+
     # Filter out commute from consideration if no work address
     filtered_scores = scores.copy()
     if not has_commute or scores.get("commute") is None:

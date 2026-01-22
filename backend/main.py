@@ -248,4 +248,4 @@ if __name__ == "__main__":
     print("API docs at http://localhost:8000/docs")
     print("="*60 + "\n")
     
-    uvicorn.run(app, host="0.0.0.0", port=5001)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
