@@ -68,3 +68,12 @@ Thumbs.db
 *.key
 *.pem
 secrets/
+
+# Logs
+*.log
+
+# Databases
+*.db
+
+# Archives
+*.zip
